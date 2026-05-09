@@ -152,13 +152,14 @@ export const MISSIONS = [
         emoji: '⬅️➡️',
         xp: 50,
         concept: { name: 'Events · Motion · Control', color: '#4C97FF' },
-        goal: 'Left and right arrow keys move your character across the screen',
+        goal: 'Left and right arrow keys move your character — and the screen edge stops them',
         description:
-          "First coding step! We need three ingredients: an Event to kick things off, a Control loop to keep checking forever, and Motion blocks that actually move the sprite. Build this script on your character.",
+          "First coding step! We need three ingredients: an Event to kick things off, a Control loop to keep checking forever, and Motion blocks that actually move the sprite. We also add \"if on edge, bounce\" so the character never walks off screen.",
         scratchArea: 'scripts',
         previewStep: 2,
         actions: [
           { text: 'Click your character sprite in the sprite panel to select it (blue outline).', area: 'Sprite Panel' },
+          { text: 'In the Sprite Info panel (bottom), find the three rotation-style icons and click the middle one — "left-right" (↔). This lets the sprite face left or right without flipping upside-down.', area: 'Sprite Info' },
           { text: 'Click the "Code" tab at the top-left if it isn\'t open already.', area: 'Code Tab' },
           { text: 'From "Events" (yellow), drag "when 🏁 clicked" into the empty scripts area.', area: 'Events Palette' },
           { text: 'From "Motion", drag "go to x: ( ) y: ( )" and snap it below. Fill in the x and y from Step 2 as your start position.', area: 'Motion Palette' },
@@ -166,7 +167,8 @@ export const MISSIONS = [
           { text: 'Inside forever: add "if < > then". From "Sensing", drag "key (left arrow) pressed?" into the ◇ diamond slot.', area: 'Sensing Palette' },
           { text: 'Inside that if: from "Motion", add "change x by (-5)". Negative = left!', area: 'Motion Palette' },
           { text: 'Add a second "if" (still inside forever) for the right arrow: "key (right arrow) pressed?" → "change x by (5)".', area: 'Control Palette' },
-          { text: 'Click the green flag and press the arrow keys — your character should walk!', area: 'Stage' },
+          { text: 'Still inside forever, after both arrow-key blocks: from "Motion" drag "if on edge, bounce". This stops the character walking off screen.', area: 'Motion Palette' },
+          { text: 'Click the green flag and walk toward each edge — the character should stop and turn around.', area: 'Stage' },
         ],
         blocks: [
           { text: 'when 🏁 clicked',                          cat: 'events',  indent: 0, shape: 'hat'   },
@@ -176,9 +178,10 @@ export const MISSIONS = [
           { text: 'change x by (-5)',                          cat: 'motion',  indent: 2, shape: 'stack' },
           { text: 'if ‹key [right arrow] pressed?› then',      cat: 'control', indent: 1, shape: 'c'     },
           { text: 'change x by (5)',                           cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'if on edge, bounce',                        cat: 'motion',  indent: 1, shape: 'stack' },
         ],
-        tip: 'Change -5 and 5 to bigger numbers (like -8 and 8) to make your character run faster!',
-        didYouKnow: 'A "forever" loop repeats 30 times per second. That\'s why checking keys inside it feels instant and smooth.',
+        tip: 'The rotation style "left-right" is key — without it "if on edge, bounce" can flip your character upside-down. Always set it before adding the bounce block!',
+        didYouKnow: '"if on edge, bounce" is actually a shortcut for: check x position, if past the edge reverse direction. It saves you writing 4 extra blocks yourself.',
       },
 
       /* ── Step 4 ── */
