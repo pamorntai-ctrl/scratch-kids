@@ -6,12 +6,14 @@ import LessonView from './components/LessonView.jsx'
 import CompletionScreen from './components/CompletionScreen.jsx'
 import BadgeModal from './components/BadgeModal.jsx'
 import XPNotification from './components/XPNotification.jsx'
+import PresentationView from './components/PresentationView.jsx'
 
 const views = {
   home: Hero,
   missions: MissionSelect,
   lesson: LessonView,
   complete: CompletionScreen,
+  presentation: PresentationView,
 }
 
 function AppInner() {

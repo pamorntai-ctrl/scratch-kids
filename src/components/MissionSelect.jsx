@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft, Clock, Star, Trophy, Lock, Zap, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Clock, Star, Trophy, Lock, Zap, ChevronRight, Monitor } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 import { MISSIONS } from '../data/missions.js'
 import GamePreview from './GamePreview.jsx'
@@ -133,7 +133,7 @@ function MissionCard({ mission, index, isCompleted, isLocked }) {
 }
 
 export default function MissionSelect() {
-  const { navigate, totalXP, level, levelProgress, badges, completedMissions } = useApp()
+  const { navigate, totalXP, level, levelProgress, badges, completedMissions, startMission } = useApp()
   const xpForNextLevel = 200
   const xpInCurrentLevel = totalXP % xpForNextLevel
 
@@ -163,6 +163,16 @@ export default function MissionSelect() {
 
           {/* Player XP display */}
           <div className="flex items-center gap-3">
+            {/* Teach Mode button */}
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => navigate('presentation')}
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs text-purple-300 border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 transition-colors"
+            >
+              <Monitor size={13} /> Teach Mode
+            </motion.button>
+
             <div className="hidden md:flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-xs font-black text-white shadow">
                 {level}
