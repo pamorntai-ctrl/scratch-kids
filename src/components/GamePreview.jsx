@@ -86,202 +86,249 @@ function drawCharacter(ctx, cx, headY, legSwing, facingRight) {
 }
 
 function drawAppleCollector(ctx, W, H, frame, previewStep) {
-  const GY = H - 32  // ground y (top surface)
+  const GY = H - 32
+  const APPLE_XS = [W * 0.65, W * 0.22, W * 0.52, W * 0.82]
 
-  /* ── Shared animation state ─────────────── */
-  // Apple slots: different x positions it can appear at
-  const APPLE_XS = [W * 0.70, W * 0.22, W * 0.55, W * 0.83]
-  const appleSlot = previewStep >= 5 ? Math.floor(frame / 80) % APPLE_XS.length : 0
-  const appleX    = APPLE_XS[appleSlot]
-  const appleY    = GY - 14
+  /* ── Apple x position per step ── */
+  let appleX
+  if (previewStep === 4) {
+    appleX = W * 0.60  // fixed centre-right (Create Apple step)
+  } else if (previewStep === 5) {
+    appleX = APPLE_XS[Math.floor(frame / 65) % APPLE_XS.length]  // cycles (Randomize step)
+  } else if (previewStep >= 8) {
+    appleX = APPLE_XS[Math.floor(frame / 80) % APPLE_XS.length]  // cycles (Respawn step)
+  } else {
+    appleX = APPLE_XS[0]  // fixed for guided collision steps 6 & 7
+  }
+  const appleY = GY - 14
 
-  /* ── Sky ──────────────────────────────── */
+  /* ── Character x position ── */
+  let charX
+  if (previewStep === 6 || previewStep === 7) {
+    // Guided path: character walks toward apple at W*0.65 and back
+    const t = (frame % 120) / 120
+    const prog = t < 0.5 ? t * 2 : (1 - t) * 2
+    charX = W * 0.10 + W * 0.68 * prog
+  } else if (previewStep >= 2) {
+    charX = W / 2 + Math.sin(frame * 0.027) * (W * 0.33)
+  } else {
+    charX = W * 0.28
+  }
+
+  /* ── Collision state (steps 6 & 7) ── */
+  const isColliding = (previewStep === 6 || previewStep === 7) && Math.abs(charX - appleX) < 22
+
+  /* ── Sky ── */
   const sky = ctx.createLinearGradient(0, 0, 0, GY)
   sky.addColorStop(0, '#4d9fdb')
   sky.addColorStop(1, '#aadbf5')
   ctx.fillStyle = sky
   ctx.fillRect(0, 0, W, GY)
-
-  // Clouds (scroll slowly)
   drawCloud(ctx, (W * 0.18 + frame * 0.16) % (W + 90) - 45, 22, 38)
   drawCloud(ctx, (W * 0.60 + frame * 0.09) % (W + 90) - 45, 38, 28)
 
-  /* ── Ground ───────────────────────────── */
+  /* ── Ground ── */
   ctx.fillStyle = '#5a8a3a'
   ctx.fillRect(0, GY, W, H - GY)
   ctx.fillStyle = '#6aaa4a'
-  for (let gx = 0; gx < W; gx += 11) {
-    ctx.fillRect(gx, GY, 7, 4)
-  }
+  for (let gx = 0; gx < W; gx += 11) ctx.fillRect(gx, GY, 7, 4)
 
-  /* ── Score HUD (step 5) ───────────────── */
-  if (previewStep >= 5) {
+  /* ── Score HUD (steps 7 & 8) ── */
+  if (previewStep >= 7) {
+    const score = previewStep >= 8
+      ? Math.floor(frame / 80) % 10
+      : Math.floor(frame / 120) % 6
     ctx.fillStyle = 'rgba(0,0,0,0.42)'
     ctx.fillRect(4, 4, 72, 22)
     ctx.fillStyle = '#fff'
     ctx.font = 'bold 11px Nunito, sans-serif'
-    ctx.fillText(`Score: ${Math.floor(frame / 80) % 7}`, 8, 18)
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(`Score: ${score}`, 8, 15)
   }
 
-  /* ── Apple (step 4+) ──────────────────── */
+  /* ── Apple (step 4+) ── */
   if (previewStep >= 4) {
-    const flashPhase = frame % 80
-    const isFlashing = previewStep >= 5 && flashPhase < 10
+    const teleportFlash = previewStep === 5 && (frame % 65) < 8
+    const respawnFlash  = previewStep >= 8  && (frame % 80) < 10
 
-    if (!isFlashing) {
-      drawApple(ctx, appleX, appleY)
-    } else {
-      // Sparkle burst on collection
+    if (isColliding) {
+      // Collision sparkle
+      const proximity = 1 - Math.abs(charX - appleX) / 22
       ctx.save()
-      ctx.globalAlpha = (10 - flashPhase) / 10
-      const SPARK_COLS = ['#ffd700', '#ff6b35', '#ff6bff', '#60f', '#0cf', '#ff0']
+      ctx.globalAlpha = proximity * 0.9
+      const SPARK_COLS = ['#ffd700', '#ff6b35', '#ff6bff', '#6366f1', '#0cf', '#ffcc00']
       for (let p = 0; p < 6; p++) {
         const a = (p / 6) * Math.PI * 2
-        const r = 12 + flashPhase * 1.8
+        const r = 10 + (1 - proximity) * 16
         ctx.fillStyle = SPARK_COLS[p]
         ctx.beginPath()
         ctx.arc(appleX + Math.cos(a) * r, appleY + Math.sin(a) * r, 3, 0, Math.PI * 2)
         ctx.fill()
       }
       ctx.restore()
+    } else if (respawnFlash) {
+      // Respawn sparkle burst
+      const t = frame % 80
+      ctx.save()
+      ctx.globalAlpha = (10 - t) / 10
+      const SPARK_COLS = ['#ffd700', '#ff6b35', '#ff6bff', '#60f', '#0cf', '#ff0']
+      for (let p = 0; p < 6; p++) {
+        const a = (p / 6) * Math.PI * 2
+        const r = 12 + t * 1.8
+        ctx.fillStyle = SPARK_COLS[p]
+        ctx.beginPath()
+        ctx.arc(appleX + Math.cos(a) * r, appleY + Math.sin(a) * r, 3, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      ctx.restore()
+    } else if (!teleportFlash) {
+      // Soft glow on "Create Apple" step to draw attention
+      if (previewStep === 4) {
+        const g = 0.25 + 0.15 * Math.abs(Math.sin(frame * 0.05))
+        ctx.save(); ctx.globalAlpha = g
+        ctx.fillStyle = '#e63946'
+        ctx.beginPath(); ctx.arc(appleX, appleY, 22, 0, Math.PI * 2); ctx.fill()
+        ctx.restore()
+      }
+      drawApple(ctx, appleX, appleY)
+    }
+
+    /* ── "pick random x" label (Randomize step) ── */
+    if (previewStep === 5 && !teleportFlash) {
+      ctx.save()
+      ctx.globalAlpha = 0.65 + 0.35 * Math.abs(Math.sin(frame * 0.07))
+      ctx.fillStyle = 'rgba(16,185,129,0.92)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(appleX - 40, appleY - 30, 80, 14, 4)
+      else ctx.rect(appleX - 40, appleY - 30, 80, 14)
+      ctx.fill()
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 7px Nunito,sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('🎲 pick random x', appleX, appleY - 23)
+      ctx.restore()
+    }
+
+    /* ── "touching [Hero]? ✓" tooltip (Detect Collision step) ── */
+    if (previewStep === 6 && isColliding) {
+      const a = 1 - Math.abs(charX - appleX) / 22
+      ctx.save(); ctx.globalAlpha = a
+      ctx.fillStyle = 'rgba(92,177,214,0.92)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(appleX - 42, appleY - 30, 84, 14, 4)
+      else ctx.rect(appleX - 42, appleY - 30, 84, 14)
+      ctx.fill()
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 7px Nunito,sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('touching [Hero]? ✓', appleX, appleY - 23)
+      ctx.restore()
     }
   }
 
-  /* ── Character (step 1+) ──────────────── */
+  /* ── Character (step 1+) ── */
   if (previewStep >= 1) {
-    // Horizontal position
-    let charX
-    if (previewStep >= 2) {
-      charX = W / 2 + Math.sin(frame * 0.027) * (W * 0.33)
-    } else {
-      charX = W * 0.28
-    }
-
-    // Jump arc (step 3+): periodic jump every 90 frames
+    // Jump arc: only on the Jump step (previewStep 3)
     let yOff = 0
-    if (previewStep >= 3) {
+    if (previewStep === 3) {
       const jp = frame % 90
       if (jp < 46) yOff = -Math.sin((jp / 46) * Math.PI) * 40
     }
 
-    const headY = GY - 48 + yOff  // head centre
-    const facingRight = previewStep < 2 || Math.sin(frame * 0.027) >= 0
+    const headY = GY - 48 + yOff
+    const facingRight = previewStep < 2
+      ? true
+      : (previewStep === 6 || previewStep === 7)
+        ? charX < appleX
+        : Math.sin(frame * 0.027) >= 0
     const leg = (previewStep >= 2 && yOff === 0) ? Math.sin(frame * 0.22) * 7 : 0
 
-    // Drop shadow when airborne
     if (yOff < -5) {
-      ctx.save()
-      ctx.globalAlpha = 0.2
+      ctx.save(); ctx.globalAlpha = 0.2
       ctx.fillStyle = '#000'
       ctx.beginPath()
       ctx.ellipse(charX, GY - 2, 13 + yOff * 0.12, 4, 0, 0, Math.PI * 2)
-      ctx.fill()
-      ctx.restore()
+      ctx.fill(); ctx.restore()
     }
 
     drawCharacter(ctx, charX, headY, leg, facingRight)
 
+    /* ── Speech bubble "🍎 Got it!" (Detect Collision step) ── */
+    if (previewStep === 6 && isColliding) {
+      const a = 1 - Math.abs(charX - appleX) / 22
+      ctx.save(); ctx.globalAlpha = a * 0.95
+      ctx.fillStyle = 'rgba(255,255,255,0.96)'
+      ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(charX - 30, GY - 90, 60, 17, 5)
+      else ctx.rect(charX - 30, GY - 90, 60, 17)
+      ctx.fill(); ctx.stroke()
+      // pointer
+      ctx.beginPath()
+      ctx.moveTo(charX - 4, GY - 73); ctx.lineTo(charX + 4, GY - 73); ctx.lineTo(charX, GY - 68)
+      ctx.closePath(); ctx.fillStyle = 'rgba(255,255,255,0.96)'; ctx.fill()
+      ctx.fillStyle = '#333'; ctx.font = 'bold 8px Nunito,sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('🍎 Got it!', charX, GY - 81)
+      ctx.restore()
+    }
+
     /* ── Costumes-editor overlay (step 1 only) ── */
     if (previewStep === 1) {
-      // Cycling shirt colour swatches painted on the character
       const SHIRT_COLS = ['#ff6b9d', '#4C97FF', '#ffd700', '#ff6b35', '#2dc653', '#9966FF']
       const shirtCycle = Math.floor(frame / 28) % SHIRT_COLS.length
-      // Re-paint body in the cycled colour so it feels "live-edited"
       ctx.fillStyle = SHIRT_COLS[shirtCycle]
       if (ctx.roundRect) {
         ctx.beginPath(); ctx.roundRect(charX - 10, headY + 10, 20, 18, 3); ctx.fill()
       } else {
         ctx.fillRect(charX - 10, headY + 10, 20, 18)
       }
-
-      // Gold star decoration on shirt (pulses)
       const starPulse = 0.85 + Math.sin(frame * 0.12) * 0.15
-      ctx.save()
-      ctx.translate(charX, headY + 20)
-      ctx.scale(starPulse, starPulse)
-      ctx.fillStyle = '#ffd700'
-      ctx.font = '11px serif'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('★', 0, 0)
-      ctx.restore()
+      ctx.save(); ctx.translate(charX, headY + 20); ctx.scale(starPulse, starPulse)
+      ctx.fillStyle = '#ffd700'; ctx.font = '11px serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('★', 0, 0); ctx.restore()
 
-      // Floating mini palette card
-      const PAL_X = charX + 30
-      const PAL_Y = headY - 30
+      const PAL_X = charX + 30; const PAL_Y = headY - 30
       ctx.save()
-      // Card shadow
       ctx.fillStyle = 'rgba(0,0,0,0.18)'
       ctx.beginPath()
       if (ctx.roundRect) ctx.roundRect(PAL_X + 2, PAL_Y + 2, 44, 44, 7)
       else ctx.rect(PAL_X + 2, PAL_Y + 2, 44, 44)
       ctx.fill()
-      // Card background
-      ctx.fillStyle = '#ffffff'
-      ctx.strokeStyle = 'rgba(0,0,0,0.08)'
-      ctx.lineWidth = 1
+      ctx.fillStyle = '#ffffff'; ctx.strokeStyle = 'rgba(0,0,0,0.08)'; ctx.lineWidth = 1
       ctx.beginPath()
       if (ctx.roundRect) ctx.roundRect(PAL_X, PAL_Y, 44, 44, 7)
       else ctx.rect(PAL_X, PAL_Y, 44, 44)
       ctx.fill(); ctx.stroke()
-
-      // Colour swatches (3 × 2 grid)
       const SWATCHES = ['#ff6b9d', '#4C97FF', '#2dc653', '#ffd700', '#9966FF', '#ff6b35']
       SWATCHES.forEach((c, i) => {
-        const sx = PAL_X + 7  + (i % 3) * 13
-        const sy = PAL_Y + 7  + Math.floor(i / 3) * 13
-        // Highlight the active colour
+        const sx = PAL_X + 7 + (i % 3) * 13; const sy = PAL_Y + 7 + Math.floor(i / 3) * 13
         if (c === SHIRT_COLS[shirtCycle]) {
-          ctx.strokeStyle = '#222'
-          ctx.lineWidth = 1.5
+          ctx.strokeStyle = '#222'; ctx.lineWidth = 1.5
           ctx.beginPath(); ctx.arc(sx, sy, 5.5, 0, Math.PI * 2); ctx.stroke()
         }
-        ctx.fillStyle = c
-        ctx.beginPath(); ctx.arc(sx, sy, 4.5, 0, Math.PI * 2); ctx.fill()
+        ctx.fillStyle = c; ctx.beginPath(); ctx.arc(sx, sy, 4.5, 0, Math.PI * 2); ctx.fill()
       })
-
-      // Tiny paintbrush in top-right corner of card
-      ctx.strokeStyle = '#7B3F00'
-      ctx.lineWidth = 1.8
-      ctx.lineCap = 'round'
-      ctx.beginPath()
-      ctx.moveTo(PAL_X + 38, PAL_Y + 6)
-      ctx.lineTo(PAL_X + 30, PAL_Y + 18)
-      ctx.stroke()
-      ctx.fillStyle = '#ffcc44'
-      ctx.beginPath(); ctx.arc(PAL_X + 38, PAL_Y + 6, 2.5, 0, Math.PI * 2); ctx.fill()
+      ctx.strokeStyle = '#7B3F00'; ctx.lineWidth = 1.8; ctx.lineCap = 'round'
+      ctx.beginPath(); ctx.moveTo(PAL_X + 38, PAL_Y + 6); ctx.lineTo(PAL_X + 30, PAL_Y + 18); ctx.stroke()
+      ctx.fillStyle = '#ffcc44'; ctx.beginPath(); ctx.arc(PAL_X + 38, PAL_Y + 6, 2.5, 0, Math.PI * 2); ctx.fill()
       ctx.restore()
 
-      // "Costumes" tab label above palette
-      ctx.save()
-      ctx.fillStyle = 'rgba(217,70,239,0.9)'
+      ctx.save(); ctx.fillStyle = 'rgba(217,70,239,0.9)'
       ctx.beginPath()
       if (ctx.roundRect) ctx.roundRect(PAL_X - 2, PAL_Y - 16, 48, 14, 4)
       else ctx.rect(PAL_X - 2, PAL_Y - 16, 48, 14)
-      ctx.fill()
-      ctx.fillStyle = '#fff'
-      ctx.font = 'bold 8px Nunito, sans-serif'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('COSTUMES', PAL_X + 22, PAL_Y - 9)
-      ctx.restore()
+      ctx.fill(); ctx.fillStyle = '#fff'; ctx.font = 'bold 8px Nunito, sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('COSTUMES', PAL_X + 22, PAL_Y - 9); ctx.restore()
 
-      // Sparkle dots floating around the character (animated)
-      const SPARKLE_OFFSETS = [
-        { dx: -26, dy: -22 }, { dx: 22, dy: -28 },
-        { dx: -30, dy:  10 }, { dx: 28, dy:  12 },
-      ]
+      const SPARKLE_OFFSETS = [{ dx: -26, dy: -22 }, { dx: 22, dy: -28 }, { dx: -30, dy: 10 }, { dx: 28, dy: 12 }]
       const SPARKLE_COLS = ['#ffd700', '#ff6bff', '#6bffff', '#ff6b35']
       SPARKLE_OFFSETS.forEach(({ dx, dy }, i) => {
         const pulse = Math.sin(frame * 0.10 + i * 1.6) * 0.5 + 0.5
-        ctx.save()
-        ctx.globalAlpha = 0.45 + pulse * 0.55
-        ctx.fillStyle = SPARKLE_COLS[i]
+        ctx.save(); ctx.globalAlpha = 0.45 + pulse * 0.55; ctx.fillStyle = SPARKLE_COLS[i]
         const sr = 2.5 + pulse * 2
-        const sx = charX + dx + Math.sin(frame * 0.06 + i) * 4
-        const sy = headY + dy + Math.cos(frame * 0.07 + i) * 3
-        // 4-point star
-        ctx.translate(sx, sy)
+        ctx.translate(charX + dx + Math.sin(frame * 0.06 + i) * 4, headY + dy + Math.cos(frame * 0.07 + i) * 3)
         ctx.rotate(frame * 0.04 + i)
         ctx.beginPath()
         for (let p = 0; p < 4; p++) {
@@ -289,9 +336,7 @@ function drawAppleCollector(ctx, W, H, frame, previewStep) {
           ctx.lineTo(Math.cos(a) * sr, Math.sin(a) * sr)
           ctx.lineTo(Math.cos(a + Math.PI / 4) * (sr * 0.38), Math.sin(a + Math.PI / 4) * (sr * 0.38))
         }
-        ctx.closePath()
-        ctx.fill()
-        ctx.restore()
+        ctx.closePath(); ctx.fill(); ctx.restore()
       })
     }
   }
