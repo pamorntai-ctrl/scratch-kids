@@ -36,9 +36,12 @@ const FEATURES = [
 ]
 
 const MISSIONS_PREVIEW = [
-  { emoji: '🍎', name: 'Apple Collector', diff: 'Beginner', color: '#10b981' },
+  { emoji: '🍎', name: 'Apple Collector', diff: 'Beginner',     color: '#10b981' },
+  { emoji: '⭐', name: 'Catch the Stars', diff: 'Beginner',     color: '#f59e0b' },
   { emoji: '🚀', name: 'Space Shooter',   diff: 'Intermediate', color: '#3b82f6' },
-  { emoji: '🧩', name: 'Maze Runner',     diff: 'Advanced', color: '#8b5cf6' },
+  { emoji: '🔨', name: 'Whack-a-Mole',   diff: 'Intermediate', color: '#f97316' },
+  { emoji: '🧩', name: 'Maze Runner',     diff: 'Advanced',     color: '#8b5cf6' },
+  { emoji: '🐦', name: 'Sky Drifter',     diff: 'Advanced',     color: '#0ea5e9' },
 ]
 
 export default function Hero() {
@@ -174,10 +177,10 @@ export default function Hero() {
           className="flex items-center justify-center gap-8 mt-14 text-white/60"
         >
           {[
-            { val: '3', label: 'Fun Games' },
-            { val: '20+', label: 'Step-by-step Lessons' },
-            { val: '500+', label: 'XP to Earn' },
-            { val: '3', label: 'Exclusive Badges' },
+            { val: '6', label: 'Fun Games' },
+            { val: '50+', label: 'Step-by-step Lessons' },
+            { val: '1500+', label: 'XP to Earn' },
+            { val: '6', label: 'Exclusive Badges' },
           ].map(s => (
             <div key={s.label} className="text-center">
               <div className="text-2xl font-black text-white">{s.val}</div>
@@ -194,7 +197,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+            className="grid grid-cols-2 sm:grid-cols-3 gap-4"
           >
             {MISSIONS_PREVIEW.map((m, i) => (
               <motion.div
