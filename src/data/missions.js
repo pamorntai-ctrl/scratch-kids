@@ -741,6 +741,668 @@ export const MISSIONS = [
   },
 
   /* ══════════════════════════════════════════════════════
+     MISSION 4 — CATCH THE STARS
+  ══════════════════════════════════════════════════════ */
+  {
+    id: 'catch-stars',
+    title: 'Catch the Stars',
+    emoji: '⭐',
+    tagline: 'Catch falling stars before they hit the ground!',
+    description:
+      'Move a bowl left and right to catch stars falling from the sky. Stars spawn randomly and fall at different speeds — every catch scores a point and every miss costs a life!',
+    difficulty: 'Beginner',
+    difficultyColor: 'emerald',
+    xpReward: 350,
+    timeEstimate: '30 min',
+    color: 'from-yellow-400 to-amber-500',
+    gradientBg: 'from-yellow-900/30 to-amber-900/20',
+    badge: {
+      id: 'star-catcher',
+      name: 'Star Catcher',
+      emoji: '💫',
+      description: 'Caught the stars!',
+      color: 'from-yellow-400 to-amber-500',
+    },
+    concepts: ['Backdrops', 'Sprites', 'Clones', 'Sensing', 'Variables'],
+    programmingSkills: [
+      {
+        emoji: '🧬',
+        skill: 'Clone Instantiation',
+        color: '#a855f7',
+        detail: '"create clone of [myself]" spawns a new independent star each second — identical to calling new Star() in JavaScript or Python. This object-instantiation pattern is the heart of OOP.',
+      },
+      {
+        emoji: '🎲',
+        skill: 'Random Numbers',
+        color: '#10b981',
+        detail: '"pick random (-200) to (200)" gives every star a different x position. Randomness drives loot drops, procedural maps, shuffled playlists, and enemy spawns across every game genre.',
+      },
+      {
+        emoji: '🎯',
+        skill: 'Collision Detection',
+        color: '#5CB1D6',
+        detail: '"touching [Catcher]?" polls 30 times per second to check if a star overlaps the bowl. Game engines like Unity call this a trigger volume — the same concept behind every catch mechanic.',
+      },
+      {
+        emoji: '📦',
+        skill: 'State Variables',
+        color: '#f59e0b',
+        detail: 'Score and Lives track the game\'s current state. Managing state — reading, updating, and displaying variables — is the central challenge of all real software engineering.',
+      },
+      {
+        emoji: '🔁',
+        skill: 'Game Loop',
+        color: '#FF8C1A',
+        detail: 'The "forever" loop runs every frame, moving the bowl and creating clones. Every game engine — Unity, Godot, Pygame — has this same main loop running 60 times per second.',
+      },
+      {
+        emoji: '🔀',
+        skill: 'Conditionals',
+        color: '#4C97FF',
+        detail: '"if ‹(Lives) = (0)›" checks a boolean condition and branches the program. If-statements are the single most important tool in all of programming — every app uses them constantly.',
+      },
+    ],
+    steps: [
+
+      /* ── Step 1 ── */
+      {
+        id: 1,
+        title: 'Set the Night Sky',
+        emoji: '🌌',
+        xp: 20,
+        concept: { name: 'Program Setup', color: '#6366f1' },
+        goal: 'Choose a galaxy or stars backdrop and delete the default cat',
+        description:
+          'Every game starts with a scene. Pick a dark starry backdrop so your falling stars stand out beautifully against the night sky.',
+        scratchArea: 'backdrop',
+        previewStep: 0,
+        actions: [
+          { text: 'Open Scratch and create a new project (File → New).', area: 'File Menu' },
+          { text: 'Right-click the cat sprite in the sprite panel and choose "Delete".', area: 'Sprite Panel' },
+          { text: 'Click "Choose a Backdrop" (bottom-right) and search for "Stars" or "Galaxy".', area: 'Backdrop Selector' },
+          { text: 'Click a dark starfield backdrop to add it — the stage turns into a night sky!', area: 'Backdrop Library' },
+        ],
+        blocks: [],
+        tip: 'A dark background makes the yellow stars pop visually. Contrast is a key principle in game design!',
+        didYouKnow: 'The Scratch stage is 480 × 360 pixels. x=0, y=0 is the dead centre. Positive y = up, negative y = down.',
+      },
+
+      /* ── Step 2 ── */
+      {
+        id: 2,
+        title: 'Add the Catcher',
+        emoji: '🥣',
+        xp: 25,
+        concept: { name: 'Object Properties', color: '#d946ef' },
+        goal: 'Add a Bowl or Cup sprite, set its size, and position it near the bottom',
+        description:
+          "The catcher is the player's tool. We'll add a Bowl sprite, resize it so it looks right, and write its opening script to lock it at the bottom of the screen.",
+        scratchArea: 'sprites',
+        previewStep: 1,
+        actions: [
+          { text: 'Click "Choose a Sprite" and search for "Bowl" or "Cup" — add it.', area: 'Sprite Library' },
+          { text: 'Set the Bowl\'s Size to 80 in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while Bowl is selected.', area: 'Code Tab' },
+          { text: 'From "Events", drag "when 🏁 clicked" into the scripts area.', area: 'Events Palette' },
+          { text: 'From "Motion", snap "go to x: (0) y: (-150)" below it — this pins the bowl near the bottom.', area: 'Motion Palette' },
+          { text: 'Click the green flag — the bowl should appear at the bottom centre!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',          cat: 'events', indent: 0, shape: 'hat'   },
+          { text: 'go to x: (0) y: (-150)',    cat: 'motion', indent: 0, shape: 'stack' },
+          { text: 'set size to (80) %',        cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'y: -150 places the bowl near the bottom. The stage goes from y=-180 (bottom) to y=180 (top).',
+        didYouKnow: 'Every object in a game starts with initialization code that sets position, size, and state before the player can interact.',
+      },
+
+      /* ── Step 3 ── */
+      {
+        id: 3,
+        title: 'Move the Catcher',
+        emoji: '⬅️➡️',
+        xp: 45,
+        concept: { name: 'Event Handling · Loops', color: '#4C97FF' },
+        goal: 'Left/right arrow keys slide the bowl across the screen; edge stops it',
+        description:
+          "Time to make the bowl responsive! We use the same forever-loop pattern as every other game: check left arrow → move left, check right arrow → move right, then bounce off edges.",
+        scratchArea: 'scripts',
+        previewStep: 2,
+        actions: [
+          { text: 'With the Bowl sprite selected, find your "when 🏁 clicked" script.', area: 'Sprite Panel' },
+          { text: 'Below "go to x/y", snap a "forever" loop from Control.', area: 'Control Palette' },
+          { text: 'Inside forever: add "if < > then". From Sensing, put "key (left arrow) pressed?" in the diamond.', area: 'Sensing Palette' },
+          { text: 'Inside that if: "change x by (-10)".', area: 'Motion Palette' },
+          { text: 'Add a second "if" for right arrow → "change x by (10)".', area: 'Control Palette' },
+          { text: 'After both ifs, add "if on edge, bounce" from Motion.', area: 'Motion Palette' },
+          { text: 'Green flag → press the arrow keys. The bowl glides left and right!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',                      cat: 'events',  indent: 0, shape: 'hat'   },
+          { text: 'go to x: (0) y: (-150)',                cat: 'motion',  indent: 0, shape: 'stack' },
+          { text: 'forever',                               cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'if ‹key [left arrow] pressed?› then',   cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'change x by (-10)',                     cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'if ‹key [right arrow] pressed?› then',  cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'change x by (10)',                      cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'if on edge, bounce',                    cat: 'motion',  indent: 1, shape: 'stack' },
+        ],
+        tip: 'Set the Bowl\'s rotation style to "left-right" in Sprite Info so "if on edge, bounce" never flips it upside-down.',
+        didYouKnow: 'This input-polling pattern inside a forever loop is the game loop — it runs in Unity, Godot, Pygame, and every other game engine at 30–60 fps.',
+      },
+
+      /* ── Step 4 ── */
+      {
+        id: 4,
+        title: 'Add the Star Template',
+        emoji: '⭐',
+        xp: 25,
+        concept: { name: 'Object Templates · Hiding', color: '#a855f7' },
+        goal: 'Add a Star sprite and hide it on flag click — it will be the clone template',
+        description:
+          "Before cloning, we need a template. The original Star sprite hides itself immediately so only its clones will be visible. This is the class-vs-instance pattern: the class stays hidden; instances do the work.",
+        scratchArea: 'sprites',
+        previewStep: 3,
+        actions: [
+          { text: 'Click "Choose a Sprite" and search "Star" — pick the yellow star.', area: 'Sprite Library' },
+          { text: 'Resize the Star to 40 in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while Star is selected.', area: 'Code Tab' },
+          { text: 'From "Events", add "when 🏁 clicked".', area: 'Events Palette' },
+          { text: 'From "Looks", snap "hide" below it. The original star is now invisible!', area: 'Looks Palette' },
+          { text: 'Green flag — you should see only the bowl. Star is hiding, ready to be cloned.', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— STAR: when 🏁 clicked →', cat: 'events', indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                        cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'Any sprite that uses clones MUST hide its original first. Otherwise the "master" copy sits frozen on the stage forever.',
+        didYouKnow: 'This template-hide pattern maps directly to a class definition in OOP — the class sits in memory invisibly until you instantiate (clone) it.',
+      },
+
+      /* ── Step 5 ── */
+      {
+        id: 5,
+        title: 'Clone Falls',
+        emoji: '🌠',
+        xp: 55,
+        concept: { name: 'Clone Instantiation', color: '#a855f7' },
+        goal: 'Make the master Star create clones that fall from top to bottom and delete themselves',
+        description:
+          "Two scripts on the Star sprite: one forever loop that creates clones every second, and one clone script that shows the star, moves it downward frame by frame, then deletes it when it exits the screen.",
+        scratchArea: 'scripts',
+        previewStep: 4,
+        actions: [
+          { text: 'On the Star sprite, add a second "when 🏁 clicked" script (separate from the hide script).', area: 'Scripts Area' },
+          { text: 'Inside a "forever" loop: "wait (1) seconds" then "create clone of [myself]".', area: 'Control Palette' },
+          { text: 'Add a third script: "when I start as a clone".', area: 'Control Palette' },
+          { text: 'In the clone script: "show", then "repeat until ‹(y position) < (-170)›".', area: 'Control Palette' },
+          { text: 'Inside the repeat-until: "change y by (-5)".', area: 'Motion Palette' },
+          { text: 'After the repeat-until: "delete this clone".', area: 'Control Palette' },
+          { text: 'Green flag — a star should appear at y=0 and fall down, disappearing at the bottom!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— STAR master: when 🏁 clicked →',            cat: 'events',  indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                                          cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'forever',                                       cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'wait (1) seconds',                              cat: 'control', indent: 1, shape: 'stack' },
+          { text: 'create clone of [myself]',                      cat: 'control', indent: 1, shape: 'stack' },
+          { text: '— STAR clone: when I start as a clone →',      cat: 'control', indent: 0, shape: 'hat',  note: true },
+          { text: 'show',                                          cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'repeat until ‹(y position) < (-170)›',         cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'change y by (-5)',                              cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                             cat: 'control', indent: 0, shape: 'cap'   },
+        ],
+        tip: '"delete this clone" is essential — without it, thousands of invisible off-screen stars pile up and slow the game to a crawl.',
+        didYouKnow: '"delete this clone" is the game-object lifecycle in action: create → update → destroy. Every bullet, enemy, and particle in every game follows this same lifecycle.',
+      },
+
+      /* ── Step 6 ── */
+      {
+        id: 6,
+        title: 'Random Spawn Position',
+        emoji: '🎲',
+        xp: 30,
+        concept: { name: 'Random Numbers', color: '#10b981' },
+        goal: 'Make each clone appear at a random x position so stars fall from different spots',
+        description:
+          "One block transforms a predictable waterfall into a real game: \"go to x:(pick random (-200) to (200)) y:(175)\" at the very start of the clone script. Now every star spawns at a surprise position.",
+        scratchArea: 'scripts',
+        previewStep: 5,
+        actions: [
+          { text: 'In the clone script (when I start as a clone), find the "show" block.', area: 'Scripts Area' },
+          { text: 'BEFORE "show", snap "go to x:( ) y:(175)" from Motion.', area: 'Motion Palette' },
+          { text: 'In the x slot, drop "pick random (-200) to (200)" from Operators.', area: 'Operators Palette' },
+          { text: 'Green flag — stars now appear at random horizontal positions each time!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— STAR clone: when I start as a clone →',           cat: 'control',   indent: 0, shape: 'hat',  note: true },
+          { text: 'go to x: (pick random (-200) to (200)) y: (175)',   cat: 'motion',    indent: 0, shape: 'stack' },
+          { text: 'show',                                               cat: 'looks',     indent: 0, shape: 'stack' },
+          { text: 'repeat until ‹(y position) < (-170)›',              cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'change y by (-5)',                                   cat: 'motion',    indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                                  cat: 'control',   indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Try pick random (-170) to (170) so stars never spawn partially off-screen.',
+        didYouKnow: 'Random number generation drives loot tables, enemy spawns, procedural worlds, and weather systems. Randomness is what makes games feel alive.',
+      },
+
+      /* ── Step 7 ── */
+      {
+        id: 7,
+        title: 'Catch a Star',
+        emoji: '🤲',
+        xp: 50,
+        concept: { name: 'Collision Detection · Polling', color: '#5CB1D6' },
+        goal: 'Detect when a falling star touches the Bowl — celebrate with a speech bubble',
+        description:
+          "Inside the clone's repeat-until loop, check every frame whether the star is touching the Catcher. If yes: show a message and delete the clone. This is collision detection via polling — the same technique as every catch/collect mechanic in gaming.",
+        scratchArea: 'palette-sensing',
+        previewStep: 6,
+        actions: [
+          { text: 'On the Star sprite, find the "when I start as a clone" script.', area: 'Scripts Area' },
+          { text: 'Inside the repeat-until loop (after "change y by (-5)"), add "if < > then".', area: 'Control Palette' },
+          { text: 'From Sensing, drag "touching [Bowl]?" into the ◇ diamond.', area: 'Sensing Palette' },
+          { text: 'Inside the if: "say [⭐ Caught!] for (0.5) secs", then "delete this clone".', area: 'Looks Palette' },
+          { text: 'Green flag → move the bowl under a falling star — it says "⭐ Caught!" on contact!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(inside repeat-until loop)',                 cat: 'control', indent: 0, shape: 'stack', note: true },
+          { text: 'change y by (-5)',                           cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'if ‹touching [Bowl]?› then',                cat: 'sensing', indent: 1, shape: 'c'     },
+          { text: 'say [⭐ Caught!] for (0.5) secs',           cat: 'looks',   indent: 2, shape: 'stack' },
+          { text: 'delete this clone',                          cat: 'control', indent: 2, shape: 'cap'   },
+        ],
+        tip: '"touching [Bowl]?" polls every frame — asking "do these two sprites overlap?" up to 30 times per second.',
+        didYouKnow: 'Collision detection is one of the most important algorithms in games. Unity calls these "colliders", Godot calls them "collision shapes" — same idea, different names.',
+      },
+
+      /* ── Step 8 ── */
+      {
+        id: 8,
+        title: 'Score the Catch',
+        emoji: '🔢',
+        xp: 40,
+        concept: { name: 'Variables · State', color: '#f59e0b' },
+        goal: 'Create a Score variable and add 1 every time a star is caught',
+        description:
+          "Variables hold state. We create \"Score\", set it to 0 at the start, and replace the speech bubble with a score increment. Now every catch feels rewarding without a blocking pop-up.",
+        scratchArea: 'palette-variables',
+        previewStep: 7,
+        actions: [
+          { text: 'Click "Variables" → "Make a Variable" → type "Score" → OK.', area: 'Variables Palette' },
+          { text: 'On the BOWL\'s "when 🏁 clicked" script, add "set [Score] to (0)" right after the flag block.', area: 'Scripts Area' },
+          { text: 'In the star clone\'s if-touching-Bowl block, remove the "say" block.', area: 'Scripts Area' },
+          { text: 'Replace it with "change [Score] by (1)" from Variables.', area: 'Variables Palette' },
+          { text: 'Green flag → catch stars — watch the Score count up!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(inside if ‹touching [Bowl]?›)',             cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'change [Score] by (1)',                      cat: 'variables', indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                          cat: 'control',   indent: 1, shape: 'cap'   },
+        ],
+        tip: 'Right-click the Score display on the stage and choose "Large readout" for a big satisfying counter!',
+        didYouKnow: 'A variable is the most fundamental concept in all programming. Python, JavaScript, Swift — every language uses them to remember and update values as a program runs.',
+      },
+
+      /* ── Step 9 ── */
+      {
+        id: 9,
+        title: 'Lives & Game Over',
+        emoji: '💀',
+        xp: 60,
+        concept: { name: 'Game Loop · Lifecycle', color: '#f59e0b' },
+        goal: 'Add Lives — lose one when a star escapes; game ends when Lives reach zero',
+        description:
+          "The final mechanic: consequences. When a star escapes (the repeat-until ends without a catch), deduct a life. When lives hit zero, announce game over and stop everything. This is a state machine: PLAYING → GAME_OVER.",
+        scratchArea: 'scripts',
+        previewStep: 8,
+        actions: [
+          { text: 'Create a "Lives" variable (Variables → Make a Variable → "Lives").', area: 'Variables Palette' },
+          { text: 'On the BOWL\'s "when 🏁 clicked" script, add "set [Lives] to (3)".', area: 'Scripts Area' },
+          { text: 'In the STAR clone script, after the repeat-until loop ends (outside it), add "change [Lives] by (-1)".', area: 'Scripts Area' },
+          { text: 'Below that: "if ‹(Lives) = (0)› then".', area: 'Control Palette' },
+          { text: 'Inside the if: "say [Game Over! 💫] for (2) secs" then "stop [all]".', area: 'Looks Palette' },
+          { text: 'After the if: "delete this clone".', area: 'Control Palette' },
+          { text: 'Green flag → let stars fall — after 3 misses, Game Over! Your Catch the Stars game is complete! ⭐', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(after the repeat-until — star escaped)',    cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'change [Lives] by (-1)',                     cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'if ‹(Lives) = (0)› then',                   cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'say [Game Over! 💫] for (2) secs',          cat: 'looks',     indent: 1, shape: 'stack' },
+          { text: 'stop [all]',                                 cat: 'control',   indent: 1, shape: 'cap'   },
+          { text: 'delete this clone',                          cat: 'control',   indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Show ♥ hearts for lives by right-clicking the Lives display — or display it as "large readout" for impact!',
+        didYouKnow: 'PLAYING → GAME_OVER is a state machine. Traffic lights, login flows, vending machines, and game modes are all state machines — one of the most powerful patterns in software.',
+      },
+    ],
+  },
+
+  /* ══════════════════════════════════════════════════════
+     MISSION 5 — WHACK-A-MOLE
+  ══════════════════════════════════════════════════════ */
+  {
+    id: 'whack-a-mole',
+    title: 'Whack-a-Mole',
+    emoji: '🔨',
+    tagline: 'Click the moles before they disappear!',
+    description:
+      'Paint your own mole-field backdrop with six holes, spawn moles that pop up and hide, and score points by clicking them before time runs out.',
+    difficulty: 'Intermediate',
+    difficultyColor: 'blue',
+    xpReward: 450,
+    timeEstimate: '35 min',
+    color: 'from-amber-500 to-orange-600',
+    gradientBg: 'from-amber-900/30 to-orange-900/20',
+    badge: {
+      id: 'mole-master',
+      name: 'Mole Master',
+      emoji: '🔨',
+      description: 'Whacked all the moles!',
+      color: 'from-amber-400 to-orange-500',
+    },
+    concepts: ['Paint Editor', 'Clones', 'Mouse Events', 'Variables', 'Timers'],
+    programmingSkills: [
+      {
+        emoji: '🖱️',
+        skill: 'Mouse Events',
+        color: '#ec4899',
+        detail: '"when this sprite clicked" fires the moment the mouse button is released over a sprite — identical to addEventListener("click") in JavaScript. Mouse events power every button, link, and interactive UI on the web.',
+      },
+      {
+        emoji: '🧬',
+        skill: 'Clone Pattern',
+        color: '#a855f7',
+        detail: 'A hidden master mole spawns clones that pop up independently. This is the class-and-instance pattern: one blueprint, many live objects — the foundation of OOP in every language.',
+      },
+      {
+        emoji: '⏱️',
+        skill: 'Timers',
+        color: '#f59e0b',
+        detail: '"wait (1.5) secs" and "repeat (30)" together create a countdown timer — the same pattern used in login timeouts, OTP codes, rate limiters, and cooking apps.',
+      },
+      {
+        emoji: '🎲',
+        skill: 'Random Position',
+        color: '#10b981',
+        detail: '"go to x:(pick random) y:(-60)" teleports the mole to a surprise hole each spawn. Randomness is what makes the game feel unpredictable and fair.',
+      },
+      {
+        emoji: '📦',
+        skill: 'State Variables',
+        color: '#6366f1',
+        detail: 'Score and Timer are state variables. All game logic reduces to reading state, updating it on events, and displaying the result — the universal pattern of interactive software.',
+      },
+      {
+        emoji: '🔀',
+        skill: 'Control Flow',
+        color: '#4C97FF',
+        detail: '"if Timer = 0 → stop all" branches the game into the GAME_OVER state. Control flow — if/else, loops, and returns — is the skeleton of every program ever written.',
+      },
+    ],
+    steps: [
+
+      /* ── Step 1 ── */
+      {
+        id: 1,
+        title: 'Draw the Mole Field',
+        emoji: '✏️',
+        xp: 35,
+        concept: { name: 'Drawing API · Backdrop', color: '#ec4899' },
+        goal: 'Use the Paint Editor to draw a brown dirt backdrop with 6 dark oval holes',
+        description:
+          "This game starts in the Paint Editor. You'll draw a rich brown dirt field and six dark oval holes arranged in a 3×2 grid — the targets your moles will pop out of.",
+        scratchArea: 'paint-editor',
+        previewStep: 0,
+        actions: [
+          { text: 'Open Scratch and delete the cat sprite.', area: 'Sprite Panel' },
+          { text: 'Click the backdrop thumbnail → "Paint" (pencil icon) to open the Paint Editor.', area: 'Backdrop Selector' },
+          { text: 'Fill the whole canvas with a warm brown colour using the Fill tool.', area: 'Paint Editor' },
+          { text: 'Switch to the Ellipse tool, pick a very dark brown or black fill, and draw 6 ovals in a 3×2 grid.', area: 'Paint Editor' },
+          { text: 'Arrange the holes: 3 in a row near the top-centre, 3 below. Leave space around each hole for the mole to fit.', area: 'Paint Editor' },
+          { text: 'Click the back-arrow to return to the main editor.', area: 'Paint Editor' },
+        ],
+        blocks: [],
+        tip: 'Keep your hole ovals consistent in size — you\'ll position mole clones to match each hole centre in later steps.',
+        didYouKnow: 'You just used a 2D drawing API — the same API that browsers use for HTML Canvas, and that Figma uses for its design canvas.',
+      },
+
+      /* ── Step 2 ── */
+      {
+        id: 2,
+        title: 'Add the Mole',
+        emoji: '🐹',
+        xp: 25,
+        concept: { name: 'Object Templates', color: '#f59e0b' },
+        goal: 'Add a hedgehog or mole sprite, size it to 50, and hide it on flag click',
+        description:
+          "The mole sprite is a template. We hide it immediately so only its clones will be visible. Each clone will independently pop up and disappear from a different hole.",
+        scratchArea: 'sprites',
+        previewStep: 1,
+        actions: [
+          { text: 'Click "Choose a Sprite" and search "Hedgehog" or "Mole" — add it.', area: 'Sprite Library' },
+          { text: 'Set the sprite Size to 50 in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while the mole is selected.', area: 'Code Tab' },
+          { text: 'From "Events", add "when 🏁 clicked" → from "Looks", snap "hide".', area: 'Looks Palette' },
+          { text: 'Green flag — only the dirt field should be visible. Mole is hiding!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— MOLE: when 🏁 clicked →', cat: 'events', indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                        cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'If you can still see the mole, make sure the Code tab is on the MOLE sprite (blue outline in sprite panel).',
+        didYouKnow: 'A hidden sprite with "when I start as a clone" scripts is exactly like a class — it defines behaviour without doing anything visible until instantiated.',
+      },
+
+      /* ── Step 3 ── */
+      {
+        id: 3,
+        title: 'Pick a Random Hole',
+        emoji: '🎲',
+        xp: 35,
+        concept: { name: 'Random Positioning · Clones', color: '#a855f7' },
+        goal: 'Make the mole teleport to a random hole position and create one clone',
+        description:
+          "For now we'll spawn just one clone to test the idea. The master mole picks a random x position matching one of the holes, then creates a clone. In the next step we'll make the clone animate.",
+        scratchArea: 'scripts',
+        previewStep: 2,
+        actions: [
+          { text: 'On the Mole sprite, add a "when 🏁 clicked" → "go to x:(pick random (-160) to (160)) y:(-60)".', area: 'Scripts Area' },
+          { text: 'Snap "create clone of [myself]" below.', area: 'Control Palette' },
+          { text: 'Green flag — you should see a mole clone appear at a random hole!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— MOLE master: when 🏁 clicked →',                        cat: 'events',  indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                                                       cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'go to x: (pick random (-160) to (160)) y: (-60)',           cat: 'motion',  indent: 0, shape: 'stack' },
+          { text: 'create clone of [myself]',                                   cat: 'control', indent: 0, shape: 'stack' },
+        ],
+        tip: 'Adjust the x range to match your painted holes. If holes are at x=-120, 0, 120 use pick random (-120) to (120).',
+        didYouKnow: '"pick random" is a pseudo-random number generator — it produces numbers that feel random but are actually deterministic sequences computed from a seed.',
+      },
+
+      /* ── Step 4 ── */
+      {
+        id: 4,
+        title: 'Mole Pops Up',
+        emoji: '🦔',
+        xp: 45,
+        concept: { name: 'Timer · Object Lifecycle', color: '#f59e0b' },
+        goal: 'The mole clone appears, waits 1.5 seconds, hides, waits 0.5 seconds, then deletes itself',
+        description:
+          "Now the clone has a full lifecycle: show → stay visible → hide → delete. This timed appearance and disappearance creates the core whack-a-mole tension.",
+        scratchArea: 'scripts',
+        previewStep: 3,
+        actions: [
+          { text: 'On the Mole sprite, add a new script: "when I start as a clone".', area: 'Scripts Area' },
+          { text: 'Snap "show" as the first block.', area: 'Looks Palette' },
+          { text: 'Add "wait (1.5) seconds" from Control.', area: 'Control Palette' },
+          { text: 'Add "hide" from Looks.', area: 'Looks Palette' },
+          { text: 'Add "wait (0.5) seconds".', area: 'Control Palette' },
+          { text: 'Add "delete this clone".', area: 'Control Palette' },
+          { text: 'Green flag — the mole pops up briefly then disappears!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— MOLE: when I start as a clone →', cat: 'control', indent: 0, shape: 'hat',  note: true },
+          { text: 'show',                               cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'wait (1.5) seconds',                 cat: 'control', indent: 0, shape: 'stack' },
+          { text: 'hide',                               cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'wait (0.5) seconds',                 cat: 'control', indent: 0, shape: 'stack' },
+          { text: 'delete this clone',                  cat: 'control', indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Try wait (0.8) for a faster pop-up or wait (2.5) for a slower, easier game. This timer controls difficulty!',
+        didYouKnow: 'This show → wait → hide → delete pattern is the game-object lifecycle: create → active → deactivate → destroy. It\'s used in every game engine for temporary objects.',
+      },
+
+      /* ── Step 5 ── */
+      {
+        id: 5,
+        title: 'Click to Whack',
+        emoji: '🖱️',
+        xp: 35,
+        concept: { name: 'Mouse Events · Input', color: '#ec4899' },
+        goal: 'Add a click handler on the Mole that plays a sound when whacked',
+        description:
+          "\"when this sprite clicked\" fires the instant the player clicks on a visible mole clone. We'll add a sound first as audio feedback to confirm the click event is wired up, before adding score.",
+        scratchArea: 'scripts',
+        previewStep: 4,
+        actions: [
+          { text: 'On the Mole sprite, add another new script: "when this sprite clicked".', area: 'Scripts Area' },
+          { text: 'Snap "play sound [pop] until done" from the Sound palette.', area: 'Sounds Palette' },
+          { text: 'Green flag → click a visible mole — you should hear a pop!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— MOLE: when this sprite clicked →', cat: 'events', indent: 0, shape: 'hat',  note: true },
+          { text: 'play sound [pop] until done',         cat: 'sound',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'Click the Sounds tab on the Mole sprite to browse and add sound effects. "Chomp", "Zap", or "Pop" all work well.',
+        didYouKnow: '"when this sprite clicked" is addEventListener("click") in JavaScript — the event pattern that powers every button, menu, and interactive element on the entire web.',
+      },
+
+      /* ── Step 6 ── */
+      {
+        id: 6,
+        title: 'Score the Hit',
+        emoji: '🔢',
+        xp: 40,
+        concept: { name: 'Variables · Reward State', color: '#6366f1' },
+        goal: 'Create a Score variable and increment it on each successful click',
+        description:
+          "Reward the player! Create Score, set it to 0 at the start, and add score + delete the clone when clicked. Deleting the clone stops it from hiding and deleting naturally — the player got it first.",
+        scratchArea: 'palette-variables',
+        previewStep: 5,
+        actions: [
+          { text: 'Click "Variables" → "Make a Variable" → type "Score" → OK.', area: 'Variables Palette' },
+          { text: 'On the MOLE\'s "when 🏁 clicked" script, add "set [Score] to (0)".', area: 'Scripts Area' },
+          { text: 'In the "when this sprite clicked" script, after the sound, add "change [Score] by (1)".', area: 'Variables Palette' },
+          { text: 'Then add "delete this clone" — the mole disappears instantly on hit!', area: 'Control Palette' },
+          { text: 'Green flag → click moles → Score counts up!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— MOLE: when this sprite clicked →', cat: 'events',    indent: 0, shape: 'hat',  note: true },
+          { text: 'play sound [pop] until done',         cat: 'sound',     indent: 0, shape: 'stack' },
+          { text: 'change [Score] by (1)',               cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'delete this clone',                   cat: 'control',   indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Right-click the Score display and choose "Large readout" for a satisfying big counter.',
+        didYouKnow: 'Every leaderboard, XP system, in-game currency, and achievement tracker is built on this same pattern: event detected → variable updated → display refreshed.',
+      },
+
+      /* ── Step 7 ── */
+      {
+        id: 7,
+        title: 'Moles Keep Coming',
+        emoji: '🔄',
+        xp: 50,
+        concept: { name: 'Parallel Execution · Concurrency', color: '#f59e0b' },
+        goal: 'Make the master mole spawn new clones continuously in a forever loop',
+        description:
+          "Replace the single-clone test with a forever loop that spawns a new mole every 1.2 seconds. Two independent scripts run at the same time — the spawn loop and the input handler — that\'s parallel execution.",
+        scratchArea: 'scripts',
+        previewStep: 6,
+        actions: [
+          { text: 'On the Mole\'s master "when 🏁 clicked" script, remove the single "create clone" block.', area: 'Scripts Area' },
+          { text: 'Add "set [Score] to (0)" right after the flag block.', area: 'Variables Palette' },
+          { text: 'Below that, add a "forever" loop.', area: 'Control Palette' },
+          { text: 'Inside forever: "wait (1.2) seconds".', area: 'Control Palette' },
+          { text: 'Then: "go to x:(pick random (-160) to (160)) y:(-60)".', area: 'Motion Palette' },
+          { text: 'Then: "create clone of [myself]".', area: 'Control Palette' },
+          { text: 'Green flag → moles pop up at random holes again and again!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— MOLE master: when 🏁 clicked →',                          cat: 'events',    indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                                                         cat: 'looks',     indent: 0, shape: 'stack' },
+          { text: 'set [Score] to (0)',                                           cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'forever',                                                      cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'wait (1.2) seconds',                                           cat: 'control',   indent: 1, shape: 'stack' },
+          { text: 'go to x: (pick random (-160) to (160)) y: (-60)',             cat: 'motion',    indent: 1, shape: 'stack' },
+          { text: 'create clone of [myself]',                                     cat: 'control',   indent: 1, shape: 'stack' },
+        ],
+        tip: 'Lower the wait time (0.8 secs) for more moles at once. Higher (2 secs) gives beginners more breathing room.',
+        didYouKnow: 'Two "when 🏁 clicked" scripts running at the same time is concurrency — the same concept behind async/await in JavaScript and Python\'s threading module.',
+      },
+
+      /* ── Step 8 ── */
+      {
+        id: 8,
+        title: 'Countdown Timer',
+        emoji: '⏱️',
+        xp: 45,
+        concept: { name: 'Countdown Timer', color: '#f59e0b' },
+        goal: 'Add a 30-second countdown Timer variable that ticks down once per second',
+        description:
+          "A parallel script starts counting down the moment the flag is clicked. The Timer variable decrements every second using a repeat-30 loop — the same pattern powering every OTP code, session timeout, and cooking timer ever built.",
+        scratchArea: 'scripts',
+        previewStep: 7,
+        actions: [
+          { text: 'Create a "Timer" variable (Variables → Make a Variable → "Timer").', area: 'Variables Palette' },
+          { text: 'On the Mole sprite, add a THIRD "when 🏁 clicked" script — this runs in parallel!', area: 'Events Palette' },
+          { text: 'Snap "set [Timer] to (30)".', area: 'Variables Palette' },
+          { text: 'Add "repeat (30)" from Control.', area: 'Control Palette' },
+          { text: 'Inside the repeat: "wait (1) seconds" then "change [Timer] by (-1)".', area: 'Control Palette' },
+          { text: 'Green flag — watch the Timer count down from 30 while moles keep spawning!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked  (timer script)',  cat: 'events',    indent: 0, shape: 'hat',  note: true },
+          { text: 'set [Timer] to (30)',               cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'repeat (30)',                       cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'wait (1) seconds',                  cat: 'control',   indent: 1, shape: 'stack' },
+          { text: 'change [Timer] by (-1)',             cat: 'variables', indent: 1, shape: 'stack' },
+        ],
+        tip: 'Increase to 45 or 60 seconds for an easier game. The "repeat" count always matches the start Timer value.',
+        didYouKnow: 'This repeat-wait-change pattern is how every countdown works in code — from quiz timers to rocket launch sequences.',
+      },
+
+      /* ── Step 9 ── */
+      {
+        id: 9,
+        title: 'Game Over',
+        emoji: '🏁',
+        xp: 35,
+        concept: { name: 'State Machines · Program Termination', color: '#ef4444' },
+        goal: 'When the timer hits zero, show a message and stop the game',
+        description:
+          "After the repeat loop finishes counting down, the game transitions from PLAYING to GAME_OVER. Display the result and freeze everything with \"stop [all]\". Your Whack-a-Mole game is complete!",
+        scratchArea: 'scripts',
+        previewStep: 8,
+        actions: [
+          { text: 'In the timer script, after the "repeat (30)" block, add "say [Time\'s up! 🔨] for (2) secs".', area: 'Scripts Area' },
+          { text: 'Below that, add "stop [all]" from Control.', area: 'Control Palette' },
+          { text: 'Green flag → play for 30 seconds — then Time\'s up! Your Whack-a-Mole is complete! 🔨', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(after the repeat loop)',              cat: 'control', indent: 0, shape: 'stack', note: true },
+          { text: 'say [Time\'s up! 🔨] for (2) secs',   cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'stop [all]',                           cat: 'control', indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Share your game on Scratch — click "Share" at the top. Friends can try to beat your high score!',
+        didYouKnow: 'PLAYING → GAME_OVER is a state machine. Login flows, vending machines, traffic lights, and payment systems all work as state machines — one of the most powerful patterns in software.',
+      },
+    ],
+  },
+
+  /* ══════════════════════════════════════════════════════
      MISSION 3 — MAZE RUNNER
   ══════════════════════════════════════════════════════ */
   {
@@ -1075,6 +1737,338 @@ export const MISSIONS = [
         ],
         tip: 'To make it harder, reduce the timer to 20 or 15 seconds. To make it easier, increase it to 60.',
         didYouKnow: 'Login session timeouts, OTP codes, rate limiters, and cooking timers all work exactly like this countdown pattern.',
+      },
+    ],
+  },
+
+  /* ══════════════════════════════════════════════════════
+     MISSION 6 — SKY DRIFTER
+  ══════════════════════════════════════════════════════ */
+  {
+    id: 'sky-drifter',
+    title: 'Sky Drifter',
+    emoji: '🐦',
+    tagline: 'Tap to flap — dodge the pipes and fly as far as you can!',
+    description:
+      'Guide a bird through an endless stream of pipe obstacles using only the spacebar. Simulate real gravity, generate infinite pipes with clones, and count how many you survive.',
+    difficulty: 'Advanced',
+    difficultyColor: 'purple',
+    xpReward: 600,
+    timeEstimate: '45 min',
+    color: 'from-sky-500 to-blue-600',
+    gradientBg: 'from-sky-900/30 to-blue-900/20',
+    badge: {
+      id: 'sky-ace',
+      name: 'Sky Ace',
+      emoji: '🏅',
+      description: 'Mastered Sky Drifter!',
+      color: 'from-sky-400 to-blue-500',
+    },
+    concepts: ['Physics', 'Clones', 'Sensing', 'Variables', 'Timers'],
+    programmingSkills: [
+      {
+        emoji: '🌍',
+        skill: 'Physics Simulation',
+        color: '#f59e0b',
+        detail: 'Gravity is just math: subtract 1 from y velocity every frame. Real physics engines — Box2D, Bullet, Havok — do exactly this, just with floating-point vectors instead of integers.',
+      },
+      {
+        emoji: '🧬',
+        skill: 'Clone Infinite Loop',
+        color: '#a855f7',
+        detail: 'A forever loop on the Pipe master creates an endless stream of pipe clones. Each clone lives independently, scrolls left, checks for collision, and destroys itself — the infinite-scroller pattern.',
+      },
+      {
+        emoji: '🎯',
+        skill: 'Collision Detection',
+        color: '#5CB1D6',
+        detail: '"touching [Bird]?" inside each pipe clone checks overlap every frame. One true result ends the game instantly — the same collision-kills mechanic used in every endless runner.',
+      },
+      {
+        emoji: '📦',
+        skill: 'State Variables',
+        color: '#6366f1',
+        detail: '"y velocity" stores physics state that changes every frame. Managing continuously-updating state is the core challenge of real-time simulation and game programming.',
+      },
+      {
+        emoji: '⚡',
+        skill: 'Input Events',
+        color: '#FFAB19',
+        detail: '"when [space] key pressed" fires an event handler that overrides gravity with a jump impulse. In real game engines this is an input callback — zero-delay, high-priority event handling.',
+      },
+      {
+        emoji: '🎲',
+        skill: 'Random Generation',
+        color: '#10b981',
+        detail: '"pick random (-60) to (60)" gives each pipe gap a different height. Procedural generation — creating infinite content from code — is the technique behind Minecraft worlds and roguelike dungeons.',
+      },
+    ],
+    steps: [
+
+      /* ── Step 1 ── */
+      {
+        id: 1,
+        title: 'Set the Sky Scene',
+        emoji: '🌤️',
+        xp: 15,
+        concept: { name: 'Asset Loading · Scene Setup', color: '#6366f1' },
+        goal: 'Choose a blue sky backdrop and delete the default cat',
+        description:
+          'A bright daytime sky sets the perfect tone for an aerial adventure. We also delete the cat so the stage is clean for our bird and pipe sprites.',
+        scratchArea: 'backdrop',
+        previewStep: 0,
+        actions: [
+          { text: 'Open Scratch and create a new project (File → New).', area: 'File Menu' },
+          { text: 'Right-click the cat sprite and choose "Delete".', area: 'Sprite Panel' },
+          { text: 'Click "Choose a Backdrop" → search "Blue Sky" → click to add.', area: 'Backdrop Selector' },
+          { text: 'The stage now shows a bright sky. We\'ll fill it with a scrolling bird and pipes!', area: 'Stage' },
+        ],
+        blocks: [],
+        tip: 'Any bright sky backdrop works. "Blue Sky 2" has clouds already painted in — saves you one step!',
+        didYouKnow: 'Loading assets and configuring the scene before the game loop starts is called scene setup or initialisation — every game engine has this explicit phase.',
+      },
+
+      /* ── Step 2 ── */
+      {
+        id: 2,
+        title: 'Add the Bird',
+        emoji: '🐦',
+        xp: 20,
+        concept: { name: 'Object Properties · Positioning', color: '#d946ef' },
+        goal: 'Add a parrot or bird sprite, size it to 50, and position it on the left of the stage',
+        description:
+          "The bird is the player character. We set its size and starting position. Next step we'll give it gravity so it falls — then let the player fight that gravity with the spacebar.",
+        scratchArea: 'sprites',
+        previewStep: 1,
+        actions: [
+          { text: 'Click "Choose a Sprite" and search "Parrot" or "Bird" — add it.', area: 'Sprite Library' },
+          { text: 'Set Size to 50 in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while the Bird is selected.', area: 'Code Tab' },
+          { text: 'From "Events", add "when 🏁 clicked" → from "Motion", snap "go to x:(-180) y:(0)".', area: 'Motion Palette' },
+          { text: 'Green flag — the bird appears on the left side of the screen.', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',          cat: 'events', indent: 0, shape: 'hat'   },
+          { text: 'go to x: (-180) y: (0)',    cat: 'motion', indent: 0, shape: 'stack' },
+        ],
+        tip: 'Placing the bird at x=-180 gives it room to navigate. Pipes will come from the right side.',
+        didYouKnow: 'Every game object starts with an initialization block that sets position, size, and velocity to known values before the game loop begins.',
+      },
+
+      /* ── Step 3 ── */
+      {
+        id: 3,
+        title: 'Gravity Pulls Down',
+        emoji: '⬇️',
+        xp: 60,
+        concept: { name: 'Variables · Physics Simulation', color: '#a855f7' },
+        goal: 'Create a "y velocity" variable; every frame subtract 1 (gravity) and apply it to y position',
+        description:
+          "The secret to realistic falling: a velocity variable. Every frame, gravity subtracts 1 from velocity; velocity then changes position. This accumulation is exactly how real physics engines — Box2D, Havok, Unity — model gravity.",
+        scratchArea: 'palette-variables',
+        previewStep: 2,
+        actions: [
+          { text: 'Click "Variables" → "Make a Variable" → "y velocity" → OK.', area: 'Variables Palette' },
+          { text: 'In the Bird\'s "when 🏁 clicked" script, add "set [y velocity] to (0)" right after the go-to block.', area: 'Scripts Area' },
+          { text: 'Below that, add a "forever" loop.', area: 'Control Palette' },
+          { text: 'Inside forever: "change [y velocity] by (-1)".', area: 'Variables Palette' },
+          { text: 'Next: "change y by (y velocity)" — drag the y velocity reporter into the slot.', area: 'Motion Palette' },
+          { text: 'Inside forever, after change-y: add "if ‹(y position) < (-170)› then / set y to (-170) / set [y velocity] to (0)".', area: 'Control Palette' },
+          { text: 'Green flag — the bird should fall to the bottom and stop (no floor bounce).', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',                      cat: 'events',    indent: 0, shape: 'hat'   },
+          { text: 'go to x: (-180) y: (0)',                cat: 'motion',    indent: 0, shape: 'stack' },
+          { text: 'set [y velocity] to (0)',               cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'forever',                               cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'change [y velocity] by (-1)',            cat: 'variables', indent: 1, shape: 'stack' },
+          { text: 'change y by (y velocity)',              cat: 'motion',    indent: 1, shape: 'stack' },
+          { text: 'if ‹(y position) < (-170)› then',       cat: 'control',   indent: 1, shape: 'c'     },
+          { text: 'set y to (-170)',                       cat: 'motion',    indent: 2, shape: 'stack' },
+          { text: 'set [y velocity] to (0)',               cat: 'variables', indent: 2, shape: 'stack' },
+        ],
+        tip: 'Try "change [y velocity] by (-2)" for stronger gravity — the game gets much harder immediately!',
+        didYouKnow: 'Velocity accumulation under constant acceleration is Newtonian mechanics — F=ma in code. Every physics engine from Box2D to Unreal uses this exact loop every frame.',
+      },
+
+      /* ── Step 4 ── */
+      {
+        id: 4,
+        title: 'Flap! Press Space',
+        emoji: '🦅',
+        xp: 35,
+        concept: { name: 'Event Handling · Input Polling', color: '#FFAB19' },
+        goal: 'Press SPACE to set y velocity to +8 — fighting gravity with a flap impulse',
+        description:
+          "The gameplay in a nutshell: gravity pulls the bird down, SPACE fires an upward impulse. Add a separate \"when [space] key pressed\" hat block on the Bird. This event handler overrides gravity for exactly one frame — the classic flap mechanic.",
+        scratchArea: 'scripts',
+        previewStep: 3,
+        actions: [
+          { text: 'On the Bird sprite, add a NEW separate script: "when [space] key pressed".', area: 'Events Palette' },
+          { text: 'Snap "set [y velocity] to (8)" inside it.', area: 'Variables Palette' },
+          { text: 'Green flag → press SPACE rapidly. The bird flaps upward each time!', area: 'Stage' },
+          { text: 'Hold SPACE to see what happens when you fight gravity continuously.', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— separate script on BIRD →',    cat: 'events',    indent: 0, shape: 'hat',  note: true },
+          { text: 'when [space] key pressed',        cat: 'events',    indent: 0, shape: 'hat'   },
+          { text: 'set [y velocity] to (8)',         cat: 'variables', indent: 0, shape: 'stack' },
+        ],
+        tip: 'Try values like 6, 10, or 15 to find the feel you want. Higher = easier to stay aloft but harder to aim through gaps.',
+        didYouKnow: '"when [space] key pressed" is a hardware interrupt wrapper — the operating system tells Scratch the instant the key is pressed, with no polling delay.',
+      },
+
+      /* ── Step 5 ── */
+      {
+        id: 5,
+        title: 'Add the Pipe',
+        emoji: '🟩',
+        xp: 30,
+        concept: { name: 'Object Templates · Hiding', color: '#a855f7' },
+        goal: 'Draw a green pipe sprite in the Paint Editor and hide it on flag click',
+        description:
+          "Just like the bullet in Space Shooter, the Pipe sprite is a template that hides itself. All the real action happens in its clones. We'll draw it as a simple tall green rectangle.",
+        scratchArea: 'paint-editor',
+        previewStep: 4,
+        actions: [
+          { text: 'Click "Choose a Sprite" → "Paint" (pencil icon) to draw from scratch.', area: 'Sprite Library' },
+          { text: 'In the Paint Editor, select the Rectangle tool. Pick a bright green fill colour.', area: 'Paint Editor' },
+          { text: 'Draw a tall thin rectangle (about 30px wide, 100px tall) centred in the canvas.', area: 'Paint Editor' },
+          { text: 'Name the sprite "Pipe" in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while Pipe is selected.', area: 'Code Tab' },
+          { text: 'From "Events", add "when 🏁 clicked" → from "Looks", snap "hide".', area: 'Looks Palette' },
+          { text: 'Green flag — only the bird and sky are visible. Pipe is ready to be cloned!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— PIPE: when 🏁 clicked →', cat: 'events', indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                        cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'Make the pipe width about 28–32 pixels. Too wide = impossible game. Too thin = too easy.',
+        didYouKnow: 'The Pipe sprite is a class. Its clones are instances. OOP in action — one template, infinite objects.',
+      },
+
+      /* ── Step 6 ── */
+      {
+        id: 6,
+        title: 'Pipes Scroll Left',
+        emoji: '⬅️',
+        xp: 50,
+        concept: { name: 'Repeat-Until · Destruction', color: '#4C97FF' },
+        goal: 'A pipe clone scrolls from right to left and deletes itself when offscreen',
+        description:
+          "The clone lifecycle for pipes: show → scroll left (changing x by -4 each frame) → delete when x < -240. This repeat-until-destroy pattern is how every endless runner scroll mechanic is built.",
+        scratchArea: 'scripts',
+        previewStep: 5,
+        actions: [
+          { text: 'On the Pipe sprite, add a "when I start as a clone" script.', area: 'Control Palette' },
+          { text: 'Snap "show".', area: 'Looks Palette' },
+          { text: 'Add "repeat until ‹(x position) < (-240)›" from Control.', area: 'Control Palette' },
+          { text: 'Inside the repeat-until: "change x by (-4)".', area: 'Motion Palette' },
+          { text: 'After the loop: "delete this clone".', area: 'Control Palette' },
+          { text: 'To test, add a temporary "when 🏁 clicked → create clone of [myself]" on Pipe. Green flag — pipe scrolls left!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— PIPE: when I start as a clone →',          cat: 'control', indent: 0, shape: 'hat',  note: true },
+          { text: 'show',                                         cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'repeat until ‹(x position) < (-240)›',        cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'change x by (-4)',                             cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                            cat: 'control', indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Increase the scroll speed to -6 or -8 for a harder game. This one number controls overall game difficulty!',
+        didYouKnow: 'Parallax scrolling, endless runners, and side-scrollers all use this pattern: spawn off-screen right → scroll left → destroy off-screen left → repeat.',
+      },
+
+      /* ── Step 7 ── */
+      {
+        id: 7,
+        title: 'Random Pipe Heights',
+        emoji: '🎲',
+        xp: 55,
+        concept: { name: 'Random Numbers · Procedural Generation', color: '#10b981' },
+        goal: 'Make the master Pipe spawn clones at random heights in a forever loop',
+        description:
+          "Procedural generation! The Pipe master's forever loop positions each new clone at a random y before creating it. This gives every session a unique layout — infinite content from a handful of blocks.",
+        scratchArea: 'scripts',
+        previewStep: 6,
+        actions: [
+          { text: 'Remove the temporary test "when 🏁 clicked → create clone" you added in the last step.', area: 'Scripts Area' },
+          { text: 'On the Pipe sprite, add a proper "when 🏁 clicked" → "forever" script.', area: 'Events Palette' },
+          { text: 'Inside forever: "go to x:(240) y:(pick random (-60) to (60))".', area: 'Motion Palette' },
+          { text: 'Then: "create clone of [myself]".', area: 'Control Palette' },
+          { text: 'Then: "wait (2.5) seconds" — this controls how often new pipes appear.', area: 'Control Palette' },
+          { text: 'Green flag → pipes stream in from the right at varying heights!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— PIPE master: when 🏁 clicked →',                         cat: 'events',  indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                                                        cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'forever',                                                     cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'go to x: (240) y: (pick random (-60) to (60))',              cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'create clone of [myself]',                                    cat: 'control', indent: 1, shape: 'stack' },
+          { text: 'wait (2.5) seconds',                                          cat: 'control', indent: 1, shape: 'stack' },
+        ],
+        tip: 'Lower the wait to 1.5 secs for a rapid-fire challenge. Wider pick-random range creates more extreme height differences.',
+        didYouKnow: 'Procedural generation — Minecraft biomes, Spelunky levels, No Man\'s Sky planets — is all "pick random" at different scales. The idea is identical.',
+      },
+
+      /* ── Step 8 ── */
+      {
+        id: 8,
+        title: 'Dodge or Crash',
+        emoji: '💥',
+        xp: 60,
+        concept: { name: 'Collision Detection · Game Over', color: '#5CB1D6' },
+        goal: 'Detect when the Bird touches a Pipe — stop the game immediately',
+        description:
+          "Inside each pipe clone's scroll loop, check every frame whether it's touching the Bird. One collision = game over. This is the core mechanical consequence that makes the game tense.",
+        scratchArea: 'palette-sensing',
+        previewStep: 7,
+        actions: [
+          { text: 'On the Pipe sprite, find the "when I start as a clone" script.', area: 'Scripts Area' },
+          { text: 'Inside the repeat-until loop (after "change x by (-4)"), add "if < > then".', area: 'Control Palette' },
+          { text: 'From Sensing, drag "touching [Bird]?" (choose your bird\'s name) into the ◇ diamond.', area: 'Sensing Palette' },
+          { text: 'Inside the if: "stop [all]" from Control.', area: 'Control Palette' },
+          { text: 'Green flag → flap through pipes — hit one and the game freezes!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(inside the repeat-until scroll loop)',     cat: 'control', indent: 0, shape: 'stack', note: true },
+          { text: 'change x by (-4)',                          cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'if ‹touching [Bird]?› then',               cat: 'sensing', indent: 1, shape: 'c'     },
+          { text: 'stop [all]',                               cat: 'control', indent: 2, shape: 'cap'   },
+        ],
+        tip: 'Before "stop [all]", add "say [Game Over! 💥] for (1) secs" on the Bird sprite for a dramatic ending.',
+        didYouKnow: '"touching [Bird]?" checks pixel-by-pixel overlap 30 times per second — the same AABB collision test behind every hitbox, trigger zone, and collision mesh in game development.',
+      },
+
+      /* ── Step 9 ── */
+      {
+        id: 9,
+        title: 'Count the Score',
+        emoji: '🏅',
+        xp: 50,
+        concept: { name: 'Variables · Score State', color: '#6366f1' },
+        goal: 'Add a Score variable that increments each time the bird passes a pipe',
+        description:
+          "The final reward mechanic: score 1 point for each pipe cleared. Inside the pipe clone's loop, check when x crosses x=-180 (bird's x position) — that's the moment the bird clears the pipe. Increment score then to avoid counting twice.",
+        scratchArea: 'palette-variables',
+        previewStep: 8,
+        actions: [
+          { text: 'Click "Variables" → "Make a Variable" → "Score" → OK.', area: 'Variables Palette' },
+          { text: 'On the Bird\'s "when 🏁 clicked" script, add "set [Score] to (0)".', area: 'Scripts Area' },
+          { text: 'In the Pipe clone\'s repeat-until loop, add another "if < > then".', area: 'Control Palette' },
+          { text: 'Build the condition: "(x position) < (-180)" using Operators.', area: 'Operators Palette' },
+          { text: 'Inside the if: "change [Score] by (1)" then "wait (0.1) secs" (prevents double-counting).', area: 'Variables Palette' },
+          { text: 'Green flag → flap through pipes → Score climbs with each pipe you clear! 🏅', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(inside the pipe clone scroll loop)',        cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'if ‹(x position) < (-180)› then',           cat: 'control',   indent: 1, shape: 'c'     },
+          { text: 'change [Score] by (1)',                      cat: 'variables', indent: 2, shape: 'stack' },
+          { text: 'wait (0.1) seconds',                         cat: 'control',   indent: 2, shape: 'stack' },
+          { text: 'if ‹touching [Bird]?› then',                cat: 'sensing',   indent: 1, shape: 'c'     },
+          { text: 'stop [all]',                                 cat: 'control',   indent: 2, shape: 'cap'   },
+        ],
+        tip: 'Share your game on Scratch — click "Share" at the top and challenge friends to beat your high score! 🏅',
+        didYouKnow: 'Threshold-crossing detection ("x < -180") is used in games, finance (stop-loss triggers), IoT (sensor alarms), and analytics (funnel drop-off). The same pattern, everywhere.',
       },
     ],
   },

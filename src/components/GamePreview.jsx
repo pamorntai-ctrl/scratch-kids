@@ -869,10 +869,858 @@ function drawMaze(ctx, W, H, frame, previewStep) {
   }
 }
 
+/* ──────────────── Catch the Stars helpers ──────────────── */
+
+function drawBowl(ctx, cx, y) {
+  // Rim
+  ctx.fillStyle = '#818cf8'
+  ctx.fillRect(cx - 26, y - 5, 52, 7)
+  // Body (trapezoid)
+  ctx.fillStyle = '#6366f1'
+  ctx.beginPath()
+  ctx.moveTo(cx - 24, y + 2)
+  ctx.lineTo(cx + 24, y + 2)
+  ctx.lineTo(cx + 18, y + 20)
+  ctx.quadraticCurveTo(cx, y + 24, cx - 18, y + 20)
+  ctx.closePath()
+  ctx.fill()
+  // Shine
+  ctx.fillStyle = 'rgba(255,255,255,0.22)'
+  ctx.fillRect(cx - 20, y + 4, 14, 4)
+}
+
+function drawCollectStar(ctx, cx, cy, r, color = '#ffd700') {
+  ctx.save()
+  ctx.translate(cx, cy)
+  ctx.fillStyle = color
+  ctx.shadowColor = color
+  ctx.shadowBlur = 10
+  ctx.beginPath()
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 - Math.PI / 2
+    const b = a + Math.PI / 5
+    ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r)
+    ctx.lineTo(Math.cos(b) * r * 0.4, Math.sin(b) * r * 0.4)
+  }
+  ctx.closePath()
+  ctx.fill()
+  ctx.restore()
+}
+
+/* ──────────────── Catch the Stars ──────────────── */
+function drawCatchStars(ctx, W, H, frame, previewStep) {
+  // Deep space background
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#050515')
+  bg.addColorStop(1, '#0a0a2a')
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+
+  // Static twinkling starfield (40 dots)
+  for (let i = 0; i < 40; i++) {
+    const sx = (i * 113 + 7) % W
+    const sy = (i * 79 + 11) % (H - 30)
+    const alpha = 0.3 + 0.7 * Math.abs(Math.sin(frame * 0.05 + i * 0.7))
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`
+    ctx.fillRect(sx, sy, i % 5 === 0 ? 2 : 1, i % 5 === 0 ? 2 : 1)
+  }
+
+  // Ground line near bottom
+  ctx.fillStyle = 'rgba(99,102,241,0.3)'
+  ctx.fillRect(0, H - 12, W, 12)
+
+  const GY = H - 28  // bowl y position
+  const RANDOM_XS = [W * 0.2, W * 0.5, W * 0.8]
+
+  // ── Step 0: Night sky backdrop label + shooting star ──
+  if (previewStep === 0) {
+    // Shooting star streak
+    const st = frame % 80
+    if (st < 60) {
+      const sx0 = W * 0.1 + st * 2.5
+      const sy0 = H * 0.1 + st * 0.5
+      ctx.save()
+      ctx.strokeStyle = 'rgba(255,255,200,0.8)'
+      ctx.lineWidth = 1.5
+      ctx.beginPath()
+      ctx.moveTo(sx0, sy0)
+      ctx.lineTo(sx0 - 30, sy0 - 12)
+      ctx.stroke()
+      ctx.restore()
+    }
+    // Label pill
+    ctx.fillStyle = 'rgba(99,102,241,0.88)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W / 2 - 58, H - 22, 116, 14, 5)
+    else ctx.rect(W / 2 - 58, H - 22, 116, 14)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('🌌 Choose Backdrop', W / 2, H - 15)
+    return
+  }
+
+  // ── Bowl position ──
+  let bowlX
+  if (previewStep === 2 || previewStep >= 5) {
+    bowlX = W / 2 + Math.sin(frame * 0.04) * 70
+  } else if (previewStep === 6) {
+    // Bowl moves toward the falling star
+    const starX = W / 2
+    const t = (frame % 100) / 100
+    bowlX = W * 0.15 + (starX - W * 0.15) * Math.min(1, t * 1.5)
+  } else {
+    bowlX = W / 2
+  }
+
+  // Draw bowl (step 1+)
+  if (previewStep >= 1) {
+    drawBowl(ctx, bowlX, GY)
+
+    // "size: 80 ✓" pill (step 1)
+    if (previewStep === 1) {
+      ctx.fillStyle = 'rgba(245,158,11,0.9)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(bowlX + 28, GY - 6, 54, 12, 3)
+      else ctx.rect(bowlX + 28, GY - 6, 54, 12)
+      ctx.fill()
+      ctx.fillStyle = '#fff'
+      ctx.font = 'bold 7px Nunito,sans-serif'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('size: 80 ✓', bowlX + 32, GY)
+    }
+
+    // ← → key hints (step 2)
+    if (previewStep === 2) {
+      const pulse = 0.5 + 0.5 * Math.abs(Math.sin(frame * 0.07))
+      ctx.save()
+      ctx.globalAlpha = pulse * 0.8
+      const ks = 14
+      for (const [kx, arrow] of [[bowlX - 30, '◀'], [bowlX + 30, '▶']]) {
+        ctx.fillStyle = 'rgba(255,255,255,0.15)'
+        ctx.strokeStyle = 'rgba(255,255,255,0.4)'
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        if (ctx.roundRect) ctx.roundRect(kx - ks / 2, GY - 25, ks, ks, 2)
+        else ctx.rect(kx - ks / 2, GY - 25, ks, ks)
+        ctx.fill()
+        ctx.stroke()
+        ctx.fillStyle = 'rgba(255,255,255,0.9)'
+        ctx.font = '9px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(arrow, kx, GY - 18)
+      }
+      ctx.restore()
+    }
+  }
+
+  // ── Step 3: Ghost star template at top-centre ──
+  if (previewStep === 3) {
+    ctx.save()
+    ctx.globalAlpha = 0.28
+    drawCollectStar(ctx, W / 2, 25, 10, '#ffd700')
+    ctx.restore()
+    // Dashed circle outline
+    ctx.save()
+    ctx.strokeStyle = '#ffd700'
+    ctx.lineWidth = 1
+    ctx.setLineDash([3, 3])
+    ctx.beginPath()
+    ctx.arc(W / 2, 25, 13, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.setLineDash([])
+    ctx.restore()
+    // "Star (hidden)" pill
+    ctx.fillStyle = 'rgba(245,158,11,0.85)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W / 2 - 42, 42, 84, 12, 4)
+    else ctx.rect(W / 2 - 42, 42, 84, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('Star (hidden)', W / 2, 48)
+    return
+  }
+
+  // ── Steps 4+: Falling stars ──
+  if (previewStep >= 4) {
+    const numStars = previewStep >= 8 ? 4 : previewStep >= 5 ? 3 : 1
+    const phases = [0, 40, 80, 20]
+    const xPositions = previewStep >= 5
+      ? RANDOM_XS
+      : [W / 2]
+
+    for (let s = 0; s < numStars; s++) {
+      const xPos = xPositions[s % xPositions.length]
+      const period = 120
+      const t = (frame + phases[s]) % period
+      const starY = (t / period) * (H + 20) - 10
+
+      // Caught flash: step 6, star near bowl
+      if (previewStep === 6 || previewStep >= 7) {
+        const catchPhase = frame % 100
+        if (catchPhase > 70 && s === 0) {
+          // "⭐ Caught!" bubble
+          ctx.save()
+          const a = Math.sin(((catchPhase - 70) / 30) * Math.PI)
+          ctx.globalAlpha = a
+          ctx.fillStyle = 'rgba(255,255,255,0.95)'
+          ctx.beginPath()
+          if (ctx.roundRect) ctx.roundRect(bowlX - 30, GY - 45, 60, 16, 5)
+          else ctx.rect(bowlX - 30, GY - 45, 60, 16)
+          ctx.fill()
+          ctx.fillStyle = '#333'
+          ctx.font = 'bold 8px Nunito,sans-serif'
+          ctx.textAlign = 'center'
+          ctx.textBaseline = 'middle'
+          ctx.fillText('⭐ Caught!', bowlX, GY - 37)
+          ctx.restore()
+          // Sparkle burst
+          const SPARK_COLS = ['#ffd700', '#ff6bff', '#6bffff', '#ff6b35']
+          for (let p = 0; p < 6; p++) {
+            const angle = (p / 6) * Math.PI * 2
+            const r = 8 + a * 14
+            ctx.save()
+            ctx.globalAlpha = a * 0.8
+            ctx.fillStyle = SPARK_COLS[p % 4]
+            ctx.beginPath()
+            ctx.arc(bowlX + Math.cos(angle) * r, GY - 5 + Math.sin(angle) * r, 2.5, 0, Math.PI * 2)
+            ctx.fill()
+            ctx.restore()
+          }
+          // "touching [Catcher]? ✓" tooltip (step 6)
+          if (previewStep === 6) {
+            ctx.save()
+            ctx.globalAlpha = a
+            ctx.fillStyle = 'rgba(92,177,214,0.92)'
+            ctx.beginPath()
+            if (ctx.roundRect) ctx.roundRect(bowlX - 50, GY - 65, 100, 13, 4)
+            else ctx.rect(bowlX - 50, GY - 65, 100, 13)
+            ctx.fill()
+            ctx.fillStyle = '#fff'
+            ctx.font = 'bold 6.5px Nunito,sans-serif'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText('touching [Catcher]? ✓', bowlX, GY - 58)
+            ctx.restore()
+          }
+          continue
+        }
+      }
+
+      drawCollectStar(ctx, xPos, starY, 8)
+    }
+  }
+
+  // ── Score HUD (steps 7+) ──
+  if (previewStep >= 7) {
+    const score = Math.floor(frame / 60) % 12
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(4, 4, 72, 20, 3)
+    else ctx.rect(4, 4, 72, 20)
+    ctx.fill()
+    ctx.fillStyle = '#ffd700'
+    ctx.font = 'bold 10px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(`Score: ${score}`, 8, 14)
+  }
+
+  // ── Lives HUD (step 8) ──
+  if (previewStep >= 8) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W - 60, 4, 56, 20, 3)
+    else ctx.rect(W - 60, 4, 56, 20)
+    ctx.fill()
+    ctx.fillStyle = '#ff6b6b'
+    ctx.font = 'bold 10px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('♥ ♥ ♥', W - 54, 14)
+  }
+}
+
+/* ──────────────── Whack-a-Mole helpers ──────────────── */
+
+function drawMoleHead(ctx, cx, cy, r = 15) {
+  // head
+  ctx.fillStyle = '#8B5E2A'
+  ctx.beginPath()
+  ctx.arc(cx, cy, r, 0, Math.PI * 2)
+  ctx.fill()
+  // snout
+  ctx.fillStyle = '#c49a3c'
+  ctx.beginPath()
+  ctx.ellipse(cx, cy + r * 0.4, r * 0.55, r * 0.38, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // nose
+  ctx.fillStyle = '#1a1a1a'
+  ctx.beginPath()
+  ctx.ellipse(cx, cy + r * 0.25, 3.5, 2.5, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // eyes
+  for (const ex of [cx - r * 0.38, cx + r * 0.38]) {
+    ctx.fillStyle = '#1a1a1a'
+    ctx.beginPath()
+    ctx.arc(ex, cy - r * 0.3, 2.5, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.arc(ex + 0.8, cy - r * 0.35, 1, 0, Math.PI * 2)
+    ctx.fill()
+  }
+}
+
+/* ──────────────── Whack-a-Mole ──────────────── */
+function drawWhackAMole(ctx, W, H, frame, previewStep) {
+  // Warm brown dirt background
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#7c5c3a')
+  bg.addColorStop(1, '#5c3d1e')
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+
+  // Holes grid
+  const HOLES = [
+    [W * 0.22, H * 0.45], [W * 0.50, H * 0.45], [W * 0.78, H * 0.45],
+    [W * 0.22, H * 0.72], [W * 0.50, H * 0.72], [W * 0.78, H * 0.72],
+  ]
+
+  // Draw each hole as a dark oval
+  const drawHole = (hx, hy) => {
+    // Shadow below hole
+    ctx.save()
+    ctx.globalAlpha = 0.4
+    ctx.fillStyle = '#1a0a00'
+    ctx.beginPath()
+    ctx.ellipse(hx, hy + 3, 22, 11, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.restore()
+    // Hole
+    ctx.fillStyle = '#3a2510'
+    ctx.beginPath()
+    ctx.ellipse(hx, hy, 20, 9, 0, 0, Math.PI * 2)
+    ctx.fill()
+    // Rim highlight
+    ctx.strokeStyle = 'rgba(100,60,20,0.5)'
+    ctx.lineWidth = 1.5
+    ctx.beginPath()
+    ctx.ellipse(hx, hy - 1, 20, 8, 0, 0, Math.PI)
+    ctx.stroke()
+  }
+
+  HOLES.forEach(([hx, hy]) => drawHole(hx, hy))
+
+  // ── Step 0: Paint Editor animation ──
+  if (previewStep === 0) {
+    // Animate drawing one hole
+    const prog = Math.min(1, (frame % 90) / 60)
+    const [hx, hy] = HOLES[1]
+    ctx.save()
+    ctx.globalAlpha = 0.7
+    ctx.fillStyle = '#2a1505'
+    ctx.beginPath()
+    ctx.ellipse(hx, hy, 20 * prog, 9 * prog, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.restore()
+    // Brush cursor
+    const bpulse = Math.sin(frame * 0.2) * 2
+    ctx.fillStyle = '#d946ef'
+    ctx.beginPath()
+    ctx.arc(hx + 20 * prog, hy, 4 + bpulse, 0, Math.PI * 2)
+    ctx.fill()
+    // Label pill
+    ctx.fillStyle = 'rgba(217,70,239,0.88)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W / 2 - 44, H - 20, 88, 14, 5)
+    else ctx.rect(W / 2 - 44, H - 20, 88, 14)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('✏️ Paint Editor', W / 2, H - 13)
+    return
+  }
+
+  // ── Step 1: Ghost mole at top-centre hole ──
+  if (previewStep === 1) {
+    const [hx, hy] = HOLES[1]
+    ctx.save()
+    ctx.globalAlpha = 0.25
+    drawMoleHead(ctx, hx, hy - 8)
+    ctx.restore()
+    // "Mole sprite (hidden)" pill
+    ctx.fillStyle = 'rgba(245,158,11,0.88)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(hx - 52, hy - 32, 104, 12, 4)
+    else ctx.rect(hx - 52, hy - 32, 104, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('Mole sprite (hidden)', hx, hy - 26)
+    return
+  }
+
+  // ── Step 2: Mole clone appears at random hole (flash) ──
+  if (previewStep === 2) {
+    const holeIdx = Math.floor(frame / 70) % HOLES.length
+    const [hx, hy] = HOLES[holeIdx]
+    const flashT = frame % 70
+    const alpha = flashT < 10 ? flashT / 10 : flashT < 55 ? 1 : (70 - flashT) / 15
+    ctx.save()
+    ctx.globalAlpha = Math.max(0, alpha)
+    drawMoleHead(ctx, hx, hy - 8)
+    ctx.restore()
+    // Tooltip
+    const tipAlpha = Math.min(1, alpha)
+    ctx.save()
+    ctx.globalAlpha = tipAlpha * 0.85
+    ctx.fillStyle = 'rgba(92,177,214,0.9)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(hx - 52, hy - 32, 104, 12, 4)
+    else ctx.rect(hx - 52, hy - 32, 104, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('go to random hole', hx, hy - 26)
+    ctx.restore()
+    return
+  }
+
+  // ── Step 3: Mole pops up at HOLES[4] (animate emergence) ──
+  if (previewStep === 3) {
+    const [hx, hy] = HOLES[4]
+    // Oscillate: visible when offset < 0
+    const cycleT = frame % 120
+    let yOff
+    if (cycleT < 50) {
+      yOff = -14 * Math.min(1, cycleT / 20)  // emerge
+    } else if (cycleT < 80) {
+      yOff = -14  // visible
+    } else {
+      yOff = -14 + 14 * Math.min(1, (cycleT - 80) / 20)  // retreat
+    }
+    ctx.save()
+    // Clip to hole region so mole appears to emerge from underground
+    ctx.beginPath()
+    ctx.ellipse(hx, hy, 20, 10, 0, 0, Math.PI * 2)
+    ctx.rect(hx - 22, hy - 30, 44, 30)
+    ctx.clip()
+    if (yOff < 0) drawMoleHead(ctx, hx, hy + yOff)
+    ctx.restore()
+    return
+  }
+
+  // ── Step 4: Cursor (hand pointer) over mole at HOLES[1] ──
+  if (previewStep === 4) {
+    const [hx, hy] = HOLES[1]
+    drawMoleHead(ctx, hx, hy - 10)
+    // Wider eyes (alarmed)
+    ctx.fillStyle = '#ff4444'
+    ctx.beginPath()
+    ctx.arc(hx - 5.7, hy - 13, 3, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(hx + 5.7, hy - 13, 3, 0, Math.PI * 2)
+    ctx.fill()
+    // Hand cursor (simplified arrow)
+    const cpulse = 0.5 + 0.5 * Math.abs(Math.sin(frame * 0.1))
+    const cx = hx + 18, cy = hy - 25
+    ctx.save()
+    ctx.globalAlpha = cpulse
+    ctx.fillStyle = '#fff'
+    ctx.strokeStyle = '#333'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(cx, cy)
+    ctx.lineTo(cx, cy + 16)
+    ctx.lineTo(cx + 4, cy + 12)
+    ctx.lineTo(cx + 7, cy + 18)
+    ctx.lineTo(cx + 9, cy + 17)
+    ctx.lineTo(cx + 6, cy + 11)
+    ctx.lineTo(cx + 11, cy + 11)
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+    ctx.restore()
+    // "click!" label
+    ctx.save()
+    ctx.globalAlpha = cpulse
+    ctx.fillStyle = 'rgba(236,72,153,0.9)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(hx + 10, hy - 44, 42, 12, 4)
+    else ctx.rect(hx + 10, hy - 44, 42, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('click!', hx + 31, hy - 38)
+    ctx.restore()
+    return
+  }
+
+  // ── Step 5: Hit sparkle burst on HOLES[4] + score HUD ──
+  if (previewStep === 5) {
+    const [hx, hy] = HOLES[4]
+    const hitT = frame % 60
+    const prog = hitT / 60
+    const SPARK_COLS = ['#ffd700', '#ff6b35', '#ff6bff', '#6bffff']
+    for (let p = 0; p < 8; p++) {
+      const angle = (p / 8) * Math.PI * 2
+      const r = prog * 22
+      ctx.save()
+      ctx.globalAlpha = (1 - prog) * 0.85
+      ctx.fillStyle = SPARK_COLS[p % 4]
+      ctx.beginPath()
+      ctx.arc(hx + Math.cos(angle) * r, hy + Math.sin(angle) * r, 3, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.restore()
+    }
+    const score = Math.floor(frame / 60)
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(4, 4, 72, 20, 3)
+    else ctx.rect(4, 4, 72, 20)
+    ctx.fill()
+    ctx.fillStyle = '#ffd700'
+    ctx.font = 'bold 10px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(`Score: ${score}`, 8, 14)
+    return
+  }
+
+  // ── Steps 6+: Multiple moles cycling simultaneously ──
+  if (previewStep >= 6) {
+    const phases = [0, 40, 80, 20, 60, 100]
+    HOLES.forEach(([hx, hy], i) => {
+      const cycleT = (frame + phases[i]) % 100
+      if (cycleT < 70) {
+        const yOff = cycleT < 15 ? -12 * (cycleT / 15) : cycleT < 55 ? -12 : -12 + 12 * ((cycleT - 55) / 15)
+        if (yOff < 0) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.ellipse(hx, hy, 20, 10, 0, 0, Math.PI * 2)
+          ctx.rect(hx - 22, hy - 30, 44, 30)
+          ctx.clip()
+          drawMoleHead(ctx, hx, hy + yOff)
+          ctx.restore()
+        }
+      }
+    })
+
+    // ── Step 7: Timer HUD ──
+    if (previewStep >= 7) {
+      const timerVal = Math.max(0, 30 - Math.floor(frame / 30))
+      ctx.fillStyle = 'rgba(0,0,0,0.5)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(W - 70, 4, 66, 20, 3)
+      else ctx.rect(W - 70, 4, 66, 20)
+      ctx.fill()
+      ctx.fillStyle = timerVal < 10 ? '#ff6b6b' : '#ffd700'
+      ctx.font = 'bold 10px Nunito,sans-serif'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`⏱ ${timerVal}s`, W - 64, 14)
+    }
+
+    // ── Step 8: Full game — score + timer ──
+    if (previewStep >= 8) {
+      const score = Math.floor(frame / 40) % 20
+      ctx.fillStyle = 'rgba(0,0,0,0.5)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(4, 4, 72, 20, 3)
+      else ctx.rect(4, 4, 72, 20)
+      ctx.fill()
+      ctx.fillStyle = '#fff'
+      ctx.font = 'bold 10px Nunito,sans-serif'
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`Score: ${score}`, 8, 14)
+    }
+  }
+}
+
+/* ──────────────── Sky Drifter helpers ──────────────── */
+
+function drawSkyBird(ctx, x, y, flapAngle) {
+  ctx.save()
+  ctx.translate(x, y)
+  // wing
+  ctx.fillStyle = '#fbbf24'
+  ctx.save()
+  ctx.rotate(flapAngle)
+  ctx.beginPath()
+  ctx.ellipse(0, -8, 13, 5, -0.4, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+  // body
+  ctx.fillStyle = '#f59e0b'
+  ctx.beginPath()
+  ctx.ellipse(0, 0, 14, 10, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // tail
+  ctx.fillStyle = '#d97706'
+  ctx.beginPath()
+  ctx.moveTo(-13, 0)
+  ctx.lineTo(-21, -5)
+  ctx.lineTo(-21, 5)
+  ctx.closePath()
+  ctx.fill()
+  // eye
+  ctx.fillStyle = '#fff'
+  ctx.beginPath()
+  ctx.arc(6, -2, 5, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = '#111'
+  ctx.beginPath()
+  ctx.arc(7, -2, 3, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = '#fff'
+  ctx.beginPath()
+  ctx.arc(8, -3, 1.2, 0, Math.PI * 2)
+  ctx.fill()
+  // beak
+  ctx.fillStyle = '#f97316'
+  ctx.beginPath()
+  ctx.moveTo(14, -1)
+  ctx.lineTo(21, 0)
+  ctx.lineTo(14, 4)
+  ctx.closePath()
+  ctx.fill()
+  ctx.restore()
+}
+
+function drawPipes(ctx, x, gapCY, gapH, H) {
+  const pw = 28, cap = 14
+  const gapTop = gapCY - gapH / 2
+  const gapBot = gapCY + gapH / 2
+  // top pipe
+  ctx.fillStyle = '#22c55e'
+  ctx.fillRect(x - pw / 2, 0, pw, gapTop - cap)
+  ctx.fillStyle = '#16a34a'
+  ctx.fillRect(x - pw / 2 - 3, gapTop - cap, pw + 6, cap)
+  // bottom pipe
+  ctx.fillStyle = '#22c55e'
+  ctx.fillRect(x - pw / 2, gapBot + cap, pw, H - gapBot - cap)
+  ctx.fillStyle = '#16a34a'
+  ctx.fillRect(x - pw / 2 - 3, gapBot, pw + 6, cap)
+}
+
+/* ──────────────── Sky Drifter ──────────────── */
+function drawSkyDrifter(ctx, W, H, frame, previewStep) {
+  // Sky gradient background
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#87ceeb')
+  bg.addColorStop(1, '#b0e0ff')
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+
+  // Scrolling clouds (3 clouds)
+  const cloudData = [
+    { baseX: W * 0.15, y: H * 0.12, r: 22, speed: 0.18 },
+    { baseX: W * 0.55, y: H * 0.22, r: 18, speed: 0.11 },
+    { baseX: W * 0.82, y: H * 0.08, r: 26, speed: 0.15 },
+  ]
+  cloudData.forEach(({ baseX, y, r, speed }) => {
+    const cx = (baseX + frame * speed) % (W + 80) - 40
+    drawCloud(ctx, cx, y, r)
+  })
+
+  // ── Step 0: pure sky + "Choose Backdrop" pill ──
+  if (previewStep === 0) {
+    ctx.fillStyle = 'rgba(99,102,241,0.88)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W / 2 - 58, H - 22, 116, 14, 5)
+    else ctx.rect(W / 2 - 58, H - 22, 116, 14)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('🌤️ Choose Backdrop', W / 2, H - 15)
+    return
+  }
+
+  const GAP_H = 60
+
+  // ── Bird position ──
+  let birdY, birdFlap = 0
+  if (previewStep === 1) {
+    // Static
+    birdY = H / 2
+  } else if (previewStep === 2) {
+    // Falls with simulated gravity (loops)
+    birdY = H * 0.3 + ((frame % 80) / 80) * H * 0.5
+    birdFlap = 0
+  } else if (previewStep === 3) {
+    // Flapping: oscillates up and down
+    birdY = H / 2 - Math.sin(frame * 0.08) * 40
+    birdFlap = Math.sin(frame * 0.2) * 0.5
+  } else if (previewStep === 7) {
+    // Bird hits pipe flash
+    birdY = H / 2 + Math.sin(frame * 0.05) * 20
+    birdFlap = Math.sin(frame * 0.2) * 0.4
+  } else {
+    // Normal flapping flight
+    birdY = H / 2 - Math.sin(frame * 0.06) * 30
+    birdFlap = Math.sin(frame * 0.2) * 0.5
+  }
+
+  const birdX = W * 0.25
+
+  // ── Step 1: "size: 50 ✓" pill ──
+  if (previewStep === 1) {
+    ctx.fillStyle = 'rgba(245,158,11,0.9)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(birdX + 22, birdY - 8, 52, 12, 3)
+    else ctx.rect(birdX + 22, birdY - 8, 52, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('size: 50 ✓', birdX + 26, birdY - 2)
+  }
+
+  // ── Step 3: SPACE key hint ──
+  if (previewStep === 3) {
+    const pulse = 0.5 + 0.5 * Math.abs(Math.sin(frame * 0.08))
+    ctx.save()
+    ctx.globalAlpha = pulse * 0.85
+    ctx.fillStyle = 'rgba(255,255,0,0.15)'
+    ctx.strokeStyle = 'rgba(255,255,0,0.5)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(birdX - 22, H - 18, 44, 12, 3)
+    else ctx.rect(birdX - 22, H - 18, 44, 12)
+    ctx.fill()
+    ctx.stroke()
+    ctx.fillStyle = 'rgba(255,255,0,0.9)'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('SPACE', birdX, H - 12)
+    ctx.restore()
+  }
+
+  // ── Steps 4+: Pipes ──
+  if (previewStep === 4) {
+    // Ghost pipe pair at right (dashed outlines)
+    const gpX = W * 0.85
+    const gpCY = H / 2
+    ctx.save()
+    ctx.globalAlpha = 0.3
+    ctx.strokeStyle = '#22c55e'
+    ctx.lineWidth = 2
+    ctx.setLineDash([4, 4])
+    // top pipe outline
+    ctx.strokeRect(gpX - 14, 0, 28, gpCY - GAP_H / 2 - 14)
+    ctx.strokeRect(gpX - 17, gpCY - GAP_H / 2 - 14, 34, 14)
+    // bottom pipe outline
+    ctx.strokeRect(gpX - 14, gpCY + GAP_H / 2, 28, H - (gpCY + GAP_H / 2 + 14))
+    ctx.strokeRect(gpX - 17, gpCY + GAP_H / 2, 34, 14)
+    ctx.setLineDash([])
+    ctx.restore()
+    // "Pipe sprite (hidden)" faded pill
+    ctx.save()
+    ctx.globalAlpha = 0.5
+    ctx.fillStyle = 'rgba(34,197,94,0.85)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(gpX - 50, H / 2 - 6, 100, 12, 4)
+    else ctx.rect(gpX - 50, H / 2 - 6, 100, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('Pipe sprite (hidden)', gpX, H / 2)
+    ctx.restore()
+  } else if (previewStep === 5) {
+    // Single pipe pair scrolling left
+    const px = W - ((frame % (W + 50)) / (W + 50)) * (W + 50)
+    drawPipes(ctx, px, H / 2, GAP_H, H)
+  } else if (previewStep >= 6) {
+    // Two pipe pairs at different heights
+    const pipeData = [
+      { offset: 0, gapCY: H * 0.4 },
+      { offset: (W + 50) / 2, gapCY: H * 0.6 },
+    ]
+    pipeData.forEach(({ offset, gapCY }) => {
+      const px = W - ((frame + offset) % (W + 50)) / (W + 50) * (W + 50)
+      if (px > -40 && px < W + 40) drawPipes(ctx, px, gapCY, GAP_H, H)
+    })
+  }
+
+  // ── Step 7: Bird hits pipe — red flash + "Game Over 💥" overlay ──
+  if (previewStep === 7) {
+    const cycleT = frame % 150
+    if (cycleT > 100) {
+      const prog = (cycleT - 100) / 50
+      ctx.save()
+      ctx.globalAlpha = Math.sin(prog * Math.PI) * 0.7
+      ctx.fillStyle = 'rgba(0,0,0,0.7)'
+      ctx.fillRect(0, 0, W, H)
+      ctx.fillStyle = '#ff4444'
+      ctx.font = 'bold 12px Nunito,sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('Game Over 💥', W / 2, H / 2)
+      ctx.restore()
+    }
+    // Red flash on bird when near collision frame
+    if (cycleT > 90 && cycleT < 110) {
+      const flashAlpha = Math.sin(((cycleT - 90) / 20) * Math.PI) * 0.6
+      ctx.save()
+      ctx.globalAlpha = flashAlpha
+      ctx.fillStyle = '#ff4444'
+      ctx.beginPath()
+      ctx.arc(birdX, birdY, 16, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.restore()
+    }
+  }
+
+  // ── Draw Bird (all steps 1+) ──
+  drawSkyBird(ctx, birdX, birdY, birdFlap)
+
+  // ── Step 8: Score HUD + pipes scroll, score increments ──
+  if (previewStep >= 8) {
+    const score = Math.floor(frame / 90)
+    ctx.fillStyle = 'rgba(0,0,50,0.55)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(4, 4, 72, 20, 3)
+    else ctx.rect(4, 4, 72, 20)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 10px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(`Score: ${score}`, 8, 14)
+  }
+}
+
 const RENDERERS = {
   'apple-collector': drawAppleCollector,
   'space-shooter':  drawSpaceShooter,
   'maze-runner':    drawMaze,
+  'catch-stars':    drawCatchStars,
+  'whack-a-mole':   drawWhackAMole,
+  'sky-drifter':    drawSkyDrifter,
 }
 
 export default function GamePreview({ missionId, previewStep, compact = false }) {
