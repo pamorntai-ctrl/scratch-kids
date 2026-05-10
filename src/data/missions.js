@@ -384,6 +384,345 @@ export const MISSIONS = [
   },
 
   /* ══════════════════════════════════════════════════════
+     MISSION 4 — CATCH THE STARS
+  ══════════════════════════════════════════════════════ */
+  {
+    id: 'catch-stars',
+    title: 'Catch the Stars',
+    emoji: '⭐',
+    tagline: 'Catch falling stars before they hit the ground!',
+    description:
+      'Move a bowl left and right to catch stars falling from the sky. Stars spawn randomly and fall at different speeds — every catch scores a point and every miss costs a life!',
+    difficulty: 'Beginner',
+    difficultyColor: 'emerald',
+    xpReward: 350,
+    timeEstimate: '30 min',
+    color: 'from-yellow-400 to-amber-500',
+    gradientBg: 'from-yellow-900/30 to-amber-900/20',
+    badge: {
+      id: 'star-catcher',
+      name: 'Star Catcher',
+      emoji: '💫',
+      description: 'Caught the stars!',
+      color: 'from-yellow-400 to-amber-500',
+    },
+    concepts: ['Backdrops', 'Sprites', 'Clones', 'Sensing', 'Variables'],
+    programmingSkills: [
+      {
+        emoji: '🧬',
+        skill: 'Clone Instantiation',
+        color: '#a855f7',
+        detail: '"create clone of [myself]" spawns a new independent star each second — identical to calling new Star() in JavaScript or Python. This object-instantiation pattern is the heart of OOP.',
+      },
+      {
+        emoji: '🎲',
+        skill: 'Random Numbers',
+        color: '#10b981',
+        detail: '"pick random (-200) to (200)" gives every star a different x position. Randomness drives loot drops, procedural maps, shuffled playlists, and enemy spawns across every game genre.',
+      },
+      {
+        emoji: '🎯',
+        skill: 'Collision Detection',
+        color: '#5CB1D6',
+        detail: '"touching [Catcher]?" polls 30 times per second to check if a star overlaps the bowl. Game engines like Unity call this a trigger volume — the same concept behind every catch mechanic.',
+      },
+      {
+        emoji: '📦',
+        skill: 'State Variables',
+        color: '#f59e0b',
+        detail: 'Score and Lives track the game\'s current state. Managing state — reading, updating, and displaying variables — is the central challenge of all real software engineering.',
+      },
+      {
+        emoji: '🔁',
+        skill: 'Game Loop',
+        color: '#FF8C1A',
+        detail: 'The "forever" loop runs every frame, moving the bowl and creating clones. Every game engine — Unity, Godot, Pygame — has this same main loop running 60 times per second.',
+      },
+      {
+        emoji: '🔀',
+        skill: 'Conditionals',
+        color: '#4C97FF',
+        detail: '"if ‹(Lives) = (0)›" checks a boolean condition and branches the program. If-statements are the single most important tool in all of programming — every app uses them constantly.',
+      },
+    ],
+    steps: [
+
+      /* ── Step 1 ── */
+      {
+        id: 1,
+        title: 'Set the Night Sky',
+        emoji: '🌌',
+        xp: 20,
+        concept: { name: 'Program Setup', color: '#6366f1' },
+        goal: 'Choose a galaxy or stars backdrop and delete the default cat',
+        description:
+          'Every game starts with a scene. Pick a dark starry backdrop so your falling stars stand out beautifully against the night sky.',
+        scratchArea: 'backdrop',
+        previewStep: 0,
+        actions: [
+          { text: 'Open Scratch and create a new project (File → New).', area: 'File Menu' },
+          { text: 'Right-click the cat sprite in the sprite panel and choose "Delete".', area: 'Sprite Panel' },
+          { text: 'Click "Choose a Backdrop" (bottom-right) and search for "Stars" or "Galaxy".', area: 'Backdrop Selector' },
+          { text: 'Click a dark starfield backdrop to add it — the stage turns into a night sky!', area: 'Backdrop Library' },
+        ],
+        blocks: [],
+        tip: 'A dark background makes the yellow stars pop visually. Contrast is a key principle in game design!',
+        didYouKnow: 'The Scratch stage is 480 × 360 pixels. x=0, y=0 is the dead centre. Positive y = up, negative y = down.',
+      },
+
+      /* ── Step 2 ── */
+      {
+        id: 2,
+        title: 'Add the Catcher',
+        emoji: '🥣',
+        xp: 25,
+        concept: { name: 'Object Properties', color: '#d946ef' },
+        goal: 'Add a Bowl or Cup sprite, set its size, and position it near the bottom',
+        description:
+          "The catcher is the player's tool. We'll add a Bowl sprite, resize it so it looks right, and write its opening script to lock it at the bottom of the screen.",
+        scratchArea: 'sprites',
+        previewStep: 1,
+        actions: [
+          { text: 'Click "Choose a Sprite" and search for "Bowl" or "Cup" — add it.', area: 'Sprite Library' },
+          { text: 'Set the Bowl\'s Size to 80 in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while Bowl is selected.', area: 'Code Tab' },
+          { text: 'From "Events", drag "when 🏁 clicked" into the scripts area.', area: 'Events Palette' },
+          { text: 'From "Motion", snap "go to x: (0) y: (-150)" below it — this pins the bowl near the bottom.', area: 'Motion Palette' },
+          { text: 'Click the green flag — the bowl should appear at the bottom centre!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',          cat: 'events', indent: 0, shape: 'hat'   },
+          { text: 'go to x: (0) y: (-150)',    cat: 'motion', indent: 0, shape: 'stack' },
+          { text: 'set size to (80) %',        cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'y: -150 places the bowl near the bottom. The stage goes from y=-180 (bottom) to y=180 (top).',
+        didYouKnow: 'Every object in a game starts with initialization code that sets position, size, and state before the player can interact.',
+      },
+
+      /* ── Step 3 ── */
+      {
+        id: 3,
+        title: 'Move the Catcher',
+        emoji: '⬅️➡️',
+        xp: 45,
+        concept: { name: 'Event Handling · Loops', color: '#4C97FF' },
+        goal: 'Left/right arrow keys slide the bowl across the screen; edge stops it',
+        description:
+          "Time to make the bowl responsive! We use the same forever-loop pattern as every other game: check left arrow → move left, check right arrow → move right, then bounce off edges.",
+        scratchArea: 'scripts',
+        previewStep: 2,
+        actions: [
+          { text: 'With the Bowl sprite selected, find your "when 🏁 clicked" script.', area: 'Sprite Panel' },
+          { text: 'Below "go to x/y", snap a "forever" loop from Control.', area: 'Control Palette' },
+          { text: 'Inside forever: add "if < > then". From Sensing, put "key (left arrow) pressed?" in the diamond.', area: 'Sensing Palette' },
+          { text: 'Inside that if: "change x by (-10)".', area: 'Motion Palette' },
+          { text: 'Add a second "if" for right arrow → "change x by (10)".', area: 'Control Palette' },
+          { text: 'After both ifs, add "if on edge, bounce" from Motion.', area: 'Motion Palette' },
+          { text: 'Green flag → press the arrow keys. The bowl glides left and right!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',                      cat: 'events',  indent: 0, shape: 'hat'   },
+          { text: 'go to x: (0) y: (-150)',                cat: 'motion',  indent: 0, shape: 'stack' },
+          { text: 'forever',                               cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'if ‹key [left arrow] pressed?› then',   cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'change x by (-10)',                     cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'if ‹key [right arrow] pressed?› then',  cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'change x by (10)',                      cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'if on edge, bounce',                    cat: 'motion',  indent: 1, shape: 'stack' },
+        ],
+        tip: 'Set the Bowl\'s rotation style to "left-right" in Sprite Info so "if on edge, bounce" never flips it upside-down.',
+        didYouKnow: 'This input-polling pattern inside a forever loop is the game loop — it runs in Unity, Godot, Pygame, and every other game engine at 30–60 fps.',
+      },
+
+      /* ── Step 4 ── */
+      {
+        id: 4,
+        title: 'Add the Star Template',
+        emoji: '⭐',
+        xp: 25,
+        concept: { name: 'Object Templates · Hiding', color: '#a855f7' },
+        goal: 'Add a Star sprite and hide it on flag click — it will be the clone template',
+        description:
+          "Before cloning, we need a template. The original Star sprite hides itself immediately so only its clones will be visible. This is the class-vs-instance pattern: the class stays hidden; instances do the work.",
+        scratchArea: 'sprites',
+        previewStep: 3,
+        actions: [
+          { text: 'Click "Choose a Sprite" and search "Star" — pick the yellow star.', area: 'Sprite Library' },
+          { text: 'Resize the Star to 40 in the Sprite Info panel.', area: 'Sprite Info' },
+          { text: 'Click the Code tab while Star is selected.', area: 'Code Tab' },
+          { text: 'From "Events", add "when 🏁 clicked".', area: 'Events Palette' },
+          { text: 'From "Looks", snap "hide" below it. The original star is now invisible!', area: 'Looks Palette' },
+          { text: 'Green flag — you should see only the bowl. Star is hiding, ready to be cloned.', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— STAR: when 🏁 clicked →', cat: 'events', indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                        cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'Any sprite that uses clones MUST hide its original first. Otherwise the "master" copy sits frozen on the stage forever.',
+        didYouKnow: 'This template-hide pattern maps directly to a class definition in OOP — the class sits in memory invisibly until you instantiate (clone) it.',
+      },
+
+      /* ── Step 5 ── */
+      {
+        id: 5,
+        title: 'Clone Falls',
+        emoji: '🌠',
+        xp: 55,
+        concept: { name: 'Clone Instantiation', color: '#a855f7' },
+        goal: 'Make the master Star create clones that fall from top to bottom and delete themselves',
+        description:
+          "Two scripts on the Star sprite: one forever loop that creates clones every second, and one clone script that shows the star, moves it downward frame by frame, then deletes it when it exits the screen.",
+        scratchArea: 'scripts',
+        previewStep: 4,
+        actions: [
+          { text: 'On the Star sprite, add a second "when 🏁 clicked" script (separate from the hide script).', area: 'Scripts Area' },
+          { text: 'Inside a "forever" loop: "wait (1) seconds" then "create clone of [myself]".', area: 'Control Palette' },
+          { text: 'Add a third script: "when I start as a clone".', area: 'Control Palette' },
+          { text: 'In the clone script: "show", then "repeat until ‹(y position) < (-170)›".', area: 'Control Palette' },
+          { text: 'Inside the repeat-until: "change y by (-5)".', area: 'Motion Palette' },
+          { text: 'After the repeat-until: "delete this clone".', area: 'Control Palette' },
+          { text: 'Green flag — a star should appear at y=0 and fall down, disappearing at the bottom!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— STAR master: when 🏁 clicked →',            cat: 'events',  indent: 0, shape: 'hat',  note: true },
+          { text: 'hide',                                          cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'forever',                                       cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'wait (1) seconds',                              cat: 'control', indent: 1, shape: 'stack' },
+          { text: 'create clone of [myself]',                      cat: 'control', indent: 1, shape: 'stack' },
+          { text: '— STAR clone: when I start as a clone →',      cat: 'control', indent: 0, shape: 'hat',  note: true },
+          { text: 'show',                                          cat: 'looks',   indent: 0, shape: 'stack' },
+          { text: 'repeat until ‹(y position) < (-170)›',         cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'change y by (-5)',                              cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                             cat: 'control', indent: 0, shape: 'cap'   },
+        ],
+        tip: '"delete this clone" is essential — without it, thousands of invisible off-screen stars pile up and slow the game to a crawl.',
+        didYouKnow: '"delete this clone" is the game-object lifecycle in action: create → update → destroy. Every bullet, enemy, and particle in every game follows this same lifecycle.',
+      },
+
+      /* ── Step 6 ── */
+      {
+        id: 6,
+        title: 'Random Spawn Position',
+        emoji: '🎲',
+        xp: 30,
+        concept: { name: 'Random Numbers', color: '#10b981' },
+        goal: 'Make each clone appear at a random x position so stars fall from different spots',
+        description:
+          "One block transforms a predictable waterfall into a real game: \"go to x:(pick random (-200) to (200)) y:(175)\" at the very start of the clone script. Now every star spawns at a surprise position.",
+        scratchArea: 'scripts',
+        previewStep: 5,
+        actions: [
+          { text: 'In the clone script (when I start as a clone), find the "show" block.', area: 'Scripts Area' },
+          { text: 'BEFORE "show", snap "go to x:( ) y:(175)" from Motion.', area: 'Motion Palette' },
+          { text: 'In the x slot, drop "pick random (-200) to (200)" from Operators.', area: 'Operators Palette' },
+          { text: 'Green flag — stars now appear at random horizontal positions each time!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— STAR clone: when I start as a clone →',           cat: 'control',   indent: 0, shape: 'hat',  note: true },
+          { text: 'go to x: (pick random (-200) to (200)) y: (175)',   cat: 'motion',    indent: 0, shape: 'stack' },
+          { text: 'show',                                               cat: 'looks',     indent: 0, shape: 'stack' },
+          { text: 'repeat until ‹(y position) < (-170)›',              cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'change y by (-5)',                                   cat: 'motion',    indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                                  cat: 'control',   indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Try pick random (-170) to (170) so stars never spawn partially off-screen.',
+        didYouKnow: 'Random number generation drives loot tables, enemy spawns, procedural worlds, and weather systems. Randomness is what makes games feel alive.',
+      },
+
+      /* ── Step 7 ── */
+      {
+        id: 7,
+        title: 'Catch a Star',
+        emoji: '🤲',
+        xp: 50,
+        concept: { name: 'Collision Detection · Polling', color: '#5CB1D6' },
+        goal: 'Detect when a falling star touches the Bowl — celebrate with a speech bubble',
+        description:
+          "Inside the clone's repeat-until loop, check every frame whether the star is touching the Catcher. If yes: show a message and delete the clone. This is collision detection via polling — the same technique as every catch/collect mechanic in gaming.",
+        scratchArea: 'palette-sensing',
+        previewStep: 6,
+        actions: [
+          { text: 'On the Star sprite, find the "when I start as a clone" script.', area: 'Scripts Area' },
+          { text: 'Inside the repeat-until loop (after "change y by (-5)"), add "if < > then".', area: 'Control Palette' },
+          { text: 'From Sensing, drag "touching [Bowl]?" into the ◇ diamond.', area: 'Sensing Palette' },
+          { text: 'Inside the if: "say [⭐ Caught!] for (0.5) secs", then "delete this clone".', area: 'Looks Palette' },
+          { text: 'Green flag → move the bowl under a falling star — it says "⭐ Caught!" on contact!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(inside repeat-until loop)',                 cat: 'control', indent: 0, shape: 'stack', note: true },
+          { text: 'change y by (-5)',                           cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'if ‹touching [Bowl]?› then',                cat: 'sensing', indent: 1, shape: 'c'     },
+          { text: 'say [⭐ Caught!] for (0.5) secs',           cat: 'looks',   indent: 2, shape: 'stack' },
+          { text: 'delete this clone',                          cat: 'control', indent: 2, shape: 'cap'   },
+        ],
+        tip: '"touching [Bowl]?" polls every frame — asking "do these two sprites overlap?" up to 30 times per second.',
+        didYouKnow: 'Collision detection is one of the most important algorithms in games. Unity calls these "colliders", Godot calls them "collision shapes" — same idea, different names.',
+      },
+
+      /* ── Step 8 ── */
+      {
+        id: 8,
+        title: 'Score the Catch',
+        emoji: '🔢',
+        xp: 40,
+        concept: { name: 'Variables · State', color: '#f59e0b' },
+        goal: 'Create a Score variable and add 1 every time a star is caught',
+        description:
+          "Variables hold state. We create \"Score\", set it to 0 at the start, and replace the speech bubble with a score increment. Now every catch feels rewarding without a blocking pop-up.",
+        scratchArea: 'palette-variables',
+        previewStep: 7,
+        actions: [
+          { text: 'Click "Variables" → "Make a Variable" → type "Score" → OK.', area: 'Variables Palette' },
+          { text: 'On the BOWL\'s "when 🏁 clicked" script, add "set [Score] to (0)" right after the flag block.', area: 'Scripts Area' },
+          { text: 'In the star clone\'s if-touching-Bowl block, remove the "say" block.', area: 'Scripts Area' },
+          { text: 'Replace it with "change [Score] by (1)" from Variables.', area: 'Variables Palette' },
+          { text: 'Green flag → catch stars — watch the Score count up!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(inside if ‹touching [Bowl]?›)',             cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'change [Score] by (1)',                      cat: 'variables', indent: 1, shape: 'stack' },
+          { text: 'delete this clone',                          cat: 'control',   indent: 1, shape: 'cap'   },
+        ],
+        tip: 'Right-click the Score display on the stage and choose "Large readout" for a big satisfying counter!',
+        didYouKnow: 'A variable is the most fundamental concept in all programming. Python, JavaScript, Swift — every language uses them to remember and update values as a program runs.',
+      },
+
+      /* ── Step 9 ── */
+      {
+        id: 9,
+        title: 'Lives & Game Over',
+        emoji: '💀',
+        xp: 60,
+        concept: { name: 'Game Loop · Lifecycle', color: '#f59e0b' },
+        goal: 'Add Lives — lose one when a star escapes; game ends when Lives reach zero',
+        description:
+          "The final mechanic: consequences. When a star escapes (the repeat-until ends without a catch), deduct a life. When lives hit zero, announce game over and stop everything. This is a state machine: PLAYING → GAME_OVER.",
+        scratchArea: 'scripts',
+        previewStep: 8,
+        actions: [
+          { text: 'Create a "Lives" variable (Variables → Make a Variable → "Lives").', area: 'Variables Palette' },
+          { text: 'On the BOWL\'s "when 🏁 clicked" script, add "set [Lives] to (3)".', area: 'Scripts Area' },
+          { text: 'In the STAR clone script, after the repeat-until loop ends (outside it), add "change [Lives] by (-1)".', area: 'Scripts Area' },
+          { text: 'Below that: "if ‹(Lives) = (0)› then".', area: 'Control Palette' },
+          { text: 'Inside the if: "say [Game Over! 💫] for (2) secs" then "stop [all]".', area: 'Looks Palette' },
+          { text: 'After the if: "delete this clone".', area: 'Control Palette' },
+          { text: 'Green flag → let stars fall — after 3 misses, Game Over! Your Catch the Stars game is complete! ⭐', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '(after the repeat-until — star escaped)',    cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'change [Lives] by (-1)',                     cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'if ‹(Lives) = (0)› then',                   cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'say [Game Over! 💫] for (2) secs',          cat: 'looks',     indent: 1, shape: 'stack' },
+          { text: 'stop [all]',                                 cat: 'control',   indent: 1, shape: 'cap'   },
+          { text: 'delete this clone',                          cat: 'control',   indent: 0, shape: 'cap'   },
+        ],
+        tip: 'Show ♥ hearts for lives by right-clicking the Lives display — or display it as "large readout" for impact!',
+        didYouKnow: 'PLAYING → GAME_OVER is a state machine. Traffic lights, login flows, vending machines, and game modes are all state machines — one of the most powerful patterns in software.',
+      },
+    ],
+  },
+
+  /* ══════════════════════════════════════════════════════
      MISSION 2 — SPACE SHOOTER
   ══════════════════════════════════════════════════════ */
   {
@@ -736,345 +1075,6 @@ export const MISSIONS = [
         ],
         tip: 'Share your game by clicking "Share" at the top of Scratch — anyone with the link can play it!',
         didYouKnow: 'Traffic lights, login flows, vending machines, and game modes are all state machines. "PLAYING → GAME_OVER" is the simplest version of a pattern used everywhere in software.',
-      },
-    ],
-  },
-
-  /* ══════════════════════════════════════════════════════
-     MISSION 4 — CATCH THE STARS
-  ══════════════════════════════════════════════════════ */
-  {
-    id: 'catch-stars',
-    title: 'Catch the Stars',
-    emoji: '⭐',
-    tagline: 'Catch falling stars before they hit the ground!',
-    description:
-      'Move a bowl left and right to catch stars falling from the sky. Stars spawn randomly and fall at different speeds — every catch scores a point and every miss costs a life!',
-    difficulty: 'Beginner',
-    difficultyColor: 'emerald',
-    xpReward: 350,
-    timeEstimate: '30 min',
-    color: 'from-yellow-400 to-amber-500',
-    gradientBg: 'from-yellow-900/30 to-amber-900/20',
-    badge: {
-      id: 'star-catcher',
-      name: 'Star Catcher',
-      emoji: '💫',
-      description: 'Caught the stars!',
-      color: 'from-yellow-400 to-amber-500',
-    },
-    concepts: ['Backdrops', 'Sprites', 'Clones', 'Sensing', 'Variables'],
-    programmingSkills: [
-      {
-        emoji: '🧬',
-        skill: 'Clone Instantiation',
-        color: '#a855f7',
-        detail: '"create clone of [myself]" spawns a new independent star each second — identical to calling new Star() in JavaScript or Python. This object-instantiation pattern is the heart of OOP.',
-      },
-      {
-        emoji: '🎲',
-        skill: 'Random Numbers',
-        color: '#10b981',
-        detail: '"pick random (-200) to (200)" gives every star a different x position. Randomness drives loot drops, procedural maps, shuffled playlists, and enemy spawns across every game genre.',
-      },
-      {
-        emoji: '🎯',
-        skill: 'Collision Detection',
-        color: '#5CB1D6',
-        detail: '"touching [Catcher]?" polls 30 times per second to check if a star overlaps the bowl. Game engines like Unity call this a trigger volume — the same concept behind every catch mechanic.',
-      },
-      {
-        emoji: '📦',
-        skill: 'State Variables',
-        color: '#f59e0b',
-        detail: 'Score and Lives track the game\'s current state. Managing state — reading, updating, and displaying variables — is the central challenge of all real software engineering.',
-      },
-      {
-        emoji: '🔁',
-        skill: 'Game Loop',
-        color: '#FF8C1A',
-        detail: 'The "forever" loop runs every frame, moving the bowl and creating clones. Every game engine — Unity, Godot, Pygame — has this same main loop running 60 times per second.',
-      },
-      {
-        emoji: '🔀',
-        skill: 'Conditionals',
-        color: '#4C97FF',
-        detail: '"if ‹(Lives) = (0)›" checks a boolean condition and branches the program. If-statements are the single most important tool in all of programming — every app uses them constantly.',
-      },
-    ],
-    steps: [
-
-      /* ── Step 1 ── */
-      {
-        id: 1,
-        title: 'Set the Night Sky',
-        emoji: '🌌',
-        xp: 20,
-        concept: { name: 'Program Setup', color: '#6366f1' },
-        goal: 'Choose a galaxy or stars backdrop and delete the default cat',
-        description:
-          'Every game starts with a scene. Pick a dark starry backdrop so your falling stars stand out beautifully against the night sky.',
-        scratchArea: 'backdrop',
-        previewStep: 0,
-        actions: [
-          { text: 'Open Scratch and create a new project (File → New).', area: 'File Menu' },
-          { text: 'Right-click the cat sprite in the sprite panel and choose "Delete".', area: 'Sprite Panel' },
-          { text: 'Click "Choose a Backdrop" (bottom-right) and search for "Stars" or "Galaxy".', area: 'Backdrop Selector' },
-          { text: 'Click a dark starfield backdrop to add it — the stage turns into a night sky!', area: 'Backdrop Library' },
-        ],
-        blocks: [],
-        tip: 'A dark background makes the yellow stars pop visually. Contrast is a key principle in game design!',
-        didYouKnow: 'The Scratch stage is 480 × 360 pixels. x=0, y=0 is the dead centre. Positive y = up, negative y = down.',
-      },
-
-      /* ── Step 2 ── */
-      {
-        id: 2,
-        title: 'Add the Catcher',
-        emoji: '🥣',
-        xp: 25,
-        concept: { name: 'Object Properties', color: '#d946ef' },
-        goal: 'Add a Bowl or Cup sprite, set its size, and position it near the bottom',
-        description:
-          "The catcher is the player's tool. We'll add a Bowl sprite, resize it so it looks right, and write its opening script to lock it at the bottom of the screen.",
-        scratchArea: 'sprites',
-        previewStep: 1,
-        actions: [
-          { text: 'Click "Choose a Sprite" and search for "Bowl" or "Cup" — add it.', area: 'Sprite Library' },
-          { text: 'Set the Bowl\'s Size to 80 in the Sprite Info panel.', area: 'Sprite Info' },
-          { text: 'Click the Code tab while Bowl is selected.', area: 'Code Tab' },
-          { text: 'From "Events", drag "when 🏁 clicked" into the scripts area.', area: 'Events Palette' },
-          { text: 'From "Motion", snap "go to x: (0) y: (-150)" below it — this pins the bowl near the bottom.', area: 'Motion Palette' },
-          { text: 'Click the green flag — the bowl should appear at the bottom centre!', area: 'Stage' },
-        ],
-        blocks: [
-          { text: 'when 🏁 clicked',          cat: 'events', indent: 0, shape: 'hat'   },
-          { text: 'go to x: (0) y: (-150)',    cat: 'motion', indent: 0, shape: 'stack' },
-          { text: 'set size to (80) %',        cat: 'looks',  indent: 0, shape: 'stack' },
-        ],
-        tip: 'y: -150 places the bowl near the bottom. The stage goes from y=-180 (bottom) to y=180 (top).',
-        didYouKnow: 'Every object in a game starts with initialization code that sets position, size, and state before the player can interact.',
-      },
-
-      /* ── Step 3 ── */
-      {
-        id: 3,
-        title: 'Move the Catcher',
-        emoji: '⬅️➡️',
-        xp: 45,
-        concept: { name: 'Event Handling · Loops', color: '#4C97FF' },
-        goal: 'Left/right arrow keys slide the bowl across the screen; edge stops it',
-        description:
-          "Time to make the bowl responsive! We use the same forever-loop pattern as every other game: check left arrow → move left, check right arrow → move right, then bounce off edges.",
-        scratchArea: 'scripts',
-        previewStep: 2,
-        actions: [
-          { text: 'With the Bowl sprite selected, find your "when 🏁 clicked" script.', area: 'Sprite Panel' },
-          { text: 'Below "go to x/y", snap a "forever" loop from Control.', area: 'Control Palette' },
-          { text: 'Inside forever: add "if < > then". From Sensing, put "key (left arrow) pressed?" in the diamond.', area: 'Sensing Palette' },
-          { text: 'Inside that if: "change x by (-10)".', area: 'Motion Palette' },
-          { text: 'Add a second "if" for right arrow → "change x by (10)".', area: 'Control Palette' },
-          { text: 'After both ifs, add "if on edge, bounce" from Motion.', area: 'Motion Palette' },
-          { text: 'Green flag → press the arrow keys. The bowl glides left and right!', area: 'Stage' },
-        ],
-        blocks: [
-          { text: 'when 🏁 clicked',                      cat: 'events',  indent: 0, shape: 'hat'   },
-          { text: 'go to x: (0) y: (-150)',                cat: 'motion',  indent: 0, shape: 'stack' },
-          { text: 'forever',                               cat: 'control', indent: 0, shape: 'c'     },
-          { text: 'if ‹key [left arrow] pressed?› then',   cat: 'control', indent: 1, shape: 'c'     },
-          { text: 'change x by (-10)',                     cat: 'motion',  indent: 2, shape: 'stack' },
-          { text: 'if ‹key [right arrow] pressed?› then',  cat: 'control', indent: 1, shape: 'c'     },
-          { text: 'change x by (10)',                      cat: 'motion',  indent: 2, shape: 'stack' },
-          { text: 'if on edge, bounce',                    cat: 'motion',  indent: 1, shape: 'stack' },
-        ],
-        tip: 'Set the Bowl\'s rotation style to "left-right" in Sprite Info so "if on edge, bounce" never flips it upside-down.',
-        didYouKnow: 'This input-polling pattern inside a forever loop is the game loop — it runs in Unity, Godot, Pygame, and every other game engine at 30–60 fps.',
-      },
-
-      /* ── Step 4 ── */
-      {
-        id: 4,
-        title: 'Add the Star Template',
-        emoji: '⭐',
-        xp: 25,
-        concept: { name: 'Object Templates · Hiding', color: '#a855f7' },
-        goal: 'Add a Star sprite and hide it on flag click — it will be the clone template',
-        description:
-          "Before cloning, we need a template. The original Star sprite hides itself immediately so only its clones will be visible. This is the class-vs-instance pattern: the class stays hidden; instances do the work.",
-        scratchArea: 'sprites',
-        previewStep: 3,
-        actions: [
-          { text: 'Click "Choose a Sprite" and search "Star" — pick the yellow star.', area: 'Sprite Library' },
-          { text: 'Resize the Star to 40 in the Sprite Info panel.', area: 'Sprite Info' },
-          { text: 'Click the Code tab while Star is selected.', area: 'Code Tab' },
-          { text: 'From "Events", add "when 🏁 clicked".', area: 'Events Palette' },
-          { text: 'From "Looks", snap "hide" below it. The original star is now invisible!', area: 'Looks Palette' },
-          { text: 'Green flag — you should see only the bowl. Star is hiding, ready to be cloned.', area: 'Stage' },
-        ],
-        blocks: [
-          { text: '— STAR: when 🏁 clicked →', cat: 'events', indent: 0, shape: 'hat',  note: true },
-          { text: 'hide',                        cat: 'looks',  indent: 0, shape: 'stack' },
-        ],
-        tip: 'Any sprite that uses clones MUST hide its original first. Otherwise the "master" copy sits frozen on the stage forever.',
-        didYouKnow: 'This template-hide pattern maps directly to a class definition in OOP — the class sits in memory invisibly until you instantiate (clone) it.',
-      },
-
-      /* ── Step 5 ── */
-      {
-        id: 5,
-        title: 'Clone Falls',
-        emoji: '🌠',
-        xp: 55,
-        concept: { name: 'Clone Instantiation', color: '#a855f7' },
-        goal: 'Make the master Star create clones that fall from top to bottom and delete themselves',
-        description:
-          "Two scripts on the Star sprite: one forever loop that creates clones every second, and one clone script that shows the star, moves it downward frame by frame, then deletes it when it exits the screen.",
-        scratchArea: 'scripts',
-        previewStep: 4,
-        actions: [
-          { text: 'On the Star sprite, add a second "when 🏁 clicked" script (separate from the hide script).', area: 'Scripts Area' },
-          { text: 'Inside a "forever" loop: "wait (1) seconds" then "create clone of [myself]".', area: 'Control Palette' },
-          { text: 'Add a third script: "when I start as a clone".', area: 'Control Palette' },
-          { text: 'In the clone script: "show", then "repeat until ‹(y position) < (-170)›".', area: 'Control Palette' },
-          { text: 'Inside the repeat-until: "change y by (-5)".', area: 'Motion Palette' },
-          { text: 'After the repeat-until: "delete this clone".', area: 'Control Palette' },
-          { text: 'Green flag — a star should appear at y=0 and fall down, disappearing at the bottom!', area: 'Stage' },
-        ],
-        blocks: [
-          { text: '— STAR master: when 🏁 clicked →',            cat: 'events',  indent: 0, shape: 'hat',  note: true },
-          { text: 'hide',                                          cat: 'looks',   indent: 0, shape: 'stack' },
-          { text: 'forever',                                       cat: 'control', indent: 0, shape: 'c'     },
-          { text: 'wait (1) seconds',                              cat: 'control', indent: 1, shape: 'stack' },
-          { text: 'create clone of [myself]',                      cat: 'control', indent: 1, shape: 'stack' },
-          { text: '— STAR clone: when I start as a clone →',      cat: 'control', indent: 0, shape: 'hat',  note: true },
-          { text: 'show',                                          cat: 'looks',   indent: 0, shape: 'stack' },
-          { text: 'repeat until ‹(y position) < (-170)›',         cat: 'control', indent: 0, shape: 'c'     },
-          { text: 'change y by (-5)',                              cat: 'motion',  indent: 1, shape: 'stack' },
-          { text: 'delete this clone',                             cat: 'control', indent: 0, shape: 'cap'   },
-        ],
-        tip: '"delete this clone" is essential — without it, thousands of invisible off-screen stars pile up and slow the game to a crawl.',
-        didYouKnow: '"delete this clone" is the game-object lifecycle in action: create → update → destroy. Every bullet, enemy, and particle in every game follows this same lifecycle.',
-      },
-
-      /* ── Step 6 ── */
-      {
-        id: 6,
-        title: 'Random Spawn Position',
-        emoji: '🎲',
-        xp: 30,
-        concept: { name: 'Random Numbers', color: '#10b981' },
-        goal: 'Make each clone appear at a random x position so stars fall from different spots',
-        description:
-          "One block transforms a predictable waterfall into a real game: \"go to x:(pick random (-200) to (200)) y:(175)\" at the very start of the clone script. Now every star spawns at a surprise position.",
-        scratchArea: 'scripts',
-        previewStep: 5,
-        actions: [
-          { text: 'In the clone script (when I start as a clone), find the "show" block.', area: 'Scripts Area' },
-          { text: 'BEFORE "show", snap "go to x:( ) y:(175)" from Motion.', area: 'Motion Palette' },
-          { text: 'In the x slot, drop "pick random (-200) to (200)" from Operators.', area: 'Operators Palette' },
-          { text: 'Green flag — stars now appear at random horizontal positions each time!', area: 'Stage' },
-        ],
-        blocks: [
-          { text: '— STAR clone: when I start as a clone →',           cat: 'control',   indent: 0, shape: 'hat',  note: true },
-          { text: 'go to x: (pick random (-200) to (200)) y: (175)',   cat: 'motion',    indent: 0, shape: 'stack' },
-          { text: 'show',                                               cat: 'looks',     indent: 0, shape: 'stack' },
-          { text: 'repeat until ‹(y position) < (-170)›',              cat: 'control',   indent: 0, shape: 'c'     },
-          { text: 'change y by (-5)',                                   cat: 'motion',    indent: 1, shape: 'stack' },
-          { text: 'delete this clone',                                  cat: 'control',   indent: 0, shape: 'cap'   },
-        ],
-        tip: 'Try pick random (-170) to (170) so stars never spawn partially off-screen.',
-        didYouKnow: 'Random number generation drives loot tables, enemy spawns, procedural worlds, and weather systems. Randomness is what makes games feel alive.',
-      },
-
-      /* ── Step 7 ── */
-      {
-        id: 7,
-        title: 'Catch a Star',
-        emoji: '🤲',
-        xp: 50,
-        concept: { name: 'Collision Detection · Polling', color: '#5CB1D6' },
-        goal: 'Detect when a falling star touches the Bowl — celebrate with a speech bubble',
-        description:
-          "Inside the clone's repeat-until loop, check every frame whether the star is touching the Catcher. If yes: show a message and delete the clone. This is collision detection via polling — the same technique as every catch/collect mechanic in gaming.",
-        scratchArea: 'palette-sensing',
-        previewStep: 6,
-        actions: [
-          { text: 'On the Star sprite, find the "when I start as a clone" script.', area: 'Scripts Area' },
-          { text: 'Inside the repeat-until loop (after "change y by (-5)"), add "if < > then".', area: 'Control Palette' },
-          { text: 'From Sensing, drag "touching [Bowl]?" into the ◇ diamond.', area: 'Sensing Palette' },
-          { text: 'Inside the if: "say [⭐ Caught!] for (0.5) secs", then "delete this clone".', area: 'Looks Palette' },
-          { text: 'Green flag → move the bowl under a falling star — it says "⭐ Caught!" on contact!', area: 'Stage' },
-        ],
-        blocks: [
-          { text: '(inside repeat-until loop)',                 cat: 'control', indent: 0, shape: 'stack', note: true },
-          { text: 'change y by (-5)',                           cat: 'motion',  indent: 1, shape: 'stack' },
-          { text: 'if ‹touching [Bowl]?› then',                cat: 'sensing', indent: 1, shape: 'c'     },
-          { text: 'say [⭐ Caught!] for (0.5) secs',           cat: 'looks',   indent: 2, shape: 'stack' },
-          { text: 'delete this clone',                          cat: 'control', indent: 2, shape: 'cap'   },
-        ],
-        tip: '"touching [Bowl]?" polls every frame — asking "do these two sprites overlap?" up to 30 times per second.',
-        didYouKnow: 'Collision detection is one of the most important algorithms in games. Unity calls these "colliders", Godot calls them "collision shapes" — same idea, different names.',
-      },
-
-      /* ── Step 8 ── */
-      {
-        id: 8,
-        title: 'Score the Catch',
-        emoji: '🔢',
-        xp: 40,
-        concept: { name: 'Variables · State', color: '#f59e0b' },
-        goal: 'Create a Score variable and add 1 every time a star is caught',
-        description:
-          "Variables hold state. We create \"Score\", set it to 0 at the start, and replace the speech bubble with a score increment. Now every catch feels rewarding without a blocking pop-up.",
-        scratchArea: 'palette-variables',
-        previewStep: 7,
-        actions: [
-          { text: 'Click "Variables" → "Make a Variable" → type "Score" → OK.', area: 'Variables Palette' },
-          { text: 'On the BOWL\'s "when 🏁 clicked" script, add "set [Score] to (0)" right after the flag block.', area: 'Scripts Area' },
-          { text: 'In the star clone\'s if-touching-Bowl block, remove the "say" block.', area: 'Scripts Area' },
-          { text: 'Replace it with "change [Score] by (1)" from Variables.', area: 'Variables Palette' },
-          { text: 'Green flag → catch stars — watch the Score count up!', area: 'Stage' },
-        ],
-        blocks: [
-          { text: '(inside if ‹touching [Bowl]?›)',             cat: 'control',   indent: 0, shape: 'stack', note: true },
-          { text: 'change [Score] by (1)',                      cat: 'variables', indent: 1, shape: 'stack' },
-          { text: 'delete this clone',                          cat: 'control',   indent: 1, shape: 'cap'   },
-        ],
-        tip: 'Right-click the Score display on the stage and choose "Large readout" for a big satisfying counter!',
-        didYouKnow: 'A variable is the most fundamental concept in all programming. Python, JavaScript, Swift — every language uses them to remember and update values as a program runs.',
-      },
-
-      /* ── Step 9 ── */
-      {
-        id: 9,
-        title: 'Lives & Game Over',
-        emoji: '💀',
-        xp: 60,
-        concept: { name: 'Game Loop · Lifecycle', color: '#f59e0b' },
-        goal: 'Add Lives — lose one when a star escapes; game ends when Lives reach zero',
-        description:
-          "The final mechanic: consequences. When a star escapes (the repeat-until ends without a catch), deduct a life. When lives hit zero, announce game over and stop everything. This is a state machine: PLAYING → GAME_OVER.",
-        scratchArea: 'scripts',
-        previewStep: 8,
-        actions: [
-          { text: 'Create a "Lives" variable (Variables → Make a Variable → "Lives").', area: 'Variables Palette' },
-          { text: 'On the BOWL\'s "when 🏁 clicked" script, add "set [Lives] to (3)".', area: 'Scripts Area' },
-          { text: 'In the STAR clone script, after the repeat-until loop ends (outside it), add "change [Lives] by (-1)".', area: 'Scripts Area' },
-          { text: 'Below that: "if ‹(Lives) = (0)› then".', area: 'Control Palette' },
-          { text: 'Inside the if: "say [Game Over! 💫] for (2) secs" then "stop [all]".', area: 'Looks Palette' },
-          { text: 'After the if: "delete this clone".', area: 'Control Palette' },
-          { text: 'Green flag → let stars fall — after 3 misses, Game Over! Your Catch the Stars game is complete! ⭐', area: 'Stage' },
-        ],
-        blocks: [
-          { text: '(after the repeat-until — star escaped)',    cat: 'control',   indent: 0, shape: 'stack', note: true },
-          { text: 'change [Lives] by (-1)',                     cat: 'variables', indent: 0, shape: 'stack' },
-          { text: 'if ‹(Lives) = (0)› then',                   cat: 'control',   indent: 0, shape: 'c'     },
-          { text: 'say [Game Over! 💫] for (2) secs',          cat: 'looks',     indent: 1, shape: 'stack' },
-          { text: 'stop [all]',                                 cat: 'control',   indent: 1, shape: 'cap'   },
-          { text: 'delete this clone',                          cat: 'control',   indent: 0, shape: 'cap'   },
-        ],
-        tip: 'Show ♥ hearts for lives by right-clicking the Lives display — or display it as "large readout" for impact!',
-        didYouKnow: 'PLAYING → GAME_OVER is a state machine. Traffic lights, login flows, vending machines, and game modes are all state machines — one of the most powerful patterns in software.',
       },
     ],
   },
