@@ -630,7 +630,6 @@ function drawMazeHero(ctx, x, y, frame, moving) {
 
 /* ──────────────── Maze Runner ──────────────── */
 function drawMaze(ctx, W, H, frame, previewStep) {
-  // Background
   ctx.fillStyle = '#12082a'
   ctx.fillRect(0, 0, W, H)
 
@@ -652,7 +651,7 @@ function drawMaze(ctx, W, H, frame, previewStep) {
     ctx.fillStyle = 'rgba(160,90,255,0.18)'; ctx.fillRect(x, y, w, 2)
   })
 
-  // Start marker (always visible)
+  // Start marker
   ctx.fillStyle = 'rgba(80,220,80,0.22)'
   ctx.fillRect(11, 11, 26, 26)
   ctx.fillStyle = 'rgba(80,220,80,0.55)'
@@ -662,18 +661,13 @@ function drawMaze(ctx, W, H, frame, previewStep) {
   // ── Step 0: paint-brush drawing animation ──
   if (previewStep === 0) {
     const prog = (frame % 120) / 100
-    // Partial highlight on a wall showing it being drawn
-    const [ax, ay, aw, ah] = WALLS[4]  // vertical wall [40,10,10,70]
+    const [ax, ay, aw, ah] = WALLS[4]
     ctx.fillStyle = 'rgba(150,60,255,0.6)'
     ctx.fillRect(ax, ay, aw, ah * Math.min(1, prog))
-
-    // Brush tip dot at leading edge
     const tipY = ay + ah * Math.min(1, prog)
     const bpulse = Math.sin(frame * 0.22) * 1.5
     ctx.fillStyle = '#d946ef'
     ctx.beginPath(); ctx.arc(ax + aw / 2, tipY, 4 + bpulse, 0, Math.PI * 2); ctx.fill()
-
-    // Label pill
     ctx.fillStyle = 'rgba(217,70,239,0.88)'
     ctx.beginPath()
     if (ctx.roundRect) ctx.roundRect(W / 2 - 40, H - 20, 80, 14, 4)
@@ -686,19 +680,113 @@ function drawMaze(ctx, W, H, frame, previewStep) {
 
   // ── Hero (step 1+) ──
   if (previewStep >= 1) {
-    let heroX, heroY
+    let heroX, heroY, heroMoving = true
 
     if (previewStep === 1) {
-      heroX = 24; heroY = 45  // standing at start
+      // Static at start — show size constraint
+      heroX = 24; heroY = 45; heroMoving = false
+    } else if (previewStep === 2) {
+      // Up/Down only: oscillate Y, fixed X
+      heroX = 24
+      heroY = 90 + Math.sin(frame * 0.04) * 60
+    } else if (previewStep === 3) {
+      // All 4 directions: small figure-eight loop
+      const t = (frame * 0.016) % (Math.PI * 2)
+      heroX = 24 + Math.sin(t) * 12
+      heroY = 50 + Math.cos(t * 0.8) * 16
+    } else if (previewStep === 4) {
+      // Sense wall: hero approaches and passes through wall at x≈40
+      const t = (frame % 130) / 130
+      const prog = t < 0.5 ? t * 2 : (1 - t) * 2
+      heroX = 24 + prog * 36  // 24 → 60 → 24 (crosses wall)
+      heroY = 50
+    } else if (previewStep === 5) {
+      // Bounce back: hero stops cleanly at wall boundary
+      const t = (frame % 80) / 80
+      const prog = t < 0.5 ? t * 2 : (1 - t) * 2
+      heroX = 24 + prog * 13  // 24 → 37 → 24 (stops before wall)
+      heroY = 50
     } else {
-      // Navigate a loop around the open corridor near start
+      // ps6+: loop around corridor
       const t = (frame * 0.016) % (Math.PI * 2)
       heroX = 24 + Math.sin(t) * 12
       heroY = 50 + Math.cos(t * 0.8) * 16
     }
 
-    // ── Step 3: wall-collision flash ──
+    // ── Size constraint overlay (step 1) ──
+    if (previewStep === 1) {
+      ctx.save()
+      ctx.strokeStyle = 'rgba(245,158,11,0.7)'; ctx.lineWidth = 1.5; ctx.setLineDash([2, 3])
+      ctx.beginPath(); ctx.arc(heroX, heroY, 11, 0, Math.PI * 2); ctx.stroke()
+      ctx.setLineDash([])
+      ctx.fillStyle = 'rgba(245,158,11,0.9)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(heroX + 14, heroY - 7, 52, 12, 3)
+      else ctx.rect(heroX + 14, heroY - 7, 52, 12)
+      ctx.fill()
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 7px Nunito,sans-serif'
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+      ctx.fillText('size: 25 ✓', heroX + 18, heroY - 1)
+      ctx.restore()
+    }
+
+    // ── ↑↓ key hints (step 2 only) ──
+    if (previewStep === 2) {
+      const pulse = 0.5 + 0.5 * Math.abs(Math.sin(frame * 0.07))
+      ctx.save(); ctx.globalAlpha = pulse * 0.75
+      const ks = 13; const kx = heroX + 18
+      for (const [ky2, arrow] of [[heroY - 18, '▲'], [heroY + 18, '▼']]) {
+        ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1
+        ctx.beginPath()
+        if (ctx.roundRect) ctx.roundRect(kx - ks / 2, ky2 - ks / 2, ks, ks, 2)
+        else ctx.rect(kx - ks / 2, ky2 - ks / 2, ks, ks)
+        ctx.fill(); ctx.stroke()
+        ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '9px sans-serif'
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText(arrow, kx, ky2)
+      }
+      ctx.restore()
+    }
+
+    // ── ←→↑↓ key hints (step 3 only) ──
     if (previewStep === 3) {
+      const pulse = 0.4 + 0.4 * Math.abs(Math.sin(frame * 0.07))
+      ctx.save(); ctx.globalAlpha = pulse * 0.65
+      const ks = 11
+      for (const [ddx, ddy, arrow] of [[0, -18, '▲'], [0, 18, '▼'], [-18, 0, '◀'], [18, 0, '▶']]) {
+        ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1
+        ctx.beginPath()
+        if (ctx.roundRect) ctx.roundRect(heroX + ddx - ks / 2, heroY + ddy - ks / 2, ks, ks, 2)
+        else ctx.rect(heroX + ddx - ks / 2, heroY + ddy - ks / 2, ks, ks)
+        ctx.fill(); ctx.stroke()
+        ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '8px sans-serif'
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText(arrow, heroX + ddx, heroY + ddy)
+      }
+      ctx.restore()
+    }
+
+    // ── Colour detection glow + tooltip (step 4: sense wall, no rollback) ──
+    if (previewStep === 4 && heroX > 35) {
+      const depth = Math.min(1, (heroX - 35) / 18)
+      ctx.save(); ctx.globalAlpha = depth * 0.55
+      ctx.fillStyle = '#5CB1D6'
+      ctx.beginPath(); ctx.arc(heroX, heroY, 16, 0, Math.PI * 2); ctx.fill()
+      ctx.restore()
+      ctx.save(); ctx.globalAlpha = depth * 0.9
+      ctx.fillStyle = 'rgba(92,177,214,0.92)'
+      ctx.beginPath()
+      if (ctx.roundRect) ctx.roundRect(heroX - 36, heroY - 24, 72, 13, 3)
+      else ctx.rect(heroX - 36, heroY - 24, 72, 13)
+      ctx.fill()
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 7px Nunito,sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('touching color? ✓', heroX, heroY - 17)
+      ctx.restore()
+    }
+
+    // ── Wall collision flash + rollback tooltip (step 5: bounce back) ──
+    if (previewStep === 5) {
       const cycle = frame % 70
       if (cycle < 14) {
         ctx.save()
@@ -707,14 +795,13 @@ function drawMaze(ctx, W, H, frame, previewStep) {
         ctx.beginPath(); ctx.arc(heroX, heroY, 17, 0, Math.PI * 2); ctx.fill()
         ctx.restore()
       }
-      // "touching color!" tooltip
       if (cycle < 35) {
         const a = Math.sin((cycle / 35) * Math.PI)
         ctx.save(); ctx.globalAlpha = a * 0.9
         ctx.fillStyle = 'rgba(255,60,60,0.85)'
         ctx.beginPath()
-        if (ctx.roundRect) ctx.roundRect(heroX - 36, heroY - 24, 72, 13, 3)
-        else ctx.rect(heroX - 36, heroY - 24, 72, 13)
+        if (ctx.roundRect) ctx.roundRect(heroX - 42, heroY - 24, 84, 13, 3)
+        else ctx.rect(heroX - 42, heroY - 24, 84, 13)
         ctx.fill()
         ctx.fillStyle = '#fff'; ctx.font = 'bold 7px Nunito,sans-serif'
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
@@ -723,19 +810,17 @@ function drawMaze(ctx, W, H, frame, previewStep) {
       }
     }
 
-    drawMazeHero(ctx, heroX, heroY, frame, previewStep >= 2)
+    drawMazeHero(ctx, heroX, heroY, frame, heroMoving)
   }
 
-  // ── Exit star (step 4+) ──
-  if (previewStep >= 4) {
+  // ── Exit star (step 6+) ──
+  if (previewStep >= 6) {
     const sx = W - 24; const sy = H - 24
-    // Halo glow
     const glow = 0.35 + 0.35 * Math.abs(Math.sin(frame * 0.07))
     ctx.save(); ctx.globalAlpha = glow * 0.4
     ctx.fillStyle = '#ffd700'
     ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI * 2); ctx.fill()
     ctx.restore()
-    // Spinning star
     ctx.save(); ctx.translate(sx, sy); ctx.rotate(frame * 0.04)
     ctx.fillStyle = '#ffd700'
     for (let p = 0; p < 5; p++) {
@@ -748,13 +833,12 @@ function drawMaze(ctx, W, H, frame, previewStep) {
       ctx.restore()
     }
     ctx.restore()
-    // EXIT label
     ctx.fillStyle = 'rgba(255,215,0,0.65)'; ctx.font = 'bold 7px Nunito,sans-serif'
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
     ctx.fillText('EXIT', sx, sy - 13)
 
-    // Win flash every 130 frames
-    if (frame % 130 > 100) {
+    // Win flash (step 7+ only)
+    if (previewStep >= 7 && frame % 130 > 100) {
       const prog = (frame % 130 - 100) / 30
       ctx.save(); ctx.globalAlpha = Math.sin(prog * Math.PI)
       ctx.fillStyle = 'rgba(0,0,0,0.65)'
@@ -766,8 +850,8 @@ function drawMaze(ctx, W, H, frame, previewStep) {
     }
   }
 
-  // ── Timer HUD (step 5+) ──
-  if (previewStep >= 5) {
+  // ── Timer HUD (step 8) ──
+  if (previewStep >= 8) {
     const secs = Math.max(0, 30 - Math.floor(frame / 30))
     const urgent = secs < 10
     const timerPulse = urgent && Math.sin(frame * 0.2) > 0.4
