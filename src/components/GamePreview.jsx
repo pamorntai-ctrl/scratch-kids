@@ -421,7 +421,7 @@ function drawSpaceShooter(ctx, W, H, frame, previewStep) {
   ctx.fillStyle = '#1144ee'; ctx.beginPath(); ctx.ellipse(W * 0.18, H * 0.65, 55, 30, -0.2, 0, Math.PI * 2); ctx.fill()
   ctx.restore()
 
-  // Starfield (two layers at different speeds)
+  // Starfield
   for (let i = 0; i < 55; i++) {
     const speed = i % 3 === 0 ? 0.22 : 0.1
     const sx = (i * 97 + frame * speed) % W
@@ -431,12 +431,12 @@ function drawSpaceShooter(ctx, W, H, frame, previewStep) {
     ctx.fillRect(sx, sy, i % 7 === 0 ? 2 : 1.5, i % 7 === 0 ? 2 : 1.5)
   }
 
-  // Spaceship
+  // Spaceship (oscillates from step 1 onward)
   const shipX = previewStep >= 1 ? W / 2 + Math.sin(frame * 0.025) * 55 : W / 2
   const shipY = H - 30
   drawShip(ctx, shipX, shipY, frame)
 
-  // Arrow key hints — step 1 only
+  /* ── Step 2: arrow key hints ── */
   if (previewStep === 1) {
     const pulse = 0.5 + 0.5 * Math.abs(Math.sin(frame * 0.07))
     ctx.save(); ctx.globalAlpha = pulse * 0.7
@@ -454,10 +454,39 @@ function drawSpaceShooter(ctx, W, H, frame, previewStep) {
     ctx.restore()
   }
 
-  // SPACE key hint — step 2 only
+  /* ── Step 3: ghost Ball sprite (hidden template) ── */
   if (previewStep === 2) {
+    const ghostPulse = 0.22 + 0.18 * Math.abs(Math.sin(frame * 0.07))
+    // Dashed circle showing the hidden sprite location
+    ctx.save()
+    ctx.globalAlpha = ghostPulse * 2
+    ctx.strokeStyle = '#ffff00'
+    ctx.lineWidth = 1.5
+    ctx.setLineDash([3, 3])
+    ctx.beginPath(); ctx.arc(shipX, shipY - 22, 12, 0, Math.PI * 2); ctx.stroke()
+    ctx.setLineDash([])
+    ctx.globalAlpha = ghostPulse
+    ctx.fillStyle = '#ffff00'
+    ctx.beginPath(); ctx.arc(shipX, shipY - 22, 7, 0, Math.PI * 2); ctx.fill()
+    ctx.restore()
+    // "hide" label
+    ctx.save()
+    ctx.globalAlpha = 0.55 + 0.25 * Math.abs(Math.sin(frame * 0.06))
+    ctx.fillStyle = 'rgba(255,255,100,0.18)'; ctx.strokeStyle = 'rgba(255,255,100,0.5)'; ctx.lineWidth = 1
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(shipX - 36, shipY - 48, 72, 13, 3)
+    else ctx.rect(shipX - 36, shipY - 48, 72, 13)
+    ctx.fill(); ctx.stroke()
+    ctx.fillStyle = 'rgba(255,255,100,0.9)'; ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText('Ball sprite (hidden)', shipX, shipY - 41)
+    ctx.restore()
+  }
+
+  /* ── Step 4: SPACE hint + single clone spawning ── */
+  if (previewStep === 3) {
     const pulse = 0.5 + 0.5 * Math.abs(Math.sin(frame * 0.1))
-    ctx.save(); ctx.globalAlpha = pulse * 0.7
+    ctx.save(); ctx.globalAlpha = pulse * 0.8
     ctx.fillStyle = 'rgba(255,255,0,0.15)'; ctx.strokeStyle = 'rgba(255,255,0,0.5)'; ctx.lineWidth = 1
     ctx.beginPath()
     if (ctx.roundRect) ctx.roundRect(W / 2 - 22, H - 14, 44, 12, 3)
@@ -467,10 +496,16 @@ function drawSpaceShooter(ctx, W, H, frame, previewStep) {
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
     ctx.fillText('SPACE', W / 2, H - 8)
     ctx.restore()
+    // Single slow bolt (showing the clone appearing at ship)
+    const bt = frame % 100
+    if (bt > 6) {
+      const by = shipY - 18 - (bt / 100) * (H * 0.85)
+      if (by > -20) drawBolt(ctx, shipX, by)
+    }
   }
 
-  // Laser bolts (step 2+)
-  if (previewStep >= 2) {
+  /* ── Steps 5+: twin laser bolts ── */
+  if (previewStep >= 4) {
     const PERIOD = 55
     for (const offset of [0, 28]) {
       const t = (frame + offset) % PERIOD
@@ -481,45 +516,64 @@ function drawSpaceShooter(ctx, W, H, frame, previewStep) {
     }
   }
 
-  // Alien ships (step 3+)
-  if (previewStep >= 3) {
-    const count = previewStep >= 4 ? 4 : 2
+  /* ── Steps 6+: alien ships ── */
+  if (previewStep >= 5) {
+    const count = previewStep >= 7 ? 4 : 2
     const PERIOD = 160
     for (let a = 0; a < count; a++) {
       const phase = (frame + a * (PERIOD / count)) % PERIOD
       const ay = (phase / PERIOD) * (H + 30) - 20
       const ax = (W / (count + 1)) * (a + 1) + Math.sin(frame * 0.014 + a * 1.4) * 22
 
-      if (ay >= -22 && ay < H + 20) {
-        // Hit detection (step 4+)
-        let exploding = false
-        if (previewStep >= 4) {
-          const bt = frame % 55
-          const bulletY = shipY - 18 - (bt / 55) * (H + 20)
-          if (Math.abs(ay - bulletY) < 18 && Math.abs(ax - shipX) < 22) exploding = true
-        }
+      if (ay < -22 || ay >= H + 20) continue
 
-        if (exploding) {
-          const progress = (frame % 20) / 20
-          const r = progress * 22
-          ctx.save()
-          const ECOLS = ['#ffd700', '#ff6b35', '#ff4444', '#ff88ff']
-          for (let p = 0; p < 8; p++) {
-            const angle = (p / 8) * Math.PI * 2
-            ctx.globalAlpha = (1 - progress) * 0.9
-            ctx.fillStyle = ECOLS[p % 4]
-            ctx.beginPath(); ctx.arc(ax + Math.cos(angle) * r, ay + Math.sin(angle) * r, 3, 0, Math.PI * 2); ctx.fill()
-          }
-          ctx.restore()
-        } else {
-          drawAlienShip(ctx, ax, ay, frame, a * 77)
-        }
+      const bt = frame % 55
+      const bulletY = shipY - 18 - (bt / 55) * (H + 20)
+      const nearBullet = Math.abs(ay - bulletY) < 20 && Math.abs(ax - shipX) < 24
+
+      // Step 7: detection glow + tooltip (no explosion yet)
+      if (previewStep === 6 && nearBullet) {
+        const glow = 0.45 + 0.4 * Math.abs(Math.sin(frame * 0.18))
+        ctx.save(); ctx.globalAlpha = glow * 0.65
+        ctx.fillStyle = '#5CB1D6'
+        ctx.beginPath(); ctx.arc(ax, ay, 20, 0, Math.PI * 2); ctx.fill()
+        ctx.restore()
+        ctx.save(); ctx.globalAlpha = glow * 0.95
+        ctx.fillStyle = 'rgba(92,177,214,0.92)'
+        ctx.beginPath()
+        if (ctx.roundRect) ctx.roundRect(ax - 40, ay - 26, 80, 12, 3)
+        else ctx.rect(ax - 40, ay - 26, 80, 12)
+        ctx.fill()
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 6px Nunito,sans-serif'
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText('touching [Ball]? ✓', ax, ay - 20)
+        ctx.restore()
+        drawAlienShip(ctx, ax, ay, frame, a * 77)
+        continue
       }
+
+      // Steps 8+: explosion
+      if (previewStep >= 7 && nearBullet) {
+        const progress = (frame % 20) / 20
+        const r = progress * 22
+        ctx.save()
+        const ECOLS = ['#ffd700', '#ff6b35', '#ff4444', '#ff88ff']
+        for (let p = 0; p < 8; p++) {
+          const angle = (p / 8) * Math.PI * 2
+          ctx.globalAlpha = (1 - progress) * 0.9
+          ctx.fillStyle = ECOLS[p % 4]
+          ctx.beginPath(); ctx.arc(ax + Math.cos(angle) * r, ay + Math.sin(angle) * r, 3, 0, Math.PI * 2); ctx.fill()
+        }
+        ctx.restore()
+        continue
+      }
+
+      drawAlienShip(ctx, ax, ay, frame, a * 77)
     }
   }
 
-  // Score HUD (step 4+)
-  if (previewStep >= 4) {
+  /* ── Step 8: Score HUD ── */
+  if (previewStep >= 7) {
     ctx.save()
     ctx.fillStyle = 'rgba(0,0,12,0.6)'
     ctx.beginPath()
@@ -532,8 +586,8 @@ function drawSpaceShooter(ctx, W, H, frame, previewStep) {
     ctx.restore()
   }
 
-  // Lives HUD (step 5+)
-  if (previewStep >= 5) {
+  /* ── Step 9: Lives HUD ── */
+  if (previewStep >= 8) {
     ctx.save()
     ctx.fillStyle = 'rgba(0,0,12,0.6)'
     ctx.beginPath()
