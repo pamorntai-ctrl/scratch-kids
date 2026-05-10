@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  ArrowLeft, Check, ChevronRight, Zap, Star, CheckCircle2,
-  ExternalLink, BookOpen,
+  ArrowLeft, Check, ChevronRight, Star,
+  ExternalLink, BookOpen, RotateCcw,
 } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 import StepInstructions from './StepInstructions.jsx'
@@ -32,26 +32,39 @@ function XPBar({ totalXP, level, levelProgress }) {
 }
 
 /* ── Sidebar step row ── */
-function StepRow({ step, index, isCompleted, isCurrent }) {
+function StepRow({ step, index, isCompleted, isCurrent, isViewing, onClick }) {
+  const clickable = isCompleted && !isCurrent
   return (
-    <div className={`flex items-start gap-2.5 transition-opacity duration-200 ${
-      !isCurrent && !isCompleted ? 'opacity-35' : ''
-    }`}>
+    <div
+      onClick={clickable ? onClick : undefined}
+      className={`flex items-start gap-2.5 transition-all duration-200 rounded-lg px-1 py-0.5 -mx-1 ${
+        !isCurrent && !isCompleted && !isViewing ? 'opacity-35' : ''
+      } ${clickable ? 'cursor-pointer hover:bg-white/06 active:bg-white/10' : ''} ${
+        isViewing && !isCurrent ? 'bg-white/08 ring-1 ring-purple-500/40' : ''
+      }`}
+    >
       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0 mt-0.5 transition-all duration-300 ${
-        isCompleted
-          ? 'bg-green-500 text-white shadow-sm shadow-green-500/40'
-          : isCurrent
-            ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-sm shadow-purple-500/40 scale-110'
-            : 'bg-white/08 text-white/30'
+        isCurrent && !isViewing
+          ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-sm shadow-purple-500/40 scale-110'
+          : isCompleted
+            ? 'bg-green-500 text-white shadow-sm shadow-green-500/40'
+            : isViewing
+              ? 'bg-purple-500/60 text-white'
+              : 'bg-white/08 text-white/30'
       }`}>
         {isCompleted ? <Check size={12} /> : index + 1}
       </div>
-      <div className="min-w-0">
-        <p className={`text-xs font-bold leading-tight ${isCurrent ? 'text-white' : isCompleted ? 'text-white/50' : 'text-white/30'}`}>
+      <div className="min-w-0 flex-1">
+        <p className={`text-xs font-bold leading-tight ${
+          isViewing || isCurrent ? 'text-white' : isCompleted ? 'text-white/55' : 'text-white/30'
+        }`}>
           {step.title}
         </p>
         <p className="text-xs text-white/25 mt-0.5">+{step.xp} XP</p>
       </div>
+      {clickable && (
+        <RotateCcw size={10} className="text-white/25 shrink-0 mt-1.5" />
+      )}
     </div>
   )
 }
@@ -87,18 +100,24 @@ export default function LessonView() {
     navigate,
     completeStep,
     completeMission,
+    goToStep,
   } = useApp()
 
   if (!mission) { navigate('missions'); return null }
 
-  const steps      = mission.steps
-  const step       = steps[currentStepIndex]
-  const isLastStep = currentStepIndex === steps.length - 1
-  const totalSteps = steps.length
-  const progressPct = (currentStepIndex / totalSteps) * 100
+  const steps       = mission.steps
+  const step        = steps[currentStepIndex]
+  const totalSteps  = steps.length
+  const activeIndex = completedSteps.length          // furthest uncompleted step
+  const isReviewing = currentStepIndex < activeIndex // viewing an already-done step
+  const isLastStep  = currentStepIndex === steps.length - 1
+  const progressPct = (activeIndex / totalSteps) * 100
 
   function handleComplete() {
-    if (isLastStep) {
+    if (isReviewing) {
+      // Navigate forward through completed/active steps without re-awarding XP
+      goToStep(currentStepIndex + 1)
+    } else if (isLastStep) {
       completeMission(mission.id, mission.xpReward, mission.badge)
     } else {
       completeStep(step.id, step.xp)
@@ -124,9 +143,10 @@ export default function LessonView() {
             <div className="flex items-center justify-between mb-1">
               <span className="text-white font-black text-sm truncate">
                 {mission.emoji} {mission.title}
+                {isReviewing && <span className="ml-2 text-purple-400 text-xs font-bold">· Reviewing #{currentStepIndex + 1}</span>}
               </span>
               <span className="text-white/40 text-xs font-bold shrink-0 ml-2">
-                {currentStepIndex + 1}/{totalSteps}
+                {activeIndex}/{totalSteps}
               </span>
             </div>
             <div className="h-2 rounded-full bg-white/08 overflow-hidden">
@@ -150,14 +170,16 @@ export default function LessonView() {
         {/* Left sidebar — steps list */}
         <aside className="hidden lg:flex flex-col w-52 shrink-0 border-r border-white/06 p-4 gap-4 overflow-y-auto">
           <p className="text-white/30 text-xs font-black uppercase tracking-widest">Steps</p>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {steps.map((s, i) => (
               <StepRow
                 key={s.id}
                 step={s}
                 index={i}
                 isCompleted={completedSteps.includes(s.id)}
-                isCurrent={i === currentStepIndex}
+                isCurrent={i === activeIndex}
+                isViewing={i === currentStepIndex}
+                onClick={() => goToStep(i)}
               />
             ))}
           </div>
@@ -180,14 +202,20 @@ export default function LessonView() {
                 className="flex flex-col gap-6"
               >
                 {/* Step header card */}
-                <div className={`rounded-2xl p-5 bg-gradient-to-br ${mission.gradientBg} border border-white/06`}>
-                  <div className="flex items-center gap-2 mb-3">
+                <div className={`rounded-2xl p-5 bg-gradient-to-br ${mission.gradientBg} border ${isReviewing ? 'border-purple-500/30' : 'border-white/06'}`}>
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
                     <span className="text-white/35 text-xs font-black uppercase tracking-wider">
                       Step {currentStepIndex + 1} of {totalSteps}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-black">
-                      +{step.xp} XP
-                    </span>
+                    {isReviewing ? (
+                      <span className="px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-300 text-xs font-black flex items-center gap-1">
+                        <RotateCcw size={9} /> Reviewing
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-black">
+                        +{step.xp} XP
+                      </span>
+                    )}
                   </div>
                   <h2 className="text-2xl font-black text-white mb-2 leading-tight">{step.title}</h2>
                   <p className="text-white/70 text-sm leading-relaxed">{step.description}</p>
@@ -210,14 +238,20 @@ export default function LessonView() {
                   <GamePreview missionId={mission.id} previewStep={step.previewStep ?? currentStepIndex} />
                 </div>
 
-                {/* Complete button */}
+                {/* Complete / navigate button */}
                 <motion.button
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleComplete}
-                  className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl transition-all duration-200 bg-gradient-to-r ${mission.color} text-white`}
+                  className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl transition-all duration-200 text-white ${
+                    isReviewing
+                      ? 'bg-gradient-to-r from-purple-600 to-purple-500'
+                      : `bg-gradient-to-r ${mission.color}`
+                  }`}
                 >
-                  {isLastStep ? (
+                  {isReviewing ? (
+                    <>Next Step <ChevronRight size={20} /></>
+                  ) : isLastStep ? (
                     <>🎉 Complete Mission! <Star size={20} fill="currentColor" /></>
                   ) : (
                     <>✅ I Did It! Next Step <ChevronRight size={20} /></>
@@ -256,21 +290,29 @@ export default function LessonView() {
           <div>
             <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-2">Progress</p>
             <div className="flex gap-1.5 flex-wrap">
-              {steps.map((s, i) => (
-                <div
-                  key={s.id}
-                  title={s.title}
-                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black transition-all duration-300 ${
-                    completedSteps.includes(s.id)
-                      ? 'bg-green-500 text-white'
-                      : i === currentStepIndex
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/08 text-white/25'
-                  }`}
-                >
-                  {completedSteps.includes(s.id) ? '✓' : i + 1}
-                </div>
-              ))}
+              {steps.map((s, i) => {
+                const done = completedSteps.includes(s.id)
+                const viewing = i === currentStepIndex
+                const active = i === activeIndex
+                return (
+                  <motion.div
+                    key={s.id}
+                    title={s.title}
+                    whileHover={done ? { scale: 1.15 } : {}}
+                    whileTap={done ? { scale: 0.9 } : {}}
+                    onClick={done ? () => goToStep(i) : undefined}
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black transition-all duration-300 ${
+                      done
+                        ? `bg-green-500 text-white cursor-pointer ${viewing ? 'ring-2 ring-purple-400' : 'hover:bg-green-400'}`
+                        : active
+                          ? 'bg-purple-500 text-white'
+                          : 'bg-white/08 text-white/25'
+                    }`}
+                  >
+                    {done ? '✓' : i + 1}
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
 

@@ -44,10 +44,13 @@ function reducer(state, action) {
         ...state,
         totalXP: newXP,
         completedSteps:   [...state.completedSteps, action.stepId],
-        currentStepIndex: state.currentStepIndex + 1,
+        currentStepIndex: state.completedSteps.length + 1,
         xpNotifications:  [...state.xpNotifications, { id: notifId, amount: action.xp }],
       }
     }
+
+    case 'GO_TO_STEP':
+      return { ...state, currentStepIndex: action.index }
 
     case 'COMPLETE_MISSION': {
       const newXP   = state.totalXP + action.xp
@@ -87,6 +90,7 @@ export function AppProvider({ children }) {
   const completeMission = useCallback((missionId, xp, badge)   => dispatch({ type: 'COMPLETE_MISSION', missionId, xp, badge }), [])
   const removeXpNotif   = useCallback((id)                     => dispatch({ type: 'REMOVE_XP_NOTIF', id }), [])
   const closeBadgeModal = useCallback(()                       => dispatch({ type: 'CLOSE_BADGE_MODAL' }), [])
+  const goToStep        = useCallback((index)                  => dispatch({ type: 'GO_TO_STEP', index }), [])
 
   return (
     <AppContext.Provider value={{
@@ -100,6 +104,7 @@ export function AppProvider({ children }) {
       completeMission,
       removeXpNotif,
       closeBadgeModal,
+      goToStep,
     }}>
       {children}
     </AppContext.Provider>
