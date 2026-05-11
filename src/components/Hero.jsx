@@ -36,6 +36,12 @@ const FEATURES = [
   },
 ]
 
+const DIFF_COLORS = {
+  Beginner:     { text: '#10b981', bg: '#10b98120' },
+  Intermediate: { text: '#3b82f6', bg: '#3b82f620' },
+  Advanced:     { text: '#8b5cf6', bg: '#8b5cf620' },
+}
+
 const MISSIONS_PREVIEW = [
   { id: 'apple-collector', emoji: '🍎', name: 'Apple Collector', diff: 'Beginner',     color: '#10b981' },
   { id: 'catch-stars',     emoji: '⭐', name: 'Catch the Stars', diff: 'Beginner',     color: '#f59e0b' },
@@ -219,7 +225,7 @@ export default function Hero() {
                 <div className="font-black text-white text-lg">{m.name}</div>
                 <div
                   className="text-xs font-bold mt-1 px-2 py-0.5 rounded-full inline-block"
-                  style={{ color: m.color, backgroundColor: m.color + '22' }}
+                  style={{ color: DIFF_COLORS[m.diff].text, backgroundColor: DIFF_COLORS[m.diff].bg }}
                 >
                   {m.diff}
                 </div>
