@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Zap, Star, Trophy, ArrowRight, Gamepad2, Code2, Rocket } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 import { MISSIONS } from '../data/missions.js'
+import { useT } from '../context/LanguageContext.jsx'
 
 const FLOATING_BLOCKS = [
   { text: 'when 🏁 clicked', color: '#FFAB19', top: '12%', left: '6%', rotation: -8, delay: 0 },
@@ -12,28 +13,10 @@ const FLOATING_BLOCKS = [
   { text: 'change x by (10)', color: '#4C97FF', top: '35%', right: '3%', rotation: -6, delay: 0.6 },
 ]
 
-const FEATURES = [
-  {
-    icon: Gamepad2,
-    title: 'Build Real Scratch Games',
-    desc: 'Guided missions walk you through scratch.mit.edu step-by-step — no experience needed.',
-    color: 'from-yellow-500 to-orange-500',
-    bg: 'from-yellow-900/20 to-orange-900/10',
-  },
-  {
-    icon: Zap,
-    title: 'Learn as You Play',
-    desc: 'Each mission teaches only the Scratch tools you need right now — never overwhelming.',
-    color: 'from-purple-500 to-pink-500',
-    bg: 'from-purple-900/20 to-pink-900/10',
-  },
-  {
-    icon: Trophy,
-    title: 'Earn XP & Badges',
-    desc: 'Every completed step earns XP. Finish a game to unlock an exclusive badge!',
-    color: 'from-blue-500 to-cyan-500',
-    bg: 'from-blue-900/20 to-cyan-900/10',
-  },
+const FEATURE_META = [
+  { icon: Gamepad2, color: 'from-yellow-500 to-orange-500', bg: 'from-yellow-900/20 to-orange-900/10' },
+  { icon: Zap,      color: 'from-purple-500 to-pink-500',   bg: 'from-purple-900/20 to-pink-900/10'  },
+  { icon: Trophy,   color: 'from-blue-500 to-cyan-500',     bg: 'from-blue-900/20 to-cyan-900/10'    },
 ]
 
 const DIFF_COLORS = {
@@ -53,6 +36,7 @@ const MISSIONS_PREVIEW = [
 
 export default function Hero() {
   const { navigate, startMission } = useApp()
+  const t = useT()
 
   function handleMissionClick(id) {
     const mission = MISSIONS.find(m => m.id === id)
@@ -108,13 +92,13 @@ export default function Hero() {
             onClick={() => navigate('missions')}
             className="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all duration-200 border border-white/10"
           >
-            Missions
+            {t('nav.missions')}
           </button>
           <button
             onClick={() => navigate('missions')}
             className="px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-black shadow-lg hover:opacity-90 active:scale-95 transition-all duration-200"
           >
-            Play Now 🎮
+            {t('nav.playNow')}
           </button>
         </motion.div>
       </nav>
@@ -128,7 +112,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm font-bold mb-6"
         >
           <Star size={14} className="text-yellow-400" fill="currentColor" />
-          Game-Based Coding for Kids Ages 8–14
+          {t('hero.badge')}
           <Star size={14} className="text-yellow-400" fill="currentColor" />
         </motion.div>
 
@@ -138,9 +122,9 @@ export default function Hero() {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="text-5xl md:text-7xl font-black text-white leading-tight mb-6"
         >
-          Learn Coding by
+          {t('hero.title1')}
           <br />
-          <span className="gradient-text">Building Games!</span>
+          <span className="gradient-text">{t('hero.title2')}</span>
         </motion.h1>
 
         <motion.p
@@ -149,11 +133,11 @@ export default function Hero() {
           transition={{ delay: 0.35, duration: 0.5 }}
           className="text-xl md:text-2xl text-purple-200/80 max-w-2xl mx-auto mb-10 leading-relaxed"
         >
-          Skip boring tutorials. Pick a game, follow guided steps, and build a real{' '}
-          <span className="text-yellow-400 font-bold">Apple Collector</span>,{' '}
-          <span className="text-blue-400 font-bold">Space Shooter</span>, or{' '}
-          <span className="text-violet-400 font-bold">Maze Runner</span>{' '}
-          on <span className="text-orange-400 font-bold">scratch.mit.edu</span>!
+          {t('hero.subtitle')}{' '}
+          <span className="text-yellow-400 font-bold">{t('hero.game1')}</span>,{' '}
+          <span className="text-blue-400 font-bold">{t('hero.game2')}</span>,{' '}
+          <span className="text-violet-400 font-bold">{t('hero.game3')}</span>{' '}
+          {t('hero.subtitleEnd')} <span className="text-orange-400 font-bold">{t('hero.subtitleSite')}</span>!
         </motion.p>
 
         <motion.div
@@ -168,7 +152,7 @@ export default function Hero() {
             whileTap={{ scale: 0.96 }}
             className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 text-white text-xl font-black shadow-2xl glow-purple"
           >
-            Start Your Quest! <Rocket size={22} />
+            {t('hero.cta1')} <Rocket size={22} />
           </motion.button>
 
           <motion.button
@@ -177,7 +161,7 @@ export default function Hero() {
             whileTap={{ scale: 0.97 }}
             className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/10 border border-white/20 text-white text-xl font-bold hover:bg-white/15 transition-all"
           >
-            See the Games <ArrowRight size={20} />
+            {t('hero.cta2')} <ArrowRight size={20} />
           </motion.button>
         </motion.div>
 
@@ -189,10 +173,10 @@ export default function Hero() {
           className="flex items-center justify-center gap-8 mt-14 text-white/60"
         >
           {[
-            { val: '6', label: 'Fun Games' },
-            { val: '50+', label: 'Step-by-step Lessons' },
-            { val: '1500+', label: 'XP to Earn' },
-            { val: '6', label: 'Exclusive Badges' },
+            { val: '6',     label: t('hero.stats.games') },
+            { val: '50+',   label: t('hero.stats.lessons') },
+            { val: '1500+', label: t('hero.stats.xp') },
+            { val: '6',     label: t('hero.stats.badges') },
           ].map(s => (
             <div key={s.label} className="text-center">
               <div className="text-2xl font-black text-white">{s.val}</div>
@@ -230,7 +214,7 @@ export default function Hero() {
                   {m.diff}
                 </div>
                 <div className="mt-3 flex items-center gap-1 text-white/40 text-sm font-semibold group-hover:text-white/70 transition-colors">
-                  Start building <ArrowRight size={14} />
+                  {t('hero.startBuilding')} <ArrowRight size={14} />
                 </div>
               </motion.div>
             ))}
@@ -247,13 +231,15 @@ export default function Hero() {
             transition={{ delay: 1.0 }}
             className="text-3xl md:text-4xl font-black text-center text-white mb-10"
           >
-            Why you'll <span className="gradient-text">love it</span>
+            {t('hero.whyTitle')}
           </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {FEATURES.map((f, i) => (
+            {FEATURE_META.map((f, i) => {
+              const feat = t(`hero.features`)[i] ?? {}
+              return (
               <motion.div
-                key={f.title}
+                key={i}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 + i * 0.12 }}
@@ -262,10 +248,10 @@ export default function Hero() {
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center mb-4 shadow-lg`}>
                   <f.icon size={24} className="text-white" />
                 </div>
-                <h3 className="text-lg font-black text-white mb-2">{f.title}</h3>
-                <p className="text-white/60 text-sm leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-black text-white mb-2">{feat.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{feat.desc}</p>
               </motion.div>
-            ))}
+            )})}
           </div>
         </div>
       </section>
@@ -280,18 +266,16 @@ export default function Hero() {
         >
           <div className="text-5xl mb-4">🚀</div>
           <h2 className="text-3xl font-black text-white mb-3">
-            Ready to become a <span className="gradient-text">Game Developer?</span>
+            {t('hero.readyTitle')} <span className="gradient-text">{t('hero.readyHighlight')}</span>
           </h2>
-          <p className="text-white/60 mb-6">
-            No experience needed. Just pick a game, follow the steps, and watch your creation come to life!
-          </p>
+          <p className="text-white/60 mb-6">{t('hero.readyDesc')}</p>
           <motion.button
             onClick={() => navigate('missions')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             className="px-10 py-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xl font-black shadow-xl glow-purple"
           >
-            Choose Your Game 🎮
+            {t('hero.chooseGame')}
           </motion.button>
         </motion.div>
       </section>

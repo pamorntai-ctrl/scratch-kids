@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowLeft, Clock, Star, Trophy, Lock, Zap, ChevronRight, Monitor } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
+import { useT, useLocalizedMission } from '../context/LanguageContext.jsx'
 import { MISSIONS } from '../data/missions.js'
 import GamePreview from './GamePreview.jsx'
 
@@ -24,6 +25,8 @@ function StatPill({ icon: Icon, value, label, color }) {
 
 function MissionCard({ mission, index, isCompleted, isLocked }) {
   const { startMission } = useApp()
+  const t = useT()
+  const localMission = useLocalizedMission(mission)
   const diff = DIFF_COLORS[mission.difficulty]
   const stepCount = mission.steps.length
   const finalPreviewStep = mission.steps[stepCount - 1].previewStep ?? stepCount - 1
@@ -59,9 +62,9 @@ function MissionCard({ mission, index, isCompleted, isLocked }) {
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
                 <span className="text-2xl drop-shadow-lg leading-none">{mission.emoji}</span>
-                <h3 className="text-lg font-black text-white drop-shadow truncate">{mission.title}</h3>
+                <h3 className="text-lg font-black text-white drop-shadow truncate">{localMission.title}</h3>
               </div>
-              <p className="text-white/65 text-xs leading-snug line-clamp-1">{mission.tagline}</p>
+              <p className="text-white/65 text-xs leading-snug line-clamp-1">{localMission.tagline}</p>
             </div>
             <div className="shrink-0">
               {isCompleted && (
@@ -102,8 +105,8 @@ function MissionCard({ mission, index, isCompleted, isLocked }) {
             {mission.badge.emoji}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-white/70 text-xs font-bold truncate">{mission.badge.name} Badge</div>
-            <div className="text-yellow-400 text-xs font-black">+{mission.xpReward} XP on completion</div>
+            <div className="text-white/70 text-xs font-bold truncate">{localMission.badge.name} Badge</div>
+            <div className="text-yellow-400 text-xs font-black">+{mission.xpReward} XP</div>
           </div>
         </div>
 
@@ -118,13 +121,13 @@ function MissionCard({ mission, index, isCompleted, isLocked }) {
                 : `bg-gradient-to-r ${mission.color} shadow-lg group-hover:shadow-xl`
               }`}
           >
-            {isCompleted ? '🔁 Play Again' : '🚀 Start Mission'}
+            {isCompleted ? t('missions.playAgain') : t('missions.startMission')}
             <ChevronRight size={18} />
           </motion.button>
         )}
         {isLocked && (
           <div className="w-full py-3 rounded-2xl bg-white/05 text-white/30 font-bold text-center flex items-center justify-center gap-2">
-            <Lock size={16} /> Coming Soon
+            <Lock size={16} /> {t('missions.comingSoon')}
           </div>
         )}
       </div>
@@ -134,6 +137,7 @@ function MissionCard({ mission, index, isCompleted, isLocked }) {
 
 export default function MissionSelect() {
   const { navigate, totalXP, level, levelProgress, badges, completedMissions, startMission } = useApp()
+  const t = useT()
   const xpForNextLevel = 200
   const xpInCurrentLevel = totalXP % xpForNextLevel
 
@@ -153,7 +157,7 @@ export default function MissionSelect() {
               onClick={() => navigate('home')}
               className="flex items-center gap-1.5 text-white/60 hover:text-white transition-colors font-semibold text-sm"
             >
-              <ArrowLeft size={18} /> Home
+              <ArrowLeft size={18} /> {t('nav.home')}
             </motion.button>
             <span className="text-white/20">|</span>
             <span className="text-xl font-black text-white">
@@ -170,7 +174,7 @@ export default function MissionSelect() {
               onClick={() => navigate('presentation')}
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs text-purple-300 border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 transition-colors"
             >
-              <Monitor size={13} /> Teach Mode
+              <Monitor size={13} /> {t('nav.teachMode')}
             </motion.button>
 
             <div className="hidden md:flex items-center gap-2">
@@ -178,7 +182,7 @@ export default function MissionSelect() {
                 {level}
               </div>
               <div>
-                <div className="text-white/80 text-xs font-bold">Level {level}</div>
+                <div className="text-white/80 text-xs font-bold">{t('missions.level')} {level}</div>
                 <div className="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden">
                   <motion.div
                     className="h-full rounded-full bg-gradient-to-r from-yellow-400 to-orange-500"
@@ -204,11 +208,9 @@ export default function MissionSelect() {
           className="mb-10"
         >
           <h1 className="text-4xl md:text-5xl font-black text-white mb-3">
-            Choose Your <span className="gradient-text">Mission</span> 🎯
+            {t('missions.title')} <span className="gradient-text">{t('missions.titleHighlight')}</span> 🎯
           </h1>
-          <p className="text-white/60 text-lg">
-            Each mission guides you step-by-step to build a real Scratch game. Start with Beginner!
-          </p>
+          <p className="text-white/60 text-lg">{t('missions.subtitle')}</p>
         </motion.div>
 
         {/* Player stats */}
@@ -218,9 +220,9 @@ export default function MissionSelect() {
           transition={{ delay: 0.1 }}
           className="flex items-center gap-3 flex-wrap mb-10"
         >
-          <StatPill icon={Zap}    value={`${totalXP} XP`}            label="Total Earned"      color="#f59e0b" />
-          <StatPill icon={Trophy} value={`${badges.length} Badges`}  label="Collected"         color="#a855f7" />
-          <StatPill icon={Star}   value={`${completedMissions.length}/${MISSIONS.length}`} label="Missions Done" color="#10b981" />
+          <StatPill icon={Zap}    value={`${totalXP} XP`}            label={t('missions.totalEarned')}  color="#f59e0b" />
+          <StatPill icon={Trophy} value={`${badges.length} Badges`}  label={t('missions.collected')}    color="#a855f7" />
+          <StatPill icon={Star}   value={`${completedMissions.length}/${MISSIONS.length}`} label={t('missions.missionsDone')} color="#10b981" />
 
           {badges.length > 0 && (
             <div className="flex items-center gap-1.5 ml-2">
@@ -254,7 +256,7 @@ export default function MissionSelect() {
           className="mt-16 text-center"
         >
           <p className="text-white/30 text-sm">
-            💡 Pro tip: complete missions in order for the best learning experience!
+            {t('missions.proTip')}
           </p>
         </motion.div>
       </div>

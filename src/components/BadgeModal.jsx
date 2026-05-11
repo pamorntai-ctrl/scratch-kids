@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
+import { useT } from '../context/LanguageContext.jsx'
 
 function ConfettiPiece({ color, delay, x }) {
   return (
@@ -23,6 +24,7 @@ const PIECES = Array.from({ length: 40 }, (_, i) => ({
 }))
 
 export default function BadgeModal({ badge, onClose }) {
+  const t = useT()
   const [showParticles, setShowParticles] = useState(true)
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function BadgeModal({ badge, onClose }) {
         ))}
 
         <div className="text-white/60 text-sm font-black uppercase tracking-widest">
-          🎉 Badge Unlocked!
+          {t('badge.unlocked')}
         </div>
 
         {/* Badge */}
@@ -112,7 +114,7 @@ export default function BadgeModal({ badge, onClose }) {
           onClick={onClose}
           className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white text-lg font-black shadow-xl"
         >
-          Awesome! 🙌
+          {t('badge.awesome')}
         </motion.button>
       </motion.div>
     </motion.div>

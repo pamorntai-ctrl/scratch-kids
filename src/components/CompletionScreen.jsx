@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Trophy, Zap, Star, ChevronRight, Home, RotateCcw, Code2 } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
+import { useT, useLocalizedMission } from '../context/LanguageContext.jsx'
 
 function StatCard({ icon: Icon, value, label, color, delay }) {
   return (
@@ -51,6 +52,9 @@ export default function CompletionScreen() {
     startMission,
   } = useApp()
 
+  const t = useT()
+  const localMission = useLocalizedMission(mission)
+
   if (!mission) {
     navigate('missions')
     return null
@@ -98,20 +102,20 @@ export default function CompletionScreen() {
         >
           <div className="text-7xl mb-4">🎉</div>
           <h1 className="text-4xl md:text-5xl font-black text-white mb-2">
-            Mission <span className="gradient-text">Complete!</span>
+            {t('complete.title')} <span className="gradient-text">{t('complete.titleHighlight')}</span>
           </h1>
           <p className="text-white/60 text-lg">
-            You built{' '}
-            <span className="text-white font-bold">{mission.emoji} {mission.title}</span>
-            {' '}from scratch!
+            {t('complete.builtFrom')}{' '}
+            <span className="text-white font-bold">{localMission.emoji} {localMission.title}</span>
+            {' '}{t('complete.fromScratch')}
           </p>
         </motion.div>
 
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3 w-full">
-          <StatCard icon={Zap}    value={`${mission.xpReward}`} label="XP Earned"      color="#f59e0b" delay={0.15} />
-          <StatCard icon={Star}   value={`${stepsCount}`}       label="Steps Mastered" color="#a855f7" delay={0.25} />
-          <StatCard icon={Trophy} value={`Lv.${level}`}         label="Current Level"  color="#10b981" delay={0.35} />
+          <StatCard icon={Zap}    value={`${mission.xpReward}`} label={t('complete.xpEarned')}      color="#f59e0b" delay={0.15} />
+          <StatCard icon={Star}   value={`${stepsCount}`}       label={t('complete.stepsMastered')} color="#a855f7" delay={0.25} />
+          <StatCard icon={Trophy} value={`Lv.${level}`}         label={t('complete.currentLevel')}  color="#10b981" delay={0.35} />
         </div>
 
         {/* Badge earned */}
@@ -129,7 +133,7 @@ export default function CompletionScreen() {
             </div>
             <div>
               <div className="text-white/40 text-xs font-black uppercase tracking-wider mb-1">
-                🏅 Badge Earned
+                {t('complete.badgeEarned')}
               </div>
               <div className="text-white text-xl font-black">{earnedBadge.name}</div>
               <div className="text-white/60 text-sm mt-0.5">{earnedBadge.description}</div>
@@ -150,7 +154,7 @@ export default function CompletionScreen() {
                 <Code2 size={14} className="text-white" />
               </div>
               <h2 className="text-white font-black text-base">
-                Real Programming Skills You Used
+                {t('complete.skillsTitle')}
               </h2>
             </div>
 
@@ -166,7 +170,7 @@ export default function CompletionScreen() {
               transition={{ delay: 0.63 + mission.programmingSkills.length * 0.07 }}
               className="mt-3 text-center text-white/30 text-xs"
             >
-              These are real concepts used by professional developers every day 🚀
+              {t('complete.skillsNote')}
             </motion.p>
           </motion.div>
         )}
@@ -178,9 +182,9 @@ export default function CompletionScreen() {
           transition={{ delay: 0.65 }}
           className="w-full p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-center"
         >
-          <span className="text-yellow-400 text-sm font-bold">Total XP: </span>
+          <span className="text-yellow-400 text-sm font-bold">{t('complete.totalXP')} </span>
           <span className="text-yellow-300 text-xl font-black">{totalXP} XP</span>
-          <span className="text-white/40 text-sm"> · Level {level}</span>
+          <span className="text-white/40 text-sm"> · {t('complete.level')} {level}</span>
         </motion.div>
 
         {/* Action buttons */}
@@ -196,7 +200,7 @@ export default function CompletionScreen() {
             onClick={() => navigate('missions')}
             className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white text-lg font-black flex items-center justify-center gap-2 shadow-xl glow-purple"
           >
-            Next Mission <ChevronRight size={22} />
+            {t('complete.nextMission')} <ChevronRight size={22} />
           </motion.button>
 
           <motion.button
@@ -205,7 +209,7 @@ export default function CompletionScreen() {
             onClick={() => startMission(mission)}
             className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/08 border border-white/12 text-white font-bold hover:bg-white/12 transition-all"
           >
-            <RotateCcw size={18} /> Play Again
+            <RotateCcw size={18} /> {t('complete.playAgain')}
           </motion.button>
 
           <motion.button
@@ -226,7 +230,7 @@ export default function CompletionScreen() {
             transition={{ delay: 0.9 }}
             className="flex items-center gap-3 flex-wrap justify-center"
           >
-            <span className="text-white/30 text-xs font-bold">Your badges:</span>
+            <span className="text-white/30 text-xs font-bold">{t('complete.yourBadges')}</span>
             {badges.map(b => (
               <div
                 key={b.id}

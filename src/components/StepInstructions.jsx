@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Lightbulb, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
+import { useT } from '../context/LanguageContext.jsx'
 import { SCRATCH_AREAS } from '../data/missions.js'
 import BlockReference from './BlockReference.jsx'
 
@@ -272,6 +273,7 @@ function ScratchDiagram({ area }) {
 
 /* ── Main component ── */
 export default function StepInstructions({ step }) {
+  const t = useT()
   const [showDiagram, setShowDiagram] = useState(false)
   const [showKnow, setShowKnow]       = useState(false)
 
@@ -311,7 +313,7 @@ export default function StepInstructions({ step }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500/15 border border-orange-500/30 text-orange-300 hover:bg-orange-500/25 transition-all"
         >
-          Open Scratch <ExternalLink size={11} />
+          {t('lesson.openScratch')} <ExternalLink size={11} />
         </a>
       </div>
 
@@ -333,7 +335,7 @@ export default function StepInstructions({ step }) {
       <div className="flex items-start gap-3 p-4 rounded-xl bg-purple-500/08 border border-purple-500/20">
         <span className="text-2xl shrink-0">{step.emoji}</span>
         <div>
-          <div className="text-purple-300 text-xs font-black uppercase tracking-wider mb-1">🎯 Goal for this step</div>
+          <div className="text-purple-300 text-xs font-black uppercase tracking-wider mb-1">{t('lesson.goalLabel')}</div>
           <p className="text-white font-bold text-sm leading-relaxed">{step.goal}</p>
         </div>
       </div>
@@ -341,7 +343,7 @@ export default function StepInstructions({ step }) {
       {/* Action list */}
       <div>
         <div className="text-white/50 text-xs font-black uppercase tracking-widest mb-3">
-          In Scratch, do this:
+          {t('lesson.inScratch')}
         </div>
         <div className="flex flex-col gap-3.5">
           {step.actions.map((action, i) => (
@@ -370,7 +372,7 @@ export default function StepInstructions({ step }) {
           className="text-left w-full"
         >
           <div className="flex items-center gap-2 text-blue-400/70 hover:text-blue-400 transition-colors text-sm font-bold">
-            🤔 Did you know?
+            {t('lesson.didYouKnow')}
             {showKnow ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </div>
           <AnimatePresence>

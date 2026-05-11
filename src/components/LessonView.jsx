@@ -4,6 +4,7 @@ import {
   ExternalLink, BookOpen, RotateCcw,
 } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
+import { useT, useLocalizedMission } from '../context/LanguageContext.jsx'
 import StepInstructions from './StepInstructions.jsx'
 import GamePreview from './GamePreview.jsx'
 
@@ -71,11 +72,12 @@ function StepRow({ step, index, isCompleted, isCurrent, isViewing, onClick }) {
 
 /* ── Concept chips strip ── */
 function ConceptChips({ concepts }) {
+  const t = useT()
   if (!concepts?.length) return null
   const colours = ['#6366f1','#f59e0b','#10b981','#3b82f6','#a855f7','#ef4444']
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      <span className="text-white/30 text-xs font-bold">You'll learn:</span>
+      <span className="text-white/30 text-xs font-bold">{t('lesson.youllLearn')}</span>
       {concepts.map((c, i) => (
         <span
           key={c}
@@ -103,9 +105,12 @@ export default function LessonView() {
     goToStep,
   } = useApp()
 
+  const t = useT()
+  const localMission = useLocalizedMission(mission)
+
   if (!mission) { navigate('missions'); return null }
 
-  const steps       = mission.steps
+  const steps       = localMission.steps
   const step        = steps[currentStepIndex]
   const totalSteps  = steps.length
   const activeIndex = completedSteps.length          // furthest uncompleted step
@@ -136,14 +141,14 @@ export default function LessonView() {
             onClick={() => navigate('missions')}
             className="flex items-center gap-1 text-white/50 hover:text-white transition-colors text-sm font-semibold shrink-0"
           >
-            <ArrowLeft size={16} /> Back
+            <ArrowLeft size={16} /> {t('lesson.back')}
           </motion.button>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-1">
               <span className="text-white font-black text-sm truncate">
-                {mission.emoji} {mission.title}
-                {isReviewing && <span className="ml-2 text-purple-400 text-xs font-bold">· Reviewing #{currentStepIndex + 1}</span>}
+                {localMission.emoji} {localMission.title}
+                {isReviewing && <span className="ml-2 text-purple-400 text-xs font-bold">· {t('lesson.reviewingLabel')}{currentStepIndex + 1}</span>}
               </span>
               <span className="text-white/40 text-xs font-bold shrink-0 ml-2">
                 {activeIndex}/{totalSteps}
@@ -169,7 +174,7 @@ export default function LessonView() {
 
         {/* Left sidebar — steps list */}
         <aside className="hidden lg:flex flex-col w-52 shrink-0 border-r border-white/06 p-4 gap-4 overflow-y-auto">
-          <p className="text-white/30 text-xs font-black uppercase tracking-widest">Steps</p>
+          <p className="text-white/30 text-xs font-black uppercase tracking-widest">{t('lesson.steps')}</p>
           <div className="flex flex-col gap-2">
             {steps.map((s, i) => (
               <StepRow
@@ -202,14 +207,14 @@ export default function LessonView() {
                 className="flex flex-col gap-6"
               >
                 {/* Step header card */}
-                <div className={`rounded-2xl p-5 bg-gradient-to-br ${mission.gradientBg} border ${isReviewing ? 'border-purple-500/30' : 'border-white/06'}`}>
+                <div className={`rounded-2xl p-5 bg-gradient-to-br ${localMission.gradientBg} border ${isReviewing ? 'border-purple-500/30' : 'border-white/06'}`}>
                   <div className="flex items-center gap-2 mb-3 flex-wrap">
                     <span className="text-white/35 text-xs font-black uppercase tracking-wider">
-                      Step {currentStepIndex + 1} of {totalSteps}
+                      {t('lesson.stepLabel')} {currentStepIndex + 1} {t('lesson.stepOf')} {totalSteps}
                     </span>
                     {isReviewing ? (
                       <span className="px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-300 text-xs font-black flex items-center gap-1">
-                        <RotateCcw size={9} /> Reviewing
+                        <RotateCcw size={9} /> {t('lesson.reviewing')}
                       </span>
                     ) : (
                       <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-black">
@@ -246,15 +251,15 @@ export default function LessonView() {
                   className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl transition-all duration-200 text-white ${
                     isReviewing
                       ? 'bg-gradient-to-r from-purple-600 to-purple-500'
-                      : `bg-gradient-to-r ${mission.color}`
+                      : `bg-gradient-to-r ${localMission.color}`
                   }`}
                 >
                   {isReviewing ? (
-                    <>Next Step <ChevronRight size={20} /></>
+                    <>{t('lesson.buttons.next')} <ChevronRight size={20} /></>
                   ) : isLastStep ? (
-                    <>🎉 Complete Mission! <Star size={20} fill="currentColor" /></>
+                    <>{t('lesson.buttons.complete')} <Star size={20} fill="currentColor" /></>
                   ) : (
-                    <>✅ I Did It! Next Step <ChevronRight size={20} /></>
+                    <>{t('lesson.buttons.iDidIt')} <ChevronRight size={20} /></>
                   )}
                 </motion.button>
 
@@ -277,18 +282,18 @@ export default function LessonView() {
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 py-3 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-300 font-black text-sm hover:bg-orange-500/25 transition-all"
           >
-            Open Scratch <ExternalLink size={14} />
+            {t('lesson.openScratch')} <ExternalLink size={14} />
           </a>
 
           {/* Game preview */}
           <div>
-            <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-2">Game Preview</p>
+            <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-2">{t('lesson.gamePreview')}</p>
             <GamePreview missionId={mission.id} previewStep={step.previewStep ?? currentStepIndex} />
           </div>
 
           {/* Step progress dots */}
           <div>
-            <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-2">Progress</p>
+            <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-2">{t('lesson.progress')}</p>
             <div className="flex gap-1.5 flex-wrap">
               {steps.map((s, i) => {
                 const done = completedSteps.includes(s.id)
@@ -318,14 +323,14 @@ export default function LessonView() {
 
           {/* Badge preview */}
           <div className="p-4 rounded-xl bg-white/04 border border-white/06">
-            <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-3">Mission Reward</p>
+            <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-3">{t('lesson.missionReward')}</p>
             <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${mission.badge.color} flex items-center justify-center text-2xl shadow-lg opacity-70`}>
-                {mission.badge.emoji}
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${localMission.badge.color} flex items-center justify-center text-2xl shadow-lg opacity-70`}>
+                {localMission.badge.emoji}
               </div>
               <div>
-                <p className="text-white/80 text-sm font-bold">{mission.badge.name}</p>
-                <p className="text-yellow-400 text-xs font-black mt-0.5">+{mission.xpReward} XP</p>
+                <p className="text-white/80 text-sm font-bold">{localMission.badge.name}</p>
+                <p className="text-yellow-400 text-xs font-black mt-0.5">+{localMission.xpReward} XP</p>
               </div>
             </div>
           </div>
@@ -333,13 +338,10 @@ export default function LessonView() {
           {/* Quick reference */}
           <div className="p-4 rounded-xl bg-white/04 border border-white/06">
             <p className="text-white/30 text-xs font-black uppercase tracking-widest mb-3">
-              <BookOpen size={10} className="inline mr-1" />Quick Tips
+              <BookOpen size={10} className="inline mr-1" />{t('lesson.quickTips')}
             </p>
             <div className="flex flex-col gap-2 text-xs text-white/50 leading-relaxed">
-              <p>🏁 Green flag = start the game</p>
-              <p>🔴 Red circle = stop the game</p>
-              <p>🖱️ Right-click a block to duplicate or delete it</p>
-              <p>💾 Scratch auto-saves if you're signed in</p>
+              {t('lesson.tips').map((tip, i) => <p key={i}>{tip}</p>)}
             </div>
           </div>
         </aside>

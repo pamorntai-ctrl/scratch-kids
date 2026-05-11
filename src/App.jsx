@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { AppProvider, useApp } from './context/AppContext.jsx'
+import { useLanguage, useT } from './context/LanguageContext.jsx'
 import Hero from './components/Hero.jsx'
 import MissionSelect from './components/MissionSelect.jsx'
 import LessonView from './components/LessonView.jsx'
@@ -14,6 +15,21 @@ const views = {
   lesson: LessonView,
   complete: CompletionScreen,
   presentation: PresentationView,
+}
+
+function LangToggle() {
+  const { toggle } = useLanguage()
+  const t = useT()
+  return (
+    <motion.button
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.94 }}
+      onClick={toggle}
+      className="fixed bottom-5 right-5 z-50 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-black backdrop-blur-sm hover:bg-white/18 transition-all shadow-lg"
+    >
+      {t('lang.toggle')}
+    </motion.button>
+  )
 }
 
 function AppInner() {
@@ -43,6 +59,8 @@ function AppInner() {
           ))}
         </AnimatePresence>
       </div>
+
+      <LangToggle />
 
       {/* Badge modal */}
       <AnimatePresence>
