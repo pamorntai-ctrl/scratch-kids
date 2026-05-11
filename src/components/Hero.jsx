@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Zap, Star, Trophy, ArrowRight, Gamepad2, Code2, Rocket } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
+import { MISSIONS } from '../data/missions.js'
 
 const FLOATING_BLOCKS = [
   { text: 'when 🏁 clicked', color: '#FFAB19', top: '12%', left: '6%', rotation: -8, delay: 0 },
@@ -36,16 +37,21 @@ const FEATURES = [
 ]
 
 const MISSIONS_PREVIEW = [
-  { emoji: '🍎', name: 'Apple Collector', diff: 'Beginner',     color: '#10b981' },
-  { emoji: '⭐', name: 'Catch the Stars', diff: 'Beginner',     color: '#f59e0b' },
-  { emoji: '🚀', name: 'Space Shooter',   diff: 'Intermediate', color: '#3b82f6' },
-  { emoji: '🔨', name: 'Whack-a-Mole',   diff: 'Intermediate', color: '#f97316' },
-  { emoji: '🧩', name: 'Maze Runner',     diff: 'Advanced',     color: '#8b5cf6' },
-  { emoji: '🐦', name: 'Sky Drifter',     diff: 'Advanced',     color: '#0ea5e9' },
+  { id: 'apple-collector', emoji: '🍎', name: 'Apple Collector', diff: 'Beginner',     color: '#10b981' },
+  { id: 'catch-stars',     emoji: '⭐', name: 'Catch the Stars', diff: 'Beginner',     color: '#f59e0b' },
+  { id: 'space-shooter',   emoji: '🚀', name: 'Space Shooter',   diff: 'Intermediate', color: '#3b82f6' },
+  { id: 'whack-a-mole',    emoji: '🔨', name: 'Whack-a-Mole',   diff: 'Intermediate', color: '#f97316' },
+  { id: 'maze-runner',     emoji: '🧩', name: 'Maze Runner',     diff: 'Advanced',     color: '#8b5cf6' },
+  { id: 'sky-drifter',     emoji: '🐦', name: 'Sky Drifter',     diff: 'Advanced',     color: '#0ea5e9' },
 ]
 
 export default function Hero() {
-  const { navigate } = useApp()
+  const { navigate, startMission } = useApp()
+
+  function handleMissionClick(id) {
+    const mission = MISSIONS.find(m => m.id === id)
+    if (mission) startMission(mission)
+  }
 
   return (
     <div className="relative min-h-screen stars-bg overflow-hidden">
@@ -206,7 +212,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9 + i * 0.1 }}
                 whileHover={{ scale: 1.04, y: -4 }}
-                onClick={() => navigate('missions')}
+                onClick={() => handleMissionClick(m.id)}
                 className="glass rounded-2xl p-6 cursor-pointer group transition-all duration-200 hover:border-white/20"
               >
                 <div className="text-4xl mb-3">{m.emoji}</div>

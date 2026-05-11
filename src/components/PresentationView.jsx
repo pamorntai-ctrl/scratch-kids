@@ -40,6 +40,12 @@ function buildSlides() {
 const SLIDES = buildSlides()
 const TOTAL = SLIDES.length
 
+// Map missionId → slide index of its mission-intro slide
+const MISSION_SLIDE_INDEX = {}
+SLIDES.forEach((s, i) => {
+  if (s.type === 'mission-intro') MISSION_SLIDE_INDEX[s.mission.id] = i
+})
+
 /* ── Slide counter dot row ── */
 function DotRow({ current, total }) {
   const MAX_DOTS = 30
@@ -106,7 +112,7 @@ function CodeBlock({ lines, color }) {
 
 /* ══════════════════════════ SLIDE RENDERERS ══════════════════════════ */
 
-function CoverSlide() {
+function CoverSlide({ onMissionClick }) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-8">
       <motion.div
@@ -135,12 +141,18 @@ function CoverSlide() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.35 }}
-        className="flex items-center gap-6 flex-wrap justify-center"
+        className="flex items-center gap-4 flex-wrap justify-center"
       >
         {MISSIONS.map(m => (
-          <div key={m.id} className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/08 border border-white/12 text-white/70 font-bold">
+          <motion.button
+            key={m.id}
+            whileHover={{ scale: 1.08, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onMissionClick(m.id)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/08 border border-white/12 text-white/70 font-bold hover:bg-white/16 hover:border-white/25 hover:text-white transition-all duration-200 cursor-pointer"
+          >
             <span>{m.emoji}</span> {m.title}
-          </div>
+          </motion.button>
         ))}
       </motion.div>
       <motion.p
@@ -149,7 +161,7 @@ function CoverSlide() {
         transition={{ delay: 0.5 }}
         className="text-white/25 text-sm"
       >
-        Press → or click the arrow to begin
+        Click a game to jump to it, or press → to begin
       </motion.p>
     </div>
   )
@@ -386,6 +398,13 @@ export default function PresentationView() {
     setIdx(i => Math.max(0, Math.min(TOTAL - 1, i + delta)))
   }, [])
 
+  const jumpToMission = useCallback((missionId) => {
+    const target = MISSION_SLIDE_INDEX[missionId]
+    if (target == null) return
+    setDir(target > 0 ? 1 : -1)
+    setIdx(target)
+  }, [])
+
   // Keyboard navigation
   useEffect(() => {
     function onKey(e) {
@@ -407,7 +426,7 @@ export default function PresentationView() {
 
   function renderSlide(s) {
     switch (s.type) {
-      case 'cover':         return <CoverSlide />
+      case 'cover':         return <CoverSlide onMissionClick={jumpToMission} />
       case 'mission-intro': return <MissionIntroSlide mission={s.mission} />
       case 'step':          return <StepSlide mission={s.mission} insight={s.insight} stepIndex={s.stepIndex} previewStep={s.previewStep} />
       case 'summary':       return <SummarySlide />
