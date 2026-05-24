@@ -228,25 +228,25 @@
     <div class="blocks-col blocks-xs">
       <div class="blocks-label">Replace the space-key script with this upgrade</div>
       <div class="block events shape-hat">when 🏁 clicked</div>
-      <div class="block variables indent-0">set [y velocity▼] to (0)</div>
+      <div class="block variables indent-0">set [y power▼] to (0)</div>
       <div class="block control indent-0 shape-c">forever</div>
       <div class="block control indent-1 shape-c">if ‹key [space▼] pressed?› then</div>
       <div class="block control indent-2 shape-c">if ‹(y position) &lt; (-115)› then</div>
-      <div class="block variables indent-3">set [y velocity▼] to (12)</div>
+      <div class="block variables indent-3">set [y power▼] to (12)</div>
       <div class="block control indent-2 shape-cap">end</div>
       <div class="block control indent-1 shape-cap">end</div>
-      <div class="block variables indent-1">change [y velocity▼] by (-1)</div>
-      <div class="block motion indent-1">change y by (y velocity)</div>
+      <div class="block variables indent-1">change [y power▼] by (-1)</div>
+      <div class="block motion indent-1">change y by (y power)</div>
       <div class="block control indent-1 shape-c">if ‹(y position) &lt; (-120)› then</div>
       <div class="block motion indent-2">set y to (-120)</div>
-      <div class="block variables indent-2">set [y velocity▼] to (0)</div>
+      <div class="block variables indent-2">set [y power▼] to (0)</div>
       <div class="block control indent-1 shape-cap">end</div>
       <div class="block control indent-0 shape-cap">end</div>
     </div>
     <div class="info-col">
       <div class="tip-box">
         <span class="box-label">💡 Tip</span>
-        <span class="box-text">"change y velocity by (-1)" is gravity — it runs every frame so the character accelerates downward naturally.</span>
+        <span class="box-text">"change y power by (-1)" is gravity — it runs every frame so the character accelerates downward naturally.</span>
       </div>
       <div class="dyk-box">
         <span class="box-label">🤔 Did You Know?</span>

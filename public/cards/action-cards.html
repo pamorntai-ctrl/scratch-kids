@@ -450,10 +450,10 @@
   </div>
 </div>
 
-<!-- ══ 2 JUMP — FRONT ══ -->
+<!-- ══ 2 JUMP + GRAVITY (merged) — FRONT ══ -->
 <div class="card card-front" style="--c:#10b981">
   <div class="top-strip">
-    <span class="action-title">Jump</span>
+    <span class="action-title">Jump &amp; Gravity</span>
     <span class="difficulty-badge">Beginner</span>
   </div>
   <div class="illustration">
@@ -467,27 +467,31 @@
       <path d="M 55,116 Q 100,22 145,116" stroke="#FFAB19" stroke-width="2.5" fill="none" stroke-dasharray="5,4" opacity=".75"/>
       <!-- Ground shadow -->
       <ellipse cx="100" cy="123" rx="22" ry="5" fill="#059669" opacity=".35"/>
-      <!-- Upward arrow -->
-      <polygon points="100,12 92,25 108,25" fill="#4C97FF" opacity=".85"/>
-      <rect x="97" y="25" width="6" height="14" rx="3" fill="#4C97FF" opacity=".85"/>
+      <!-- Upward arrow (jump) -->
+      <polygon points="60,40 52,52 68,52" fill="#4C97FF" opacity=".85"/>
+      <rect x="57" y="52" width="6" height="14" rx="3" fill="#4C97FF" opacity=".85"/>
+      <text x="60" y="78" font-size="7" font-weight="900" fill="#1e3a8a" text-anchor="middle" font-family="Nunito,sans-serif">JUMP</text>
+      <!-- Downward arrow (gravity) -->
+      <rect x="137" y="40" width="6" height="14" rx="3" fill="#FF8C1A" opacity=".85"/>
+      <polygon points="140,66 132,54 148,54" fill="#FF8C1A" opacity=".85"/>
+      <text x="140" y="78" font-size="7" font-weight="900" fill="#9a3412" text-anchor="middle" font-family="Nunito,sans-serif">GRAVITY</text>
       <!-- Hair -->
       <path d="M 86,50 Q 87,40 100,39 Q 113,40 114,50" fill="#c2783c"/>
       <!-- Head -->
       <circle cx="100" cy="54" r="15" fill="#fcd787"/>
-      <!-- Eyes (wide, excited) -->
+      <!-- Eyes -->
       <circle cx="95" cy="52" r="2.5" fill="#1a1a2e"/>
       <circle cx="105" cy="52" r="2.5" fill="#1a1a2e"/>
-      <!-- Open smile -->
+      <!-- Smile -->
       <path d="M 94,58 Q 100,63 106,58" stroke="#1a1a2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
       <!-- Body -->
       <rect x="89" y="69" width="22" height="21" rx="5" fill="#9966FF"/>
       <!-- Arms raised -->
-      <line x1="89" y1="74" x2="74" y2="60" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
-      <line x1="111" y1="74" x2="126" y2="60" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
-      <!-- Left leg (bent, knee out left) -->
+      <line x1="89" y1="74" x2="78" y2="63" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
+      <line x1="111" y1="74" x2="122" y2="63" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
+      <!-- Legs bent (mid-air) -->
       <polyline points="94,90 80,102 88,113" stroke="#6d28d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <ellipse cx="87" cy="115" rx="8" ry="4" fill="#1e293b" transform="rotate(-15,87,115)"/>
-      <!-- Right leg (bent, knee out right) -->
       <polyline points="106,90 120,102 112,113" stroke="#6d28d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <ellipse cx="113" cy="115" rx="8" ry="4" fill="#1e293b" transform="rotate(15,113,115)"/>
       <!-- Space key -->
@@ -496,84 +500,37 @@
     </svg>
   </div>
   <div class="bottom-strip">
-    <span class="scratch-pill">Motion</span>
+    <span class="scratch-pill">Motion · Variables</span>
   </div>
 </div>
 
-<!-- ══ 2 JUMP — BACK ══ -->
+<!-- ══ 2 JUMP + GRAVITY (merged) — BACK ══ -->
 <div class="card card-back" style="--c:#10b981">
   <div class="back-top">
     <span class="script-ref">Script Reference</span>
-    <span class="back-action-name">Jump</span>
+    <span class="back-action-name">Jump &amp; Gravity</span>
   </div>
   <div class="back-body">
     <div class="block-col">
-      <span class="b ev hat">when [space▼] key pressed</span>
-      <span class="b co">if &lt;(on ground?) = true&gt; then</span>
-      <span class="b va i1">set [vy▼] to (-15)</span>
-      <span class="b co cap i0">end</span>
-      <span class="nb" style="margin-top:4px">// negative vy = upward</span>
-      <span class="nb">// gravity pulls back down</span>
-    </div>
-    <div class="tip-col">
-      <div class="tip-label">💡 Pro Tip</div>
-      <div class="tip-text">Save velocity in a variable <strong>vy</strong>. Gravity adds to vy each frame — realistic feel!</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 3 GRAVITY — FRONT ══ -->
-<div class="card card-front" style="--c:#10b981">
-  <div class="top-strip">
-    <span class="action-title">Gravity</span>
-    <span class="difficulty-badge">Beginner</span>
-  </div>
-  <div class="illustration">
-    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
-      <rect width="200" height="118" fill="#dbeafe"/>
-      <rect y="118" width="200" height="37" fill="#10b981"/>
-      <line x1="0" y1="118" x2="200" y2="118" stroke="#059669" stroke-width="2"/>
-      <!-- Falling trail -->
-      <line x1="100" y1="20" x2="100" y2="68" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
-      <!-- Character falling -->
-      <text x="100" y="102" font-size="50" text-anchor="middle" font-family="serif">🧒</text>
-      <!-- Down arrows -->
-      <polygon points="100,112 93,100 107,100" fill="#4C97FF" opacity=".8"/>
-      <rect x="97" y="68" width="6" height="33" rx="3" fill="#4C97FF" opacity=".8"/>
-      <!-- vy variable display -->
-      <rect x="130" y="28" width="56" height="28" rx="6" fill="#FF8C1A"/>
-      <text x="158" y="39" font-size="7" font-weight="bold" fill="white" text-anchor="middle" font-family="Courier New,monospace">vy</text>
-      <rect x="134" y="42" width="48" height="10" rx="3" fill="white"/>
-      <text x="158" y="50" font-size="8" font-weight="900" fill="#FF8C1A" text-anchor="middle" font-family="Courier New,monospace">8</text>
-      <!-- Arrow showing vy increasing -->
-      <text x="138" y="38" font-size="9" fill="white">↑</text>
-    </svg>
-  </div>
-  <div class="bottom-strip">
-    <span class="scratch-pill">Variables</span>
-  </div>
-</div>
-
-<!-- ══ 3 GRAVITY — BACK ══ -->
-<div class="card card-back" style="--c:#10b981">
-  <div class="back-top">
-    <span class="script-ref">Script Reference</span>
-    <span class="back-action-name">Gravity</span>
-  </div>
-  <div class="back-body">
-    <div class="block-col">
+      <span class="nb">─ gravity (always runs) ─</span>
       <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b va">set [y power▼] to (0)</span>
       <span class="b co">forever</span>
-      <span class="b va i1">change [vy▼] by (1)</span>
-      <span class="b mo i1">change y by (vy)</span>
-      <span class="b se i1">if &lt;touching [ground▼]?&gt;</span>
-      <span class="b va i2">set [vy▼] to (0)</span>
+      <span class="b va i1">change [y power▼] by (-1)</span>
+      <span class="b mo i1">change y by (y power)</span>
+      <span class="b co i1">if &lt;touching [ground▼]?&gt; then</span>
+      <span class="b va i2">set [y power▼] to (0)</span>
       <span class="b co cap i1">end</span>
+      <span class="b co cap">end</span>
+      <span class="nb" style="margin-top:3px">─ jump (on space) ─</span>
+      <span class="b ev hat">when [space▼] key pressed</span>
+      <span class="b co">if &lt;touching [ground▼]?&gt; then</span>
+      <span class="b va i1">set [y power▼] to (12)</span>
       <span class="b co cap">end</span>
     </div>
     <div class="tip-col">
       <div class="tip-label">💡 Pro Tip</div>
-      <div class="tip-text">Start vy at 0. Add 1 each frame. Cap vy at <strong>15</strong> so the character doesn't fall too fast.</div>
+      <div class="tip-text">In Scratch, <strong>positive y = up</strong>. Jump sets <strong>y power = 12</strong>; gravity subtracts 1 each frame so the leap arcs back down.</div>
     </div>
   </div>
 </div>
@@ -1380,18 +1337,20 @@
   </div>
   <div class="back-body">
     <div class="block-col">
+      <span class="nb">─ gravity (always runs) ─</span>
       <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b va">set [y velocity▼] to (0)</span>
       <span class="b co">forever</span>
-      <span class="b va i1">change [vy▼] by (0.4)</span>
-      <span class="b mo i1">change y by (vy)</span>
+      <span class="b va i1">change [y velocity▼] by (-1)</span>
+      <span class="b mo i1">change y by (y velocity)</span>
       <span class="b co cap">end</span>
-      <span class="nb" style="margin-top:4px">─ flap ─</span>
+      <span class="nb" style="margin-top:3px">─ flap (on space) ─</span>
       <span class="b ev hat">when [space▼] key pressed</span>
-      <span class="b va">set [vy▼] to (-6)</span>
+      <span class="b va">set [y velocity▼] to (8)</span>
     </div>
     <div class="tip-col">
       <div class="tip-label">💡 Pro Tip</div>
-      <div class="tip-text">vy of <strong>-6</strong> on flap feels best. Gravity <strong>+0.4</strong> per frame. Tune these numbers!</div>
+      <div class="tip-text">Flap sets <strong>y velocity = 8</strong> (upward burst); gravity subtracts 1 each frame so the bird drifts back down.</div>
     </div>
   </div>
 </div>
