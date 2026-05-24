@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Whack-a-Mole — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print These Cards (File → Print → Actual Size)</button>
+
+<!-- ═══ STEP 1 ═══ -->
+<p class="section-title">Step 1 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">1 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">✏️</div>
+    <div class="concept-pill">Drawing API · Backdrop</div>
+    <div class="goal-text">Use the Paint Editor to draw a brown dirt backdrop with 6 dark oval holes</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Draw the Mole Field</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Draw the Mole Field</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Open Scratch → delete cat sprite</li>
+        <li>Click backdrop thumbnail → "Paint" (pencil icon)</li>
+        <li>Fill canvas brown</li>
+        <li>Ellipse tool dark brown → draw 6 ovals in 3×2 grid</li>
+        <li>Click back-arrow to return</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Keep your hole ovals consistent in size — you'll position mole clones to match each hole centre in later steps.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">You just used a 2D drawing API — the same API that browsers use for HTML Canvas, and that Figma uses for its design canvas.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<p class="section-title">Step 2 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">2 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🐹</div>
+    <div class="concept-pill">Object Templates</div>
+    <div class="goal-text">Add a hedgehog or mole sprite, size it to 50, and hide it on flag click</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Mole</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Mole</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the MOLE sprite</div>
+      <div class="block events shape-hat note">— MOLE: when 🏁 clicked →</div>
+      <div class="block looks indent-0 shape-cap">hide</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">If you can still see the mole, make sure the Code tab is on the MOLE sprite (blue outline in sprite panel).</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">A hidden sprite with "when I start as a clone" scripts is exactly like a class — it defines behaviour without doing anything visible until instantiated.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<p class="section-title">Step 3 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">3 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🎲</div>
+    <div class="concept-pill">Random Positioning · Clones</div>
+    <div class="goal-text">Make the mole teleport to a random hole position and create one clone</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Pick a Random Hole</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Pick a Random Hole</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the MOLE sprite</div>
+      <div class="block events shape-hat note">— MOLE master: when 🏁 clicked →</div>
+      <div class="block looks indent-0">hide</div>
+      <div class="block motion indent-0">go to x: (pick random (-160) to (160)) y: (-60)</div>
+      <div class="block control indent-0 shape-cap">create clone of [myself]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Adjust the x range to match your painted holes. If holes are at x=-120, 0, 120 use pick random (-120) to (120).</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"pick random" is a pseudo-random number generator — it produces numbers that feel random but are actually deterministic sequences computed from a seed.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<p class="section-title">Step 4 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">4 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🦔</div>
+    <div class="concept-pill">Timer · Object Lifecycle</div>
+    <div class="goal-text">The mole clone appears, waits 1.5 seconds, hides, waits 0.5 seconds, then deletes itself</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Mole Pops Up</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Mole Pops Up</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the MOLE sprite</div>
+      <div class="block control shape-hat note">— MOLE: when I start as a clone →</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0">wait (1.5) seconds</div>
+      <div class="block looks indent-0">hide</div>
+      <div class="block control indent-0">wait (0.5) seconds</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Try wait (0.8) for a faster pop-up or wait (2.5) for a slower, easier game. This timer controls difficulty!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This show → wait → hide → delete pattern is the game-object lifecycle: create → active → deactivate → destroy. Used in every game engine for temporary objects.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<p class="section-title">Step 5 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">5 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🖱️</div>
+    <div class="concept-pill">Mouse Events · Input</div>
+    <div class="goal-text">Add a click handler on the Mole that plays a sound when whacked</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Click to Whack</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Click to Whack</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the MOLE sprite</div>
+      <div class="block events shape-hat note">— MOLE: when this sprite clicked →</div>
+      <div class="block sound indent-0 shape-cap">play sound [pop] until done</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Click the Sounds tab on the Mole sprite to browse and add sound effects. "Chomp", "Zap", or "Pop" all work well.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"when this sprite clicked" is addEventListener("click") in JavaScript — the event pattern that powers every button, menu, and interactive element on the entire web.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 ═══ -->
+<p class="section-title">Step 6 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">6 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🔢</div>
+    <div class="concept-pill">Variables · Reward State</div>
+    <div class="goal-text">Create a Score variable and increment it on each successful click</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Score the Hit</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Score the Hit</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the MOLE sprite</div>
+      <div class="block events shape-hat note">— MOLE: when this sprite clicked →</div>
+      <div class="block sound indent-0">play sound [pop] until done</div>
+      <div class="block variables indent-0">change [Score] by (1)</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Right-click the Score display and choose "Large readout" for a satisfying big counter.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Every leaderboard, XP system, in-game currency, and achievement tracker is built on this same pattern: event detected → variable updated → display refreshed.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 7 ═══ -->
+<p class="section-title">Step 7 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">7 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🔄</div>
+    <div class="concept-pill">Parallel Execution · Concurrency</div>
+    <div class="goal-text">Make the master mole spawn new clones continuously in a forever loop</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Moles Keep Coming</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Moles Keep Coming</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the MOLE sprite</div>
+      <div class="block events shape-hat note">— MOLE master: when 🏁 clicked →</div>
+      <div class="block looks indent-0">hide</div>
+      <div class="block variables indent-0">set [Score] to (0)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1">wait (1.2) seconds</div>
+      <div class="block motion indent-1">go to x: (pick random (-160) to (160)) y: (-60)</div>
+      <div class="block control indent-1 shape-cap">create clone of [myself]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Lower the wait time (0.8 secs) for more moles at once. Higher (2 secs) gives beginners more breathing room.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Two "when 🏁 clicked" scripts running at the same time is concurrency — the same concept behind async/await in JavaScript and Python's threading module.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 ═══ -->
+<p class="section-title">Step 8 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">8 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⏱️</div>
+    <div class="concept-pill">Countdown Timer</div>
+    <div class="goal-text">Add a 30-second countdown Timer variable that ticks down once per second</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Countdown Timer</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Countdown Timer</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — timer script</div>
+      <div class="block events shape-hat note">when 🏁 clicked (timer script)</div>
+      <div class="block variables indent-0">set [Timer] to (30)</div>
+      <div class="block control indent-0 shape-c">repeat (30)</div>
+      <div class="block control indent-1">wait (1) seconds</div>
+      <div class="block variables indent-1 shape-cap">change [Timer] by (-1)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Increase to 45 or 60 seconds for an easier game. The "repeat" count always matches the start Timer value.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This repeat-wait-change pattern is how every countdown works in code — from quiz timers to rocket launch sequences.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 ═══ -->
+<p class="section-title">Step 9 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🔨 Whack-a-Mole</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">9 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🏁</div>
+    <div class="concept-pill">State Machines · Program Termination</div>
+    <div class="goal-text">When the timer hits zero, show a message and stop the game</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Game Over</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Game Over</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — after the repeat loop</div>
+      <div class="block control indent-0 shape-c note">(after the repeat loop)</div>
+      <div class="block looks indent-0">say [Time's up! 🔨] for (2) secs</div>
+      <div class="block control indent-0 shape-cap">stop [all]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Share your game on Scratch — click "Share" at the top. Friends can try to beat your high score!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">PLAYING → GAME_OVER is a state machine. Login flows, vending machines, traffic lights, and payment systems all work as state machines.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

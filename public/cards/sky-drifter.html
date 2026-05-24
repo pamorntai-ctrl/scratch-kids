@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sky Drifter — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print These Cards (File → Print → Actual Size)</button>
+
+<!-- ═══ STEP 1 ═══ -->
+<p class="section-title">Step 1 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">1 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🌤️</div>
+    <div class="concept-pill">Asset Loading · Scene Setup</div>
+    <div class="goal-text">Choose a blue sky backdrop and delete the default cat</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Set the Sky Scene</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Set the Sky Scene</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Open Scratch → right-click cat → Delete</li>
+        <li>Choose a Backdrop → search "Blue Sky"</li>
+        <li>Click to add → stage turns sky blue!</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Any bright sky backdrop works. "Blue Sky 2" has clouds already painted in — saves you one step!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Loading assets and configuring the scene before the game loop starts is called scene setup or initialisation — every game engine has this explicit phase.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<p class="section-title">Step 2 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">2 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🐦</div>
+    <div class="concept-pill">Object Properties · Positioning</div>
+    <div class="goal-text">Add a parrot or bird sprite, size it to 50, and position it on the left of the stage</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Bird</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Bird</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the BIRD sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0 shape-cap">go to x: (-180) y: (0)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Placing the bird at x=-180 gives it room to navigate. Pipes will come from the right side.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Every game object starts with an initialization block that sets position, size, and velocity to known values before the game loop begins.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<p class="section-title">Step 3 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">3 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⬇️</div>
+    <div class="concept-pill">Variables · Physics Simulation</div>
+    <div class="goal-text">Create a "y velocity" variable; every frame subtract 1 (gravity) and apply it to y position</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Gravity Pulls Down</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Gravity Pulls Down</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col blocks-sm">
+      <div class="blocks-label">Scratch Blocks — on the BIRD sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (-180) y: (0)</div>
+      <div class="block variables indent-0">set [y velocity] to (0)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block variables indent-1">change [y velocity] by (-1)</div>
+      <div class="block motion indent-1">change y by (y velocity)</div>
+      <div class="block control indent-1 shape-c">if ‹(y position) &lt; (-170)› then</div>
+      <div class="block motion indent-2">set y to (-170)</div>
+      <div class="block variables indent-2 shape-cap">set [y velocity] to (0)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Try "change [y velocity] by (-2)" for stronger gravity — the game gets much harder immediately!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Velocity accumulation under constant acceleration is Newtonian mechanics — F=ma in code. Every physics engine from Box2D to Unreal uses this exact loop every frame.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<p class="section-title">Step 4 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">4 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🦅</div>
+    <div class="concept-pill">Event Handling · Input Polling</div>
+    <div class="goal-text">Press SPACE to set y velocity to +8 — fighting gravity with a flap impulse</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Flap! Press Space</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Flap! Press Space</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — separate script on BIRD</div>
+      <div class="block events shape-hat note">— separate script on BIRD →</div>
+      <div class="block events shape-hat">when [space] key pressed</div>
+      <div class="block variables indent-0 shape-cap">set [y velocity] to (8)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Try values like 6, 10, or 15 to find the feel you want. Higher = easier to stay aloft but harder to aim through gaps.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"when [space] key pressed" is a hardware interrupt wrapper — the operating system tells Scratch the instant the key is pressed, with no polling delay.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<p class="section-title">Step 5 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">5 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🟩</div>
+    <div class="concept-pill">Object Templates · Hiding</div>
+    <div class="goal-text">Draw a green pipe sprite in the Paint Editor and hide it on flag click</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Pipe</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Pipe</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the PIPE sprite</div>
+      <div class="block events shape-hat note">— PIPE: when 🏁 clicked →</div>
+      <div class="block looks indent-0 shape-cap">hide</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Make the pipe width about 28–32 pixels. Too wide = impossible game. Too thin = too easy.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">The Pipe sprite is a class. Its clones are instances. OOP in action — one template, infinite objects.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 ═══ -->
+<p class="section-title">Step 6 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">6 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⬅️</div>
+    <div class="concept-pill">Repeat-Until · Destruction</div>
+    <div class="goal-text">A pipe clone scrolls from right to left and deletes itself when offscreen</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Pipes Scroll Left</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Pipes Scroll Left</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the PIPE sprite</div>
+      <div class="block control shape-hat note">— PIPE: when I start as a clone →</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0 shape-c">repeat until ‹(x position) &lt; (-240)›</div>
+      <div class="block motion indent-1">change x by (-4)</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Increase the scroll speed to -6 or -8 for a harder game. This one number controls overall game difficulty!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Parallax scrolling, endless runners, and side-scrollers all use this pattern: spawn off-screen right → scroll left → destroy off-screen left → repeat.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 7 ═══ -->
+<p class="section-title">Step 7 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">7 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🎲</div>
+    <div class="concept-pill">Random Numbers · Procedural Generation</div>
+    <div class="goal-text">Make the master Pipe spawn clones at random heights in a forever loop</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Random Pipe Heights</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Random Pipe Heights</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the PIPE sprite</div>
+      <div class="block events shape-hat note">— PIPE master: when 🏁 clicked →</div>
+      <div class="block looks indent-0">hide</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block motion indent-1">go to x: (240) y: (pick random (-60) to (60))</div>
+      <div class="block control indent-1">create clone of [myself]</div>
+      <div class="block control indent-1 shape-cap">wait (2.5) seconds</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Lower the wait to 1.5 secs for a rapid-fire challenge. Wider pick-random range creates more extreme height differences.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Procedural generation — Minecraft biomes, Spelunky levels, No Man's Sky planets — is all "pick random" at different scales.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 ═══ -->
+<p class="section-title">Step 8 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">8 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">💥</div>
+    <div class="concept-pill">Collision Detection · Game Over</div>
+    <div class="goal-text">Detect when the Bird touches a Pipe — stop the game immediately</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Dodge or Crash</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Dodge or Crash</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — inside the pipe scroll loop</div>
+      <div class="block control indent-0 shape-c note">(inside the repeat-until scroll loop)</div>
+      <div class="block motion indent-1">change x by (-4)</div>
+      <div class="block sensing indent-1 shape-c">if ‹touching [Bird]?› then</div>
+      <div class="block control indent-2 shape-cap">stop [all]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Before "stop [all]", add "say [Game Over! 💥] for (1) secs" on the Bird sprite for a dramatic ending.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"touching [Bird]?" checks pixel-by-pixel overlap 30 times per second — the same AABB collision test behind every hitbox, trigger zone, and collision mesh in game development.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 ═══ -->
+<p class="section-title">Step 9 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🐦 Sky Drifter</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">9 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🏅</div>
+    <div class="concept-pill">Variables · Score State</div>
+    <div class="goal-text">Add a Score variable that increments each time the bird passes a pipe</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Count the Score</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Count the Score</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — inside the pipe clone scroll loop</div>
+      <div class="block control indent-0 shape-c note">(inside the pipe clone scroll loop)</div>
+      <div class="block control indent-1 shape-c">if ‹(x position) &lt; (-180)› then</div>
+      <div class="block variables indent-2">change [Score] by (1)</div>
+      <div class="block control indent-2">wait (0.1) seconds</div>
+      <div class="block sensing indent-1 shape-c">if ‹touching [Bird]?› then</div>
+      <div class="block control indent-2 shape-cap">stop [all]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Share your game on Scratch — click "Share" at the top and challenge friends to beat your high score! 🏅</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Threshold-crossing detection ("x &lt; -180") is used in games, finance (stop-loss triggers), IoT (sensor alarms), and analytics (funnel drop-off).</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

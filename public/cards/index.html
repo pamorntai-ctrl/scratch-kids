@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ScratchQuest — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+<style>
+@page { size: A4; margin: 0; }
+body { font-family: 'Nunito', 'Segoe UI', Arial, sans-serif; background: #1a1730; min-height: 100vh; padding: 40px 24px; }
+.index-header { text-align: center; margin-bottom: 48px; }
+.index-title { font-size: 36px; font-weight: 900; color: white; margin-bottom: 8px; }
+.index-subtitle { font-size: 16px; color: #a0a0c8; }
+.games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+.game-card {
+  background: rgba(255,255,255,0.06);
+  border: 2px solid var(--color);
+  border-radius: 20px;
+  padding: 28px 24px;
+  text-decoration: none;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.game-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+.game-emoji { font-size: 52px; }
+.game-title { font-size: 20px; font-weight: 900; color: white; }
+.game-diff {
+  display: inline-block; font-size: 10px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color); background: rgba(255,255,255,0.08);
+  border: 1.5px solid var(--color); border-radius: 20px;
+  padding: 3px 12px;
+}
+.game-desc { font-size: 13px; color: #8888aa; line-height: 1.5; flex: 1; }
+.game-link {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px; border-radius: 10px;
+  background: var(--color); color: white;
+  font-size: 13px; font-weight: 900;
+}
+.cards-count { font-size: 11px; color: #6668a0; margin-top: 4px; }
+.instructions {
+  max-width: 960px; margin: 48px auto 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 28px 32px;
+}
+.instructions h2 { color: white; font-size: 18px; font-weight: 900; margin-bottom: 16px; }
+.instructions ol { color: #8888aa; font-size: 14px; line-height: 2; padding-left: 20px; }
+.instructions strong { color: #c0b0ff; }
+@media print { body, .index-header, .games-grid, .instructions { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="index-header">
+  <div class="index-title">🎮 ScratchQuest Learning Cards</div>
+  <div class="index-subtitle">Print & cut — one card per Scratch step, front &amp; back</div>
+</div>
+
+<div class="games-grid">
+
+  <a class="game-card" href="apple-collector.html" style="--color:#10b981">
+    <div class="game-emoji">🍎</div>
+    <div class="game-title">Apple Collector</div>
+    <span class="game-diff">Beginner</span>
+    <div class="game-desc">Walk, jump, and collect apples. Learn motion, variables, gravity, and collision detection.</div>
+    <div class="cards-count">10 cards · 20 pages</div>
+    <div class="game-link">🖨️ Open &amp; Print Cards</div>
+  </a>
+
+  <a class="game-card" href="catch-stars.html" style="--color:#10b981">
+    <div class="game-emoji">⭐</div>
+    <div class="game-title">Catch the Stars</div>
+    <span class="game-diff">Beginner</span>
+    <div class="game-desc">Catch falling stars with a bowl. Learn clones, random numbers, lives, and game-over states.</div>
+    <div class="cards-count">9 cards · 18 pages</div>
+    <div class="game-link">🖨️ Open &amp; Print Cards</div>
+  </a>
+
+  <a class="game-card" href="space-shooter.html" style="--color:#3b82f6">
+    <div class="game-emoji">🚀</div>
+    <div class="game-title">Space Shooter</div>
+    <span class="game-diff">Intermediate</span>
+    <div class="game-desc">Blast alien invaders! Learn event handling, object instantiation, parallel execution, and score tracking.</div>
+    <div class="cards-count">9 cards · 18 pages</div>
+    <div class="game-link">🖨️ Open &amp; Print Cards</div>
+  </a>
+
+  <a class="game-card" href="whack-a-mole.html" style="--color:#3b82f6">
+    <div class="game-emoji">🔨</div>
+    <div class="game-title">Whack-a-Mole</div>
+    <span class="game-diff">Intermediate</span>
+    <div class="game-desc">Click the moles before they disappear! Learn mouse events, timers, state machines, and the Paint Editor.</div>
+    <div class="cards-count">9 cards · 18 pages</div>
+    <div class="game-link">🖨️ Open &amp; Print Cards</div>
+  </a>
+
+  <a class="game-card" href="maze-runner.html" style="--color:#8b5cf6">
+    <div class="game-emoji">🧩</div>
+    <div class="game-title">Maze Runner</div>
+    <span class="game-diff">Advanced</span>
+    <div class="game-desc">Navigate your own hand-drawn maze. Learn colour sensing, rollback patterns, 4-way movement, and timers.</div>
+    <div class="cards-count">9 cards · 18 pages</div>
+    <div class="game-link">🖨️ Open &amp; Print Cards</div>
+  </a>
+
+  <a class="game-card" href="sky-drifter.html" style="--color:#8b5cf6">
+    <div class="game-emoji">🐦</div>
+    <div class="game-title">Sky Drifter</div>
+    <span class="game-diff">Advanced</span>
+    <div class="game-desc">Tap to flap through infinite pipes! Learn physics simulation, procedural generation, and endless-runner design.</div>
+    <div class="cards-count">9 cards · 18 pages</div>
+    <div class="game-link">🖨️ Open &amp; Print Cards</div>
+  </a>
+
+</div>
+
+<div style="max-width:960px;margin:40px auto 0;text-align:center">
+  <div style="font-size:13px;font-weight:900;color:#a0a0c8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px">⚡ Action Card Deck</div>
+  <a class="game-card" href="action-cards.html" style="--color:#6366f1;display:flex;flex-direction:column;gap:12px;max-width:400px;margin:0 auto">
+    <div class="game-emoji">🃏</div>
+    <div class="game-title">Scratch Action Cards</div>
+    <span class="game-diff" style="align-self:flex-start">All Levels</span>
+    <div class="game-desc">20 mechanic cards — Walk, Jump, Clone, Gravity and more. Playing-card size (2.5"×3.5"), sorted by difficulty. Mix &amp; match across all 6 games.</div>
+    <div class="cards-count">20 cards · 40 pages · 2.5" × 3.5"</div>
+    <div class="game-link">🖨️ Open &amp; Print Action Deck</div>
+  </a>
+</div>
+
+<div class="instructions">
+  <h2>🖨️ How to Print the Cards</h2>
+  <ol>
+    <li>Click a game above to open its card file</li>
+    <li>Click the <strong>"Print These Cards"</strong> button at the top</li>
+    <li><strong>Game cards:</strong> set paper to <strong>5" × 3.5"</strong> (or A4 "Fit to page")</li>
+    <li><strong>Action cards:</strong> set paper to <strong>2.5" × 3.5"</strong> (playing card size)</li>
+    <li>Enable <strong>double-sided printing</strong> → flip on <strong>short edge</strong></li>
+    <li>Each page alternates <strong>Front → Back</strong> so cards align when printed double-sided</li>
+    <li>Cut along the card borders and laminate for durability!</li>
+  </ol>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+/* ═══════════════════════════════════════════════════════
+   ScratchQuest Physical Learning Cards — Shared Styles
+   Print at: File → Print → "Actual size" or "5×3.5in"
+════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+/* ── Page / Print ── */
+@page { size: 5in 3.5in; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+  background: #e8e8e8;
+  padding: 24px;
+}
+
+/* ── Screen helpers ── */
+@media screen {
+  .card { margin: 12px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.22); }
+  .print-btn {
+    display: block; margin: 0 auto 24px;
+    padding: 12px 36px; background: #6366f1; color: white;
+    border: none; border-radius: 10px; cursor: pointer;
+    font-size: 15px; font-weight: 900; letter-spacing: 0.04em;
+  }
+  .print-btn:hover { background: #4f46e5; }
+  .section-title {
+    text-align: center; font-size: 13px; font-weight: 900;
+    color: #666; letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 20px 0 8px;
+  }
+}
+@media print {
+  body { background: white; padding: 0; }
+  .print-btn, .section-title { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARD BASE
+════════════════════════════════════════════════════════ */
+.card {
+  width: 5in; height: 3.5in;
+  border-radius: 14px; overflow: hidden;
+  display: flex; flex-direction: column;
+  page-break-after: always;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FRONT CARD
+════════════════════════════════════════════════════════ */
+.card-front {
+  background: white;
+  border: 2.5px solid var(--diff-color);
+}
+
+.front-header {
+  background: var(--diff-color);
+  color: white;
+  padding: 9px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.game-name { font-size: 14px; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.diff-badge {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.07em;
+  background: rgba(255,255,255,0.22); border-radius: 20px; padding: 2px 9px;
+}
+.step-num {
+  font-size: 11px; font-weight: 900;
+  background: rgba(0,0,0,0.18); border-radius: 20px; padding: 2px 9px;
+}
+
+.front-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 10px 28px; text-align: center;
+}
+.step-emoji { font-size: 48px; line-height: 1; margin-bottom: 6px; }
+.concept-pill {
+  font-size: 9.5px; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--diff-color); background: var(--diff-bg);
+  border-radius: 20px; padding: 3px 12px; margin-bottom: 10px;
+  border: 1.5px solid var(--diff-color);
+}
+.goal-text {
+  font-size: 14px; font-weight: 700; color: #1a1a2e;
+  line-height: 1.45; max-height: 3em; overflow: hidden;
+}
+
+.front-footer {
+  border-top: 1.5px solid #eee;
+  padding: 6px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; background: #f9f9fc;
+}
+.step-title-small { font-size: 10px; font-weight: 800; color: #555; }
+.brand { font-size: 9px; color: #bbb; font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════
+   BACK CARD
+════════════════════════════════════════════════════════ */
+.card-back {
+  background: #1a1730;
+  border: 2.5px solid var(--diff-color);
+}
+
+.back-header {
+  background: var(--diff-color);
+  color: white;
+  padding: 7px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.back-title { font-size: 10.5px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+.back-step-name { font-size: 10px; font-weight: 700; opacity: 0.85; max-width: 2.8in; text-align: right; }
+
+.back-body {
+  flex: 1; display: flex;
+  padding: 8px 12px; gap: 10px; overflow: hidden;
+}
+
+/* ── Blocks column ── */
+.blocks-col {
+  flex: 1; display: flex; flex-direction: column;
+  gap: 2px; overflow: hidden;
+}
+.blocks-label {
+  font-size: 8px; font-weight: 900; color: #8888aa;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.block {
+  padding: 2.5px 8px; border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 8.5px; font-weight: bold; color: white;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex-shrink: 0; line-height: 1.4;
+}
+.block.note {
+  background: transparent !important;
+  color: #7ad4ff; font-size: 7.5px; font-style: italic;
+  padding: 1px 0;
+}
+.events    { background: #FFAB19; color: #1c1000; }
+.motion    { background: #4C97FF; }
+.control   { background: #FF8C1A; color: #1a0a00; }
+.looks     { background: #9966FF; }
+.sensing   { background: #5CB1D6; color: #001820; }
+.sound     { background: #CF63CF; }
+.operators { background: #59C059; color: #001800; }
+.variables { background: #FF8C1A; color: #1a0a00; }
+
+.indent-0 { margin-left: 0; }
+.indent-1 { margin-left: 11px; }
+.indent-2 { margin-left: 22px; }
+.indent-3 { margin-left: 33px; }
+
+.shape-hat { border-radius: 12px 12px 3px 3px; }
+.shape-cap { border-radius: 3px 3px 10px 10px; }
+
+/* Small font for steps with many blocks */
+.blocks-sm .block { font-size: 7.5px; padding: 2px 7px; }
+.blocks-xs .block { font-size: 7px; padding: 1.5px 6px; }
+
+/* Actions list (for steps without blocks) */
+.actions-list {
+  font-size: 8px; color: #c0c0d8; line-height: 1.65;
+  list-style: decimal; padding-left: 18px; margin: 0;
+}
+.actions-list li { margin-bottom: 1px; }
+
+/* ── Info column ── */
+.info-col {
+  width: 1.55in; display: flex; flex-direction: column;
+  gap: 7px; flex-shrink: 0;
+}
+.tip-box {
+  background: rgba(245,158,11,0.12);
+  border: 1px solid rgba(245,158,11,0.35);
+  border-radius: 7px; padding: 7px 9px;
+  color: #fde68a; line-height: 1.45; flex-shrink: 0;
+}
+.dyk-box {
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 7px; padding: 7px 9px;
+  color: #c4b5fd; line-height: 1.45;
+  flex: 1; overflow: hidden;
+}
+.box-label {
+  font-size: 8px; font-weight: 900; letter-spacing: 0.06em;
+  text-transform: uppercase; display: block; margin-bottom: 3px;
+}
+.tip-box .box-label { color: #f59e0b; }
+.dyk-box .box-label { color: #818cf8; }
+.box-text { font-size: 7.5px; }

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Maze Runner — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print These Cards (File → Print → Actual Size)</button>
+
+<!-- ═══ STEP 1 ═══ -->
+<p class="section-title">Step 1 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">1 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">✏️</div>
+    <div class="concept-pill">Paint Editor · Backdrops</div>
+    <div class="goal-text">Create your own maze as a Scratch backdrop</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Draw the Maze</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Draw the Maze</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Open Scratch → delete cat</li>
+        <li>Click stage backdrop thumbnail → "Paint" (pencil icon)</li>
+        <li>Rectangle tool with solid dark blue fill</li>
+        <li>Draw thick rectangles for walls</li>
+        <li>Leave 30–40px corridors</li>
+        <li>Draw outer border first → back-arrow to return</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Keep paths wide! If they are too narrow, the hero will get stuck in the walls.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">In Scratch, "touching colour" checks the exact pixel colour — that's why solid, consistent wall colours are so important.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<p class="section-title">Step 2 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">2 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🧍</div>
+    <div class="concept-pill">Sprites · Size</div>
+    <div class="goal-text">Add a small hero sprite that fits inside the maze corridors</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Hero</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Hero</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Choose a Sprite → pick small character (Avery or arrow)</li>
+        <li>Set Size to 25–30</li>
+        <li>Drag to maze start</li>
+        <li>Note the x and y coordinates for next step</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">After placing the hero, check that it's smaller than the maze corridors. If it looks cramped, reduce the size further.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">You can click anywhere on the stage while editing to see those x/y coordinates in the bottom-right of the editor.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<p class="section-title">Step 3 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">3 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⬆️⬇️</div>
+    <div class="concept-pill">Events · Motion · Y-Axis</div>
+    <div class="goal-text">Press the up and down arrow keys to move the hero vertically through the corridor</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Move Up &amp; Down</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Move Up &amp; Down</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the HERO sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (-190) y: (150)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1 shape-c">if ‹key [up arrow] pressed?› then</div>
+      <div class="block motion indent-2">change y by (4)</div>
+      <div class="block control indent-1 shape-c">if ‹key [down arrow] pressed?› then</div>
+      <div class="block motion indent-2 shape-cap">change y by (-4)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">"change y by (4)" moves UP because positive y is upward in Scratch. Negative y moves down — just like a maths graph!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">In Scratch, y=0 is the centre of the stage. y=180 is the very top; y=−180 is the very bottom.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<p class="section-title">Step 4 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">4 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🕹️</div>
+    <div class="concept-pill">2D Vectors · 4-Way Input</div>
+    <div class="goal-text">Add left and right arrow keys to complete full 4-direction movement</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Move All 4 Directions</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Move All 4 Directions</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col blocks-sm">
+      <div class="blocks-label">Scratch Blocks — on the HERO sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (-190) y: (150)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1 shape-c">if ‹key [up arrow] pressed?› then</div>
+      <div class="block motion indent-2">change y by (4)</div>
+      <div class="block control indent-1 shape-c">if ‹key [down arrow] pressed?› then</div>
+      <div class="block motion indent-2">change y by (-4)</div>
+      <div class="block control indent-1 shape-c">if ‹key [left arrow] pressed?› then</div>
+      <div class="block motion indent-2">change x by (-4)</div>
+      <div class="block control indent-1 shape-c">if ‹key [right arrow] pressed?› then</div>
+      <div class="block motion indent-2 shape-cap">change x by (4)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Use the same speed value (4) for all four directions so movement feels balanced.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Vectors power every game engine, physics simulator, animation system, and robotics controller in existence.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<p class="section-title">Step 5 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">5 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">👁️</div>
+    <div class="concept-pill">Colour Sensing · Pixel Detection</div>
+    <div class="goal-text">Detect when the hero touches a wall — say "Ouch!" as proof it works</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Sense the Wall Colour</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Sense the Wall Colour</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — add inside the forever loop</div>
+      <div class="block control indent-0 shape-c note">(at the end of the forever loop)</div>
+      <div class="block sensing indent-1 shape-c">if ‹touching color [■ dark blue]?› then</div>
+      <div class="block looks indent-2 shape-cap">say [Ouch! 🧱] for (0.5) secs</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">The eyedropper only works when you click it first, THEN click the wall on the stage. The colour must match exactly.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"touching color?" reads actual pixel data on screen — making the maze artwork itself the collision system. No coordinate math needed!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 ═══ -->
+<p class="section-title">Step 6 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">6 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🧱</div>
+    <div class="concept-pill">Rollback Pattern · Colour Sensing</div>
+    <div class="goal-text">Reverse each move if the hero touches a wall — the "rollback" pattern</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Bounce Back</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Bounce Back</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — replace each direction block</div>
+      <div class="block control indent-1 shape-c">if ‹key [up arrow] pressed?› then</div>
+      <div class="block motion indent-2">change y by (4)</div>
+      <div class="block sensing indent-2 shape-c">if ‹touching color [■ dark blue]?› then</div>
+      <div class="block motion indent-3">change y by (-4) ← rollback!</div>
+      <div class="block control indent-0 shape-c note">... repeat for all 4 directions</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Do the EXACT same pattern for all 4 directions — up/down use y, left/right use x. Each direction gets its own immediate rollback.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Database transactions, Git commits, undo/redo stacks, and save files all use rollback — "save state, try action, restore if bad."</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 7 ═══ -->
+<p class="section-title">Step 7 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">7 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⭐</div>
+    <div class="concept-pill">Multiple Sprites · Parallel Scripts</div>
+    <div class="goal-text">Place a spinning star at the maze exit — it runs its own code independently</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Exit Star</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Exit Star</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block events shape-hat note">— STAR: when 🏁 clicked →</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block motion indent-1 shape-cap">turn (4) degrees</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Drag the star to the very end of your maze path — players must navigate all the way through to reach it.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Multiple "when 🏁 clicked" scripts run simultaneously. This is called parallel execution — the same concept used in async programming, game engines, and operating systems.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 ═══ -->
+<p class="section-title">Step 8 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">8 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🎉</div>
+    <div class="concept-pill">Win Conditions · Boolean Logic</div>
+    <div class="goal-text">Celebrate when the hero reaches the exit star — stop the game on victory</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Win the Maze</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Win the Maze</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite (second script)</div>
+      <div class="block events shape-hat note">— STAR: when 🏁 clicked (win script) →</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block sensing indent-1 shape-c">if ‹touching [Hero]?› then</div>
+      <div class="block looks indent-2">say [You escaped! 🎉] for (3) seconds</div>
+      <div class="block control indent-2 shape-cap">stop [all]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">The star now has TWO scripts — one spinning forever, one watching for the hero. Both run at the same time!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Achievement systems, form validation, access control — all evaluate a boolean condition, then branch to a reward or error path.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 ═══ -->
+<p class="section-title">Step 9 / 9</p>
+<div class="card card-front" style="--diff-color:#8b5cf6;--diff-bg:#ede9fe">
+  <div class="front-header">
+    <div class="game-name">🧩 Maze Runner</div>
+    <div class="header-right"><span class="diff-badge">Advanced</span><span class="step-num">9 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⏱️</div>
+    <div class="concept-pill">Variables · Countdown Timer</div>
+    <div class="goal-text">Add a 30-second countdown; game over if time runs out</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Race the Clock</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#8b5cf6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Race the Clock</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — timer script (any sprite)</div>
+      <div class="block events shape-hat note">when 🏁 clicked (timer script)</div>
+      <div class="block variables indent-0">set [Timer] to (30)</div>
+      <div class="block control indent-0 shape-c">repeat (30)</div>
+      <div class="block control indent-1">wait (1) seconds</div>
+      <div class="block variables indent-1">change [Timer] by (-1)</div>
+      <div class="block looks indent-0">say [Time's up! ⏰] for (2) seconds</div>
+      <div class="block control indent-0 shape-cap">stop [all]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">To make it harder, reduce the timer to 20 or 15 seconds. To make it easier, increase it to 60.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Login session timeouts, OTP codes, rate limiters, and cooking timers all work exactly like this countdown pattern.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

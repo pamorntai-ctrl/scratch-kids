@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catch the Stars — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print These Cards (File → Print → Actual Size)</button>
+
+<!-- ═══ STEP 1 ═══ -->
+<p class="section-title">Step 1 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">1 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🌌</div>
+    <div class="concept-pill">Program Setup</div>
+    <div class="goal-text">Choose a galaxy or stars backdrop and delete the default cat</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Set the Night Sky</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Set the Night Sky</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Open <strong>scratch.mit.edu</strong> and click "Create"</li>
+        <li>Right-click the cat sprite → Delete</li>
+        <li>Click "Choose a Backdrop" (bottom-right)</li>
+        <li>Search "Stars" or "Galaxy" → click the dark starfield</li>
+        <li>Sign in to auto-save your project!</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">A dark background makes the yellow stars pop visually. Contrast is a key principle in game design!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">The Scratch stage is 480 × 360 pixels. x=0, y=0 is the dead centre.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<p class="section-title">Step 2 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">2 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🥣</div>
+    <div class="concept-pill">Object Properties</div>
+    <div class="goal-text">Add a Bowl sprite, set size to 80, and position it near the bottom</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Catcher</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Catcher</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the BOWL sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (0) y: (-150)</div>
+      <div class="block looks indent-0 shape-cap">set size to (80) %</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">y: -150 places the bowl near the bottom. The stage goes from y=-180 (bottom) to y=180 (top).</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Every object in a game starts with initialization code that sets position, size, and state before the player can interact.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<p class="section-title">Step 3 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">3 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⬅️➡️</div>
+    <div class="concept-pill">Event Handling · Loops</div>
+    <div class="goal-text">Left/right arrow keys slide the bowl across the screen; edge stops it</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Move the Catcher</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Move the Catcher</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the BOWL sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (0) y: (-150)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1 shape-c">if ‹key [left arrow] pressed?› then</div>
+      <div class="block motion indent-2">change x by (-10)</div>
+      <div class="block control indent-1 shape-c">if ‹key [right arrow] pressed?› then</div>
+      <div class="block motion indent-2">change x by (10)</div>
+      <div class="block motion indent-1">if on edge, bounce</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Set Bowl's rotation style to "left-right" in Sprite Info so "if on edge, bounce" never flips it upside-down.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This input-polling pattern inside a forever loop is the game loop — it runs in Unity, Godot, Pygame at 30–60 fps.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<p class="section-title">Step 4 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">4 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⭐</div>
+    <div class="concept-pill">Object Templates · Hiding</div>
+    <div class="goal-text">Add a Star sprite and hide it on flag click — it will be the clone template</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Star Template</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Star Template</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block events shape-hat note">STAR: when 🏁 clicked</div>
+      <div class="block looks indent-0 shape-cap">hide</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Any sprite that uses clones MUST hide its original first. Otherwise the "master" copy sits frozen on the stage forever.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This template-hide pattern maps directly to a class definition in OOP — the class sits in memory invisibly until you instantiate (clone) it.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<p class="section-title">Step 5 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">5 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🌠</div>
+    <div class="concept-pill">Clone Instantiation</div>
+    <div class="goal-text">Make the master Star create clones that fall from top to bottom and delete themselves</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Clone Falls</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Clone Falls</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col blocks-sm">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block events shape-hat note">STAR master: when 🏁 clicked</div>
+      <div class="block looks indent-0">hide</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1">wait (1) seconds</div>
+      <div class="block control indent-1">create clone of [myself]</div>
+      <div class="block control shape-hat note">STAR clone: when I start as a clone</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0 shape-c">repeat until ‹(y position) &lt; (-170)›</div>
+      <div class="block motion indent-1">change y by (-5)</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">"delete this clone" is essential — without it, thousands of invisible off-screen stars pile up and slow the game to a crawl.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"delete this clone" is the game-object lifecycle: create → update → destroy. Every bullet, enemy, and particle follows this same lifecycle.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 ═══ -->
+<p class="section-title">Step 6 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">6 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🎲</div>
+    <div class="concept-pill">Random Numbers</div>
+    <div class="goal-text">Make each clone appear at a random x position so stars fall from different spots</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Random Spawn Position</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Random Spawn Position</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block control shape-hat note">STAR clone: when I start as a clone</div>
+      <div class="block motion indent-0">go to x: (pick random (-200) to (200)) y: (175)</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0 shape-c">repeat until ‹(y position) &lt; (-170)›</div>
+      <div class="block motion indent-1">change y by (-5)</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Try pick random (-170) to (170) so stars never spawn partially off-screen.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Random number generation drives loot tables, enemy spawns, procedural worlds, and weather systems. Randomness makes games feel alive.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 7 ═══ -->
+<p class="section-title">Step 7 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">7 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🤲</div>
+    <div class="concept-pill">Collision Detection · Polling</div>
+    <div class="goal-text">Detect when a falling star touches the Bowl — celebrate with a speech bubble</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Catch a Star</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Catch a Star</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block control shape-hat note">(inside repeat-until loop)</div>
+      <div class="block motion indent-1">change y by (-5)</div>
+      <div class="block sensing indent-1 shape-c">if ‹touching [Bowl]?› then</div>
+      <div class="block looks indent-2">say [⭐ Caught!] for (0.5) secs</div>
+      <div class="block control indent-2 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">"touching [Bowl]?" polls every frame — asking "do these two sprites overlap?" up to 30 times per second.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Collision detection is one of the most important algorithms in games. Unity calls these "colliders", Godot calls them "collision shapes".</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 ═══ -->
+<p class="section-title">Step 8 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">8 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🔢</div>
+    <div class="concept-pill">Variables · State</div>
+    <div class="goal-text">Create a Score variable and add 1 every time a star is caught</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Score the Catch</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Score the Catch</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block control shape-hat note">(inside if ‹touching [Bowl]?›)</div>
+      <div class="block variables indent-1">change [Score] by (1)</div>
+      <div class="block control indent-1 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Right-click the Score display on the stage and choose "Large readout" for a big satisfying counter!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">A variable is the most fundamental concept in all programming. Python, JavaScript, Swift — every language uses them.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 ═══ -->
+<p class="section-title">Step 9 / 9</p>
+<div class="card card-front" style="--diff-color:#10b981;--diff-bg:#d1fae5">
+  <div class="front-header">
+    <div class="game-name">⭐ Catch the Stars</div>
+    <div class="header-right"><span class="diff-badge">Beginner</span><span class="step-num">9 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">💀</div>
+    <div class="concept-pill">Game Loop · Lifecycle</div>
+    <div class="goal-text">Add Lives — lose one when a star escapes; game ends when Lives reach zero</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Lives &amp; Game Over</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#10b981">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Lives &amp; Game Over</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the STAR sprite</div>
+      <div class="block control shape-hat note">(after the repeat-until — star escaped)</div>
+      <div class="block variables indent-0">change [Lives] by (-1)</div>
+      <div class="block control indent-0 shape-c">if ‹(Lives) = (0)› then</div>
+      <div class="block looks indent-1">say [Game Over! 💫] for (2) secs</div>
+      <div class="block control indent-1 shape-cap">stop [all]</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Show ♥ hearts for lives by right-clicking the Lives display — or display it as "large readout" for impact!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">PLAYING → GAME_OVER is a state machine. Traffic lights, login flows, vending machines, and game modes are all state machines.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

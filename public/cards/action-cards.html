@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scratch Action Cards — Print Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f0f0;
+    padding: 20px;
+  }
+
+  /* ── Print button ── */
+  .print-btn {
+    display: block;
+    margin: 0 auto 24px;
+    padding: 12px 32px;
+    background: #6366f1;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,.4);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .print-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(99,102,241,.5); }
+
+  /* ── Section labels (screen only) ── */
+  .section-label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-align: center;
+    margin: 28px 0 12px;
+    letter-spacing: .5px;
+    color: #333;
+  }
+  .section-label.beginner    { color: #10b981; }
+  .section-label.intermediate{ color: #3b82f6; }
+  .section-label.advanced    { color: #8b5cf6; }
+  .section-label.special     { color: #6366f1; }
+
+  /* ── Card layout ── */
+  @page { size: 2.5in 3.5in; margin: 0; }
+
+  .card {
+    width: 2.5in;
+    height: 3.5in;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    break-after: page;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    position: relative;
+    margin: 8px auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  }
+
+  /* ── FRONT layout ── */
+  .card-front {
+    background: #ffffff;
+    border: 3px solid var(--c);
+  }
+
+  .top-strip {
+    background: var(--c);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 9px;
+    min-height: 36px;
+    flex-shrink: 0;
+  }
+  .action-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .difficulty-badge {
+    font-size: 7px;
+    font-weight: 900;
+    color: var(--c);
+    background: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    flex-shrink: 0;
+  }
+
+  .illustration {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f8faff;
+  }
+  .illustration svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .bottom-strip {
+    background: var(--c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    min-height: 22px;
+    flex-shrink: 0;
+  }
+  .scratch-pill {
+    font-size: 7px;
+    font-weight: 800;
+    color: var(--c);
+    background: white;
+    border-radius: 10px;
+    padding: 2px 9px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+
+  /* ── BACK layout ── */
+  .card-back {
+    background: #1a1730;
+    border: 3px solid var(--c);
+    color: white;
+  }
+
+  .back-top {
+    background: var(--c);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    min-height: 24px;
+  }
+  .script-ref {
+    font-size: 7px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .back-action-name {
+    font-size: 8px;
+    font-weight: 900;
+    color: var(--c);
+    background: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+
+  .back-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 7px 0;
+    overflow: hidden;
+  }
+
+  .block-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    overflow: hidden;
+  }
+  .tip-col {
+    flex: 0 0 auto;
+    background: rgba(245,158,11,.10);
+    border-top: 1px solid rgba(245,158,11,.28);
+    padding: 5px 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    overflow: hidden;
+  }
+  .tip-label {
+    font-size: 6.5px;
+    font-weight: 900;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .tip-text {
+    font-size: 7px;
+    font-weight: 600;
+    color: #c9d6e8;
+    line-height: 1.5;
+  }
+  .tip-text strong { color: #fff; font-weight: 900; }
+
+  /* ── Scratch block classes ── */
+  .b  { font-family:'Courier New',monospace; font-size:7.5px; font-weight:bold; color:white; border-radius:4px; padding:2px 7px; margin-bottom:2px; white-space:nowrap; line-height:1.6; display:block; }
+  .ev { background:#FFAB19; color:#1a0d00; }
+  .mo { background:#4C97FF; }
+  .co { background:#FF8C1A; color:#1a0800; }
+  .lo { background:#9966FF; }
+  .se { background:#5CB1D6; color:#001820; }
+  .va { background:#FF8C1A; color:#1a0800; }
+  .op { background:#59C059; color:#001800; }
+  .nb { background:transparent!important; color:#7ad4ff; font-size:6.5px; font-style:italic; padding:1px 0; margin-bottom:1px; }
+  .hat { border-radius:10px 10px 3px 3px; }
+  .cap { border-radius:3px 3px 9px 9px; }
+  .i1 { margin-left:10px; }
+  .i2 { margin-left:20px; }
+  .i3 { margin-left:30px; }
+
+  /* Steps list for paint-editor card */
+  .steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .steps-list li {
+    font-size: 7px;
+    font-weight: 700;
+    color: #c9d6e8;
+    background: rgba(255,255,255,.08);
+    border-radius: 4px;
+    padding: 3px 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    line-height: 1.5;
+  }
+  .steps-list li .step-num {
+    color: var(--c);
+    font-weight: 900;
+    min-width: 12px;
+    font-size: 8px;
+  }
+
+  /* ── Screen wrapper ── */
+  .cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 auto 24px;
+  }
+  .mode-toggle {
+    padding: 12px 28px;
+    background: #8b5cf6;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(139,92,246,.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .mode-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(139,92,246,.5);
+  }
+  .toolbar .print-btn { margin: 0; }
+
+  /* ── Interactive flip-card mode ── */
+  body.interactive-mode { background: linear-gradient(180deg, #f0f0f5 0%, #e8e8f0 100%); }
+  body.interactive-mode .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(2.5in, 1fr));
+    gap: 32px 20px;
+    max-width: 1280px;
+    justify-items: center;
+    padding: 6px;
+  }
+  .flip-card {
+    width: 2.5in;
+    height: 3.5in;
+    perspective: 1400px;
+    cursor: pointer;
+    position: relative;
+  }
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform .7s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-card .card {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    page-break-after: auto;
+    box-shadow: 0 10px 28px rgba(0,0,0,.28);
+  }
+  .flip-card .card-back { transform: rotateY(180deg); }
+  .flip-card:hover .flip-card-inner:not(.no-hover) {
+    box-shadow: 0 14px 36px rgba(0,0,0,.32);
+  }
+  .flip-hint {
+    position: absolute;
+    bottom: -20px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    color: #777;
+    font-weight: 700;
+    letter-spacing: .05em;
+    pointer-events: none;
+    transition: opacity .3s;
+  }
+  .flip-card.flipped .flip-hint { opacity: 0; }
+
+  /* ── Print overrides ── */
+  @media print {
+    html, body { background: white; padding: 0; margin: 0; }
+    .toolbar, .print-btn, .mode-toggle, .section-label, .flip-hint { display: none !important; }
+    .cards-grid { display: block; }
+    .card {
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+      break-after: page;
+      position: static !important;
+      transform: none !important;
+      backface-visibility: visible !important;
+    }
+    .flip-card { width: auto; height: auto; perspective: none; }
+    .flip-card-inner { transform: none !important; transform-style: flat; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="mode-toggle" id="modeBtn">🎴 Interactive Mode</button>
+  <button class="print-btn" id="printBtn">🖨️ Print Action Cards</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ BEGINNER ═══ -->
+<div class="section-label beginner">⭐ BEGINNER CARDS</div>
+<div class="cards-grid">
+
+<!-- ══ 1 WALK — FRONT ══ -->
+<div class="card card-front" style="--c:#10b981">
+  <div class="top-strip">
+    <span class="action-title">Walk</span>
+    <span class="difficulty-badge">Beginner</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sky -->
+      <rect width="200" height="120" fill="#e0f2fe"/>
+      <!-- Ground -->
+      <rect y="120" width="200" height="35" fill="#10b981"/>
+      <line x1="0" y1="120" x2="200" y2="120" stroke="#059669" stroke-width="2"/>
+      <!-- Speed lines -->
+      <line x1="16" y1="90" x2="52" y2="90" stroke="#4C97FF" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="12" y1="99" x2="48" y2="99" stroke="#4C97FF" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+      <line x1="18" y1="108" x2="46" y2="108" stroke="#4C97FF" stroke-width="1.5" stroke-linecap="round" opacity=".2"/>
+      <!-- Hair -->
+      <path d="M 86,66 Q 87,56 100,55 Q 113,56 114,66" fill="#c2783c"/>
+      <!-- Head -->
+      <circle cx="100" cy="69" r="15" fill="#fcd787"/>
+      <!-- Eyes -->
+      <circle cx="95" cy="67" r="2" fill="#1a1a2e"/>
+      <circle cx="105" cy="67" r="2" fill="#1a1a2e"/>
+      <!-- Smile -->
+      <path d="M 95,73 Q 100,77 105,73" stroke="#1a1a2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Body -->
+      <rect x="89" y="84" width="22" height="21" rx="5" fill="#4C97FF"/>
+      <!-- Left arm (swinging back) -->
+      <line x1="89" y1="89" x2="74" y2="101" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
+      <!-- Right arm (swinging forward) -->
+      <line x1="111" y1="89" x2="126" y2="100" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
+      <!-- Left leg (striding forward) -->
+      <polyline points="94,105 84,114 73,120" stroke="#1d6fcc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <ellipse cx="71" cy="120" rx="8" ry="4" fill="#1e293b"/>
+      <!-- Right leg (pushing back) -->
+      <polyline points="106,105 114,114 124,120" stroke="#1d6fcc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <ellipse cx="126" cy="120" rx="8" ry="4" fill="#1e293b"/>
+      <!-- Direction arrow -->
+      <polygon points="158,87 178,95 158,103" fill="#FFAB19" opacity=".9"/>
+      <rect x="133" y="92" width="27" height="6" rx="3" fill="#FFAB19" opacity=".9"/>
+      <!-- Arrow key -->
+      <rect x="157" y="107" width="22" height="13" rx="3" fill="#1e293b"/>
+      <text x="168" y="117" font-size="8" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">▶</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Motion</span>
+  </div>
+</div>
+
+<!-- ══ 1 WALK — BACK ══ -->
+<div class="card card-back" style="--c:#10b981">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Walk</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when [right arrow▼] key pressed</span>
+      <span class="b mo">change x by (10)</span>
+      <span class="nb">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</span>
+      <span class="b ev hat">when [left arrow▼] key pressed</span>
+      <span class="b mo">change x by (-10)</span>
+      <span class="nb" style="margin-top:4px">// tip: flip costume</span>
+      <span class="nb">// for direction facing</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Use <strong>change x</strong> (not 'move') to prevent diagonal drift when pressing two keys at once.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 2 JUMP — FRONT ══ -->
+<div class="card card-front" style="--c:#10b981">
+  <div class="top-strip">
+    <span class="action-title">Jump</span>
+    <span class="difficulty-badge">Beginner</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sky -->
+      <rect width="200" height="120" fill="#fef3c7"/>
+      <!-- Ground -->
+      <rect y="120" width="200" height="35" fill="#10b981"/>
+      <line x1="0" y1="120" x2="200" y2="120" stroke="#059669" stroke-width="2"/>
+      <!-- Jump arc -->
+      <path d="M 55,116 Q 100,22 145,116" stroke="#FFAB19" stroke-width="2.5" fill="none" stroke-dasharray="5,4" opacity=".75"/>
+      <!-- Ground shadow -->
+      <ellipse cx="100" cy="123" rx="22" ry="5" fill="#059669" opacity=".35"/>
+      <!-- Upward arrow -->
+      <polygon points="100,12 92,25 108,25" fill="#4C97FF" opacity=".85"/>
+      <rect x="97" y="25" width="6" height="14" rx="3" fill="#4C97FF" opacity=".85"/>
+      <!-- Hair -->
+      <path d="M 86,50 Q 87,40 100,39 Q 113,40 114,50" fill="#c2783c"/>
+      <!-- Head -->
+      <circle cx="100" cy="54" r="15" fill="#fcd787"/>
+      <!-- Eyes (wide, excited) -->
+      <circle cx="95" cy="52" r="2.5" fill="#1a1a2e"/>
+      <circle cx="105" cy="52" r="2.5" fill="#1a1a2e"/>
+      <!-- Open smile -->
+      <path d="M 94,58 Q 100,63 106,58" stroke="#1a1a2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Body -->
+      <rect x="89" y="69" width="22" height="21" rx="5" fill="#9966FF"/>
+      <!-- Arms raised -->
+      <line x1="89" y1="74" x2="74" y2="60" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
+      <line x1="111" y1="74" x2="126" y2="60" stroke="#fcd787" stroke-width="6" stroke-linecap="round"/>
+      <!-- Left leg (bent, knee out left) -->
+      <polyline points="94,90 80,102 88,113" stroke="#6d28d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <ellipse cx="87" cy="115" rx="8" ry="4" fill="#1e293b" transform="rotate(-15,87,115)"/>
+      <!-- Right leg (bent, knee out right) -->
+      <polyline points="106,90 120,102 112,113" stroke="#6d28d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <ellipse cx="113" cy="115" rx="8" ry="4" fill="#1e293b" transform="rotate(15,113,115)"/>
+      <!-- Space key -->
+      <rect x="68" y="131" width="44" height="13" rx="3" fill="#1e293b"/>
+      <text x="90" y="141" font-size="7.5" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">SPACE</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Motion</span>
+  </div>
+</div>
+
+<!-- ══ 2 JUMP — BACK ══ -->
+<div class="card card-back" style="--c:#10b981">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Jump</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when [space▼] key pressed</span>
+      <span class="b co">if &lt;(on ground?) = true&gt; then</span>
+      <span class="b va i1">set [vy▼] to (-15)</span>
+      <span class="b co cap i0">end</span>
+      <span class="nb" style="margin-top:4px">// negative vy = upward</span>
+      <span class="nb">// gravity pulls back down</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Save velocity in a variable <strong>vy</strong>. Gravity adds to vy each frame — realistic feel!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 3 GRAVITY — FRONT ══ -->
+<div class="card card-front" style="--c:#10b981">
+  <div class="top-strip">
+    <span class="action-title">Gravity</span>
+    <span class="difficulty-badge">Beginner</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="118" fill="#dbeafe"/>
+      <rect y="118" width="200" height="37" fill="#10b981"/>
+      <line x1="0" y1="118" x2="200" y2="118" stroke="#059669" stroke-width="2"/>
+      <!-- Falling trail -->
+      <line x1="100" y1="20" x2="100" y2="68" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+      <!-- Character falling -->
+      <text x="100" y="102" font-size="50" text-anchor="middle" font-family="serif">🧒</text>
+      <!-- Down arrows -->
+      <polygon points="100,112 93,100 107,100" fill="#4C97FF" opacity=".8"/>
+      <rect x="97" y="68" width="6" height="33" rx="3" fill="#4C97FF" opacity=".8"/>
+      <!-- vy variable display -->
+      <rect x="130" y="28" width="56" height="28" rx="6" fill="#FF8C1A"/>
+      <text x="158" y="39" font-size="7" font-weight="bold" fill="white" text-anchor="middle" font-family="Courier New,monospace">vy</text>
+      <rect x="134" y="42" width="48" height="10" rx="3" fill="white"/>
+      <text x="158" y="50" font-size="8" font-weight="900" fill="#FF8C1A" text-anchor="middle" font-family="Courier New,monospace">8</text>
+      <!-- Arrow showing vy increasing -->
+      <text x="138" y="38" font-size="9" fill="white">↑</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Variables</span>
+  </div>
+</div>
+
+<!-- ══ 3 GRAVITY — BACK ══ -->
+<div class="card card-back" style="--c:#10b981">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Gravity</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b va i1">change [vy▼] by (1)</span>
+      <span class="b mo i1">change y by (vy)</span>
+      <span class="b se i1">if &lt;touching [ground▼]?&gt;</span>
+      <span class="b va i2">set [vy▼] to (0)</span>
+      <span class="b co cap i1">end</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Start vy at 0. Add 1 each frame. Cap vy at <strong>15</strong> so the character doesn't fall too fast.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4 COLLECT — FRONT ══ -->
+<div class="card card-front" style="--c:#10b981">
+  <div class="top-strip">
+    <span class="action-title">Collect</span>
+    <span class="difficulty-badge">Beginner</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="118" fill="#ecfdf5"/>
+      <rect y="118" width="200" height="37" fill="#10b981"/>
+      <line x1="0" y1="118" x2="200" y2="118" stroke="#059669" stroke-width="2"/>
+      <!-- Character -->
+      <text x="75" y="105" font-size="50" text-anchor="middle" font-family="serif">🧒</text>
+      <!-- Apple -->
+      <text x="135" y="100" font-size="44" text-anchor="middle" font-family="serif">🍎</text>
+      <!-- Glow around apple -->
+      <circle cx="135" cy="82" r="28" fill="#FFAB19" opacity=".18"/>
+      <!-- Collision stars -->
+      <text x="108" y="75" font-size="14" font-family="serif">✨</text>
+      <!-- Score counter -->
+      <rect x="10" y="12" width="55" height="20" rx="5" fill="#1e293b"/>
+      <text x="37" y="25" font-size="8" font-weight="bold" fill="#FFAB19" text-anchor="middle" font-family="Nunito,sans-serif">SCORE: 1</text>
+      <!-- Plus 1 floating -->
+      <text x="140" y="55" font-size="13" font-weight="900" fill="#10b981" font-family="Nunito,sans-serif">+1</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Sensing</span>
+  </div>
+</div>
+
+<!-- ══ 4 COLLECT — BACK ══ -->
+<div class="card card-back" style="--c:#10b981">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Collect</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b se i1">if &lt;touching [Apple▼]?&gt; then</span>
+      <span class="b va i2">change [score▼] by (1)</span>
+      <span class="b lo i2">hide</span>
+      <span class="b co cap i1">end</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text"><strong>Hide</strong> the apple when collected instead of deleting — clones can't be deleted the same way!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 5 RANDOM SPAWN — FRONT ══ -->
+<div class="card card-front" style="--c:#10b981">
+  <div class="top-strip">
+    <span class="action-title">Random Spawn</span>
+    <span class="difficulty-badge">Beginner</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#0f172a"/>
+      <!-- Stars scattered at random positions -->
+      <text x="30" y="45" font-size="28" text-anchor="middle" font-family="serif" opacity=".5">⭐</text>
+      <text x="170" y="75" font-size="22" text-anchor="middle" font-family="serif" opacity=".4">⭐</text>
+      <text x="80" y="130" font-size="20" text-anchor="middle" font-family="serif" opacity=".35">⭐</text>
+      <text x="155" y="130" font-size="18" text-anchor="middle" font-family="serif" opacity=".3">⭐</text>
+      <!-- Main glowing star -->
+      <circle cx="110" cy="72" r="30" fill="#FFAB19" opacity=".15"/>
+      <circle cx="110" cy="72" r="18" fill="#FFAB19" opacity=".25"/>
+      <text x="110" y="88" font-size="38" text-anchor="middle" font-family="serif">⭐</text>
+      <!-- Coordinate labels -->
+      <rect x="8" y="60" width="60" height="16" rx="4" fill="#FFAB19" opacity=".8"/>
+      <text x="38" y="71" font-size="7.5" font-weight="bold" fill="#1a0d00" text-anchor="middle" font-family="Courier New,monospace">x: pick random</text>
+      <!-- Dotted path from random position -->
+      <line x1="40" y1="22" x2="110" y2="60" stroke="#FFAB19" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+      <circle cx="40" cy="22" r="4" fill="#FFAB19" opacity=".5"/>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Operators</span>
+  </div>
+</div>
+
+<!-- ══ 5 RANDOM SPAWN — BACK ══ -->
+<div class="card card-back" style="--c:#10b981">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Random Spawn</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b mo i1">go to x: (pick random</span>
+      <span class="b op i2">-200 to 200)</span>
+      <span class="b mo i1">y: (180)</span>
+      <span class="b co i1">wait (2) secs</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text"><strong>pick random</strong> works with negative numbers! Use -200 to 200 for full stage width.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /beginner cards-grid -->
+
+<!-- ═══════════════════════════════════════════════ INTERMEDIATE ═══ -->
+<div class="section-label intermediate">🔵 INTERMEDIATE CARDS</div>
+<div class="cards-grid">
+
+<!-- ══ 6 CLONE — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Clone</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-clone" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="#FFAB19"/>
+        </marker>
+      </defs>
+      <rect width="200" height="120" fill="#eff6ff"/>
+      <rect y="120" width="200" height="35" fill="#3b82f6"/>
+      <line x1="0" y1="120" x2="200" y2="120" stroke="#2563eb" stroke-width="2"/>
+      <!-- ORIGINAL star -->
+      <circle cx="68" cy="88" r="30" fill="#FFAB19" opacity=".15"/>
+      <circle cx="68" cy="88" r="18" fill="#FFAB19" opacity=".2"/>
+      <text x="68" y="104" font-size="42" text-anchor="middle" font-family="serif">⭐</text>
+      <!-- ORIGINAL label -->
+      <rect x="43" y="50" width="50" height="14" rx="5" fill="#1e293b"/>
+      <text x="68" y="60" font-size="7.5" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">ORIGINAL</text>
+      <!-- Copy arrow -->
+      <path d="M 96,88 Q 105,76 118,88" stroke="#FFAB19" stroke-width="2.5" fill="none" marker-end="url(#arr-clone)"/>
+      <!-- CLONE star (faded) -->
+      <text x="138" y="104" font-size="42" text-anchor="middle" font-family="serif" opacity=".5">⭐</text>
+      <!-- CLONE label -->
+      <rect x="114" y="50" width="48" height="14" rx="5" fill="#3b82f6"/>
+      <text x="138" y="60" font-size="7.5" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">CLONE</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Control</span>
+  </div>
+</div>
+
+<!-- ══ 6 CLONE — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Clone</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b co i1">create clone of [myself▼]</span>
+      <span class="b co i1">wait (1) secs</span>
+      <span class="b co cap">end</span>
+      <span class="nb" style="margin-top:5px">─ clone script ─</span>
+      <span class="b ev hat">when I start as a clone</span>
+      <span class="b lo">show</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">The <strong>original</strong> sprite can stay hidden — clones do all the work. Set visible only in clone script.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 7 CLONE FALLS — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Clone Falls</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <!-- Space background -->
+      <rect width="200" height="155" fill="#0f172a"/>
+      <!-- Starfield -->
+      <circle cx="20" cy="15" r="1.5" fill="white" opacity=".6"/>
+      <circle cx="80" cy="8"  r="1"   fill="white" opacity=".5"/>
+      <circle cx="170" cy="22" r="1.5" fill="white" opacity=".7"/>
+      <circle cx="190" cy="55" r="1"   fill="white" opacity=".4"/>
+      <circle cx="30"  cy="70" r="1"   fill="white" opacity=".5"/>
+      <circle cx="170" cy="90" r="1"   fill="white" opacity=".4"/>
+      <!-- Small star top — just spawned -->
+      <text x="50" y="38" font-size="24" text-anchor="middle" font-family="serif" opacity=".38">⭐</text>
+      <!-- Fall arrow 1 -->
+      <line x1="50" y1="42" x2="50" y2="55" stroke="#60a5fa" stroke-width="2" stroke-dasharray="3,2" opacity=".6"/>
+      <polygon points="50,60 45,50 55,50" fill="#60a5fa" opacity=".6"/>
+      <!-- Medium star mid — falling -->
+      <text x="108" y="90" font-size="34" text-anchor="middle" font-family="serif" opacity=".62">⭐</text>
+      <!-- Fall arrow 2 -->
+      <line x1="108" y1="94" x2="108" y2="107" stroke="#60a5fa" stroke-width="2" stroke-dasharray="3,2" opacity=".78"/>
+      <polygon points="108,112 103,102 113,102" fill="#60a5fa" opacity=".78"/>
+      <!-- Large star bottom — arriving -->
+      <circle cx="155" cy="128" r="24" fill="#FFAB19" opacity=".15"/>
+      <circle cx="155" cy="128" r="14" fill="#FFAB19" opacity=".2"/>
+      <text x="155" y="143" font-size="42" text-anchor="middle" font-family="serif">⭐</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Control</span>
+  </div>
+</div>
+
+<!-- ══ 7 CLONE FALLS — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Clone Falls</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when I start as a clone</span>
+      <span class="b mo">go to x: (pick random</span>
+      <span class="b op i1">-200 to 200) y:(180)</span>
+      <span class="b co">forever</span>
+      <span class="b mo i1">change y by (-5)</span>
+      <span class="b co i1">if &lt;(y pos) &lt; -180&gt;</span>
+      <span class="b co i2">delete this clone</span>
+      <span class="b co cap i1">end</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Always <strong>delete</strong> clones when off-screen — too many clones slow Scratch to a crawl!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 8 FIRE LASER — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Fire Laser</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#0f172a"/>
+      <!-- Stars -->
+      <circle cx="25" cy="20" r="1.5" fill="white" opacity=".7"/>
+      <circle cx="80" cy="15" r="1" fill="white" opacity=".5"/>
+      <circle cx="160" cy="25" r="1.5" fill="white" opacity=".6"/>
+      <circle cx="170" cy="70" r="1" fill="white" opacity=".4"/>
+      <!-- Laser beam -->
+      <rect x="97" y="10" width="6" height="80" rx="3" fill="#ff4444"/>
+      <rect x="98" y="10" width="4" height="80" rx="2" fill="#ffaaaa" opacity=".8"/>
+      <!-- Glow at top -->
+      <circle cx="100" cy="15" r="8" fill="#ff4444" opacity=".3"/>
+      <!-- Spaceship -->
+      <text x="100" y="138" font-size="44" text-anchor="middle" font-family="serif">🚀</text>
+      <!-- Space key indicator -->
+      <rect x="62" y="141" width="44" height="11" rx="3" fill="#1e293b"/>
+      <text x="84" y="150" font-size="7" font-weight="bold" fill="#FFAB19" text-anchor="middle" font-family="Nunito,sans-serif">SPACE</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Control</span>
+  </div>
+</div>
+
+<!-- ══ 8 FIRE LASER — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Fire Laser</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when [space▼] key pressed</span>
+      <span class="b co">create clone of [Laser▼]</span>
+      <span class="nb" style="margin-top:4px">─ Laser sprite ─</span>
+      <span class="b ev hat">when I start as a clone</span>
+      <span class="b lo">show</span>
+      <span class="b co">repeat until &lt;y &gt; 180&gt;</span>
+      <span class="b mo i1">change y by (15)</span>
+      <span class="b co cap">end</span>
+      <span class="b co">delete this clone</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Make the Laser sprite tiny (<strong>2×12px</strong> white rectangle). It moves faster than the ship.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 9 MOUSE CLICK — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Mouse Click</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#f0f9ff"/>
+      <!-- Target/coin -->
+      <circle cx="100" cy="72" r="36" fill="#FFAB19" opacity=".2"/>
+      <circle cx="100" cy="72" r="28" fill="#FFAB19" opacity=".4"/>
+      <text x="100" y="88" font-size="38" text-anchor="middle" font-family="serif">🌟</text>
+      <!-- Click burst lines -->
+      <line x1="100" y1="24" x2="100" y2="34" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="100" y1="110" x2="100" y2="120" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="52" y1="72" x2="62" y2="72" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="138" y1="72" x2="148" y2="72" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="67" y1="39" x2="74" y2="46" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="126" y1="98" x2="133" y2="105" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="67" y1="105" x2="74" y2="98" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="126" y1="46" x2="133" y2="39" stroke="#FFAB19" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Cursor -->
+      <polygon points="148,108 148,132 155,125 162,138 167,135 160,122 170,120" fill="#1e293b"/>
+      <!-- +1 -->
+      <text x="22" y="38" font-size="16" font-weight="900" fill="#3b82f6" font-family="Nunito,sans-serif">+1</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Events</span>
+  </div>
+</div>
+
+<!-- ══ 9 MOUSE CLICK — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Mouse Click</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when this sprite clicked</span>
+      <span class="b va">change [score▼] by (1)</span>
+      <span class="b lo">hide</span>
+      <span class="b co">wait (pick random 1 to 3) secs</span>
+      <span class="b mo">go to x:(pick random</span>
+      <span class="b op i1">-200 to 200)</span>
+      <span class="b mo">y:(pick random -150 to 150)</span>
+      <span class="b lo">show</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text"><strong>this sprite clicked</strong> fires even if another script is running — great for quick reactions!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 10 LIVES SYSTEM — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Lives System</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#fff0f3"/>
+      <!-- HUD bar -->
+      <rect x="0" y="0" width="200" height="35" fill="#1e293b"/>
+      <text x="100" y="14" font-size="8" font-weight="bold" fill="#94a3b8" text-anchor="middle" font-family="Nunito,sans-serif">LIVES</text>
+      <!-- 3 hearts -->
+      <text x="42" y="30" font-size="22" text-anchor="middle" font-family="serif">❤️</text>
+      <text x="100" y="30" font-size="22" text-anchor="middle" font-family="serif">❤️</text>
+      <text x="158" y="30" font-size="22" text-anchor="middle" font-family="serif">❤️</text>
+      <!-- Character -->
+      <text x="80" y="112" font-size="52" text-anchor="middle" font-family="serif">🧒</text>
+      <!-- Danger indicator -->
+      <text x="155" y="100" font-size="36" text-anchor="middle" font-family="serif">💀</text>
+      <!-- -1 lives flash -->
+      <text x="155" y="70" font-size="14" font-weight="900" fill="#ef4444" font-family="Nunito,sans-serif">-1</text>
+      <!-- Broadcast label -->
+      <rect x="10" y="120" width="65" height="14" rx="4" fill="#FFAB19"/>
+      <text x="42" y="130" font-size="7" font-weight="bold" fill="#1a0d00" text-anchor="middle" font-family="Nunito,sans-serif">broadcast: hit</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Variables</span>
+  </div>
+</div>
+
+<!-- ══ 10 LIVES SYSTEM — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Lives System</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b va">set [lives▼] to (3)</span>
+      <span class="nb" style="margin-top:4px">─ hit handler ─</span>
+      <span class="b ev hat">when I receive [hit▼]</span>
+      <span class="b va">change [lives▼] by (-1)</span>
+      <span class="b co">if &lt;(lives) = 0&gt; then</span>
+      <span class="b ev i1">broadcast [game over▼]</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Show lives as <strong>costume changes</strong> (heart sprites) OR as a variable. Costume looks more fun!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 11 SCORE TRACKER — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Score Tracker</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#f0fdf4"/>
+      <!-- Score board -->
+      <rect x="20" y="18" width="160" height="60" rx="10" fill="#1e293b"/>
+      <text x="100" y="38" font-size="9" font-weight="bold" fill="#94a3b8" text-anchor="middle" font-family="Nunito,sans-serif">SCORE</text>
+      <text x="100" y="68" font-size="28" font-weight="900" fill="#FFAB19" text-anchor="middle" font-family="Nunito,sans-serif">1250</text>
+      <!-- Increasing arrows -->
+      <polygon points="100,96 88,108 112,108" fill="#10b981" opacity=".8"/>
+      <!-- Coins -->
+      <text x="40" y="130" font-size="28" text-anchor="middle" font-family="serif">🪙</text>
+      <text x="100" y="130" font-size="28" text-anchor="middle" font-family="serif">🪙</text>
+      <text x="160" y="130" font-size="28" text-anchor="middle" font-family="serif">🪙</text>
+      <!-- +10 labels -->
+      <text x="40" y="148" font-size="9" font-weight="900" fill="#3b82f6" text-anchor="middle" font-family="Nunito,sans-serif">+10</text>
+      <text x="100" y="148" font-size="9" font-weight="900" fill="#3b82f6" text-anchor="middle" font-family="Nunito,sans-serif">+10</text>
+      <text x="160" y="148" font-size="9" font-weight="900" fill="#3b82f6" text-anchor="middle" font-family="Nunito,sans-serif">+10</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Variables</span>
+  </div>
+</div>
+
+<!-- ══ 11 SCORE TRACKER — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Score Tracker</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b va">set [score▼] to (0)</span>
+      <span class="nb" style="margin-top:4px">─ collect handler ─</span>
+      <span class="b ev hat">when I receive [collect▼]</span>
+      <span class="b va">change [score▼] by (10)</span>
+      <span class="nb" style="margin-top:6px">// always reset on start</span>
+      <span class="nb">// use broadcast to add</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text"><strong>set score to 0</strong> inside 'when flag clicked' so restarting always resets it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 12 TIMER — FRONT ══ -->
+<div class="card card-front" style="--c:#3b82f6">
+  <div class="top-strip">
+    <span class="action-title">Timer</span>
+    <span class="difficulty-badge">Intermediate</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#fefce8"/>
+      <!-- Clock face -->
+      <circle cx="100" cy="80" r="52" fill="white" stroke="#e2e8f0" stroke-width="3"/>
+      <circle cx="100" cy="80" r="48" fill="white" stroke="#3b82f6" stroke-width="4"/>
+      <!-- Clock numbers -->
+      <text x="100" y="40" font-size="10" font-weight="bold" fill="#64748b" text-anchor="middle" font-family="Nunito,sans-serif">12</text>
+      <text x="140" y="85" font-size="10" font-weight="bold" fill="#64748b" text-anchor="middle" font-family="Nunito,sans-serif">3</text>
+      <text x="100" y="124" font-size="10" font-weight="bold" fill="#64748b" text-anchor="middle" font-family="Nunito,sans-serif">6</text>
+      <text x="60" y="85" font-size="10" font-weight="bold" fill="#64748b" text-anchor="middle" font-family="Nunito,sans-serif">9</text>
+      <!-- Clock hands -->
+      <line x1="100" y1="80" x2="100" y2="46" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="80" x2="128" y2="80" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="100" cy="80" r="4" fill="#1e293b"/>
+      <!-- Timer display -->
+      <rect x="70" y="100" width="60" height="22" rx="6" fill="#ef4444"/>
+      <text x="100" y="115" font-size="14" font-weight="900" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">30s</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Variables</span>
+  </div>
+</div>
+
+<!-- ══ 12 TIMER — BACK ══ -->
+<div class="card card-back" style="--c:#3b82f6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Timer</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b va">set [time▼] to (30)</span>
+      <span class="b co">repeat until &lt;(time) = 0&gt;</span>
+      <span class="b co i1">wait (1) secs</span>
+      <span class="b va i1">change [time▼] by (-1)</span>
+      <span class="b co cap">end</span>
+      <span class="b ev">broadcast [game over▼]</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Put the countdown in its <strong>own script</strong> so the game can still move while counting down.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /intermediate cards-grid -->
+
+<!-- ══════════════════════════════════════════════════ ADVANCED ═══ -->
+<div class="section-label advanced">🟣 ADVANCED CARDS</div>
+<div class="cards-grid">
+
+<!-- ══ 13 DRAW BACKDROP — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">Draw Backdrop</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#faf5ff"/>
+      <!-- Canvas frame -->
+      <rect x="18" y="12" width="164" height="116" rx="6" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <!-- Maze drawing on canvas -->
+      <rect x="28" y="20" width="144" height="98" fill="#f8faff"/>
+      <!-- Maze walls (black) -->
+      <rect x="38" y="30" width="124" height="8" rx="2" fill="#1e293b"/>
+      <rect x="38" y="30" width="8" height="80" rx="2" fill="#1e293b"/>
+      <rect x="38" y="102" width="124" height="8" rx="2" fill="#1e293b"/>
+      <rect x="154" y="30" width="8" height="80" rx="2" fill="#1e293b"/>
+      <!-- Inner walls -->
+      <rect x="70" y="30" width="8" height="50" rx="2" fill="#1e293b"/>
+      <rect x="110" y="58" width="8" height="52" rx="2" fill="#1e293b"/>
+      <!-- Paint bucket icon -->
+      <text x="168" y="140" font-size="28" text-anchor="middle" font-family="serif">🖌️</text>
+      <!-- Backdrop tab label -->
+      <rect x="22" y="130" width="72" height="14" rx="4" fill="#8b5cf6"/>
+      <text x="58" y="140" font-size="7" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">BACKDROPS</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Looks</span>
+  </div>
+</div>
+
+<!-- ══ 13 DRAW BACKDROP — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Draw Backdrop</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col" style="flex:1">
+      <span class="tip-label" style="color:#8b5cf6;font-size:7px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;display:block">Paint Editor Steps</span>
+      <ul class="steps-list">
+        <li><span class="step-num">1</span>Click the <strong style="color:white">Backdrops</strong> tab</li>
+        <li><span class="step-num">2</span>Choose <strong style="color:white">Paint</strong> (brush icon)</li>
+        <li><span class="step-num">3</span>Draw maze walls in <strong style="color:white">black</strong></li>
+        <li><span class="step-num">4</span>Fill background in <strong style="color:white">white</strong></li>
+        <li><span class="step-num">5</span>Name it <strong style="color:white">"Level 1"</strong></li>
+      </ul>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Use the <strong>Fill tool</strong> (paint bucket) to quickly color large areas. Zoom in for detail.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 14 4-WAY MOVE — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">4-Way Move</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="120" fill="#f5f3ff"/>
+      <rect y="120" width="200" height="35" fill="#8b5cf6"/>
+      <line x1="0" y1="120" x2="200" y2="120" stroke="#7c3aed" stroke-width="2"/>
+      <!-- Character center -->
+      <text x="100" y="90" font-size="42" text-anchor="middle" font-family="serif">🧒</text>
+      <!-- 4 arrows -->
+      <!-- UP -->
+      <polygon points="100,20 92,36 108,36" fill="#8b5cf6"/>
+      <rect x="96" y="36" width="8" height="18" rx="4" fill="#8b5cf6"/>
+      <!-- DOWN -->
+      <polygon points="100,118 92,103 108,103" fill="#8b5cf6"/>
+      <rect x="96" y="86" width="8" height="18" rx="4" fill="#8b5cf6"/>
+      <!-- LEFT -->
+      <polygon points="18,72 35,64 35,80" fill="#8b5cf6"/>
+      <rect x="35" y="68" width="20" height="8" rx="4" fill="#8b5cf6"/>
+      <!-- RIGHT -->
+      <polygon points="182,72 165,64 165,80" fill="#8b5cf6"/>
+      <rect x="145" y="68" width="20" height="8" rx="4" fill="#8b5cf6"/>
+      <!-- Key labels -->
+      <rect x="87" y="126" width="26" height="12" rx="3" fill="#1e293b"/>
+      <text x="100" y="135" font-size="8" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">WASD</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Motion</span>
+  </div>
+</div>
+
+<!-- ══ 14 4-WAY MOVE — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">4-Way Move</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b co i1">if &lt;key [up▼] pressed?&gt;</span>
+      <span class="b mo i2">change y by (5)</span>
+      <span class="b co i1">if &lt;key [down▼] pressed?&gt;</span>
+      <span class="b mo i2">change y by (-5)</span>
+      <span class="b co i1">if &lt;key [right▼] pressed?&gt;</span>
+      <span class="b mo i2">change x by (5)</span>
+      <span class="b co i1">if &lt;key [left▼] pressed?&gt;</span>
+      <span class="b mo i2">change x by (-5)</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Sensing <strong>key pressed?</strong> inside forever lets <strong>multiple keys</strong> work simultaneously.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 15 COLOR SENSE — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">Color Sense</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#faf5ff"/>
+      <!-- Maze wall (black) -->
+      <rect x="100" y="0" width="30" height="130" rx="4" fill="#1e293b"/>
+      <!-- Colored walls -->
+      <rect x="0" y="60" width="100" height="12" rx="3" fill="#8b5cf6" opacity=".7"/>
+      <!-- Character touching colored wall -->
+      <text x="64" y="100" font-size="44" text-anchor="middle" font-family="serif">🧒</text>
+      <!-- Touch glow -->
+      <circle cx="88" cy="78" r="12" fill="#8b5cf6" opacity=".35"/>
+      <!-- Rollback arrow -->
+      <path d="M 88,78 Q 65,68 50,78" stroke="#ef4444" stroke-width="2.5" fill="none" marker-end="url(#arr2)"/>
+      <defs>
+        <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="#ef4444"/>
+        </marker>
+      </defs>
+      <!-- prev_x label -->
+      <rect x="20" y="105" width="55" height="14" rx="4" fill="#FF8C1A"/>
+      <text x="47" y="115" font-size="7" font-weight="bold" fill="#1a0800" text-anchor="middle" font-family="Courier New,monospace">prev_x saved</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Sensing</span>
+  </div>
+</div>
+
+<!-- ══ 15 COLOR SENSE — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Color Sense</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b se i1">if &lt;touching color [■]?&gt;</span>
+      <span class="b mo i2">go to x:(prev_x)</span>
+      <span class="b mo i2">y:(prev_y)</span>
+      <span class="b co cap i1">end</span>
+      <span class="b va i1">set [prev_x▼] to (x pos)</span>
+      <span class="b va i1">set [prev_y▼] to (y pos)</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Save position <strong>BEFORE</strong> moving. If you hit a wall, teleport back — no getting stuck!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 16 ROLLBACK — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">Rollback</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#f5f3ff"/>
+      <!-- Wall on right -->
+      <rect x="130" y="0" width="20" height="155" fill="#1e293b"/>
+      <!-- Character bouncing back -->
+      <text x="78" y="95" font-size="44" text-anchor="middle" font-family="serif">🧒</text>
+      <!-- Impact stars -->
+      <text x="122" y="70" font-size="16" font-family="serif">💥</text>
+      <!-- Forward arrow (grey, going to wall) -->
+      <line x1="90" y1="75" x2="118" y2="75" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3" opacity=".5"/>
+      <!-- Bounce back arrow (red) -->
+      <path d="M 120,82 Q 100,100 72,82" stroke="#ef4444" stroke-width="3" fill="none" marker-end="url(#arr3)"/>
+      <defs>
+        <marker id="arr3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="#ef4444"/>
+        </marker>
+      </defs>
+      <!-- Save checkpoint -->
+      <rect x="8" y="60" width="50" height="24" rx="5" fill="#8b5cf6"/>
+      <text x="33" y="71" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">SAVED</text>
+      <text x="33" y="80" font-size="6" font-weight="bold" fill="#ddd6fe" text-anchor="middle" font-family="Courier New,monospace">prev_x,y</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Motion</span>
+  </div>
+</div>
+
+<!-- ══ 16 ROLLBACK — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Rollback</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b va i1">set [prev_x▼] to (x pos)</span>
+      <span class="b va i1">set [prev_y▼] to (y pos)</span>
+      <span class="b mo i1">move (5) steps</span>
+      <span class="b se i1">if &lt;touching color [■]?&gt;</span>
+      <span class="b mo i2">go to x:(prev_x)</span>
+      <span class="b mo i2">y:(prev_y)</span>
+      <span class="b co cap i1">end</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Save → Move → Check → Undo. A <strong>universal pattern</strong> for all collision detection!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 17 FLAP PHYSICS — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">Flap Physics</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sky gradient -->
+      <rect width="200" height="155" fill="#bfdbfe"/>
+      <!-- Pipes top -->
+      <rect x="130" y="0" width="40" height="52" rx="4" fill="#22c55e"/>
+      <rect x="126" y="44" width="48" height="10" rx="3" fill="#16a34a"/>
+      <!-- Pipes bottom -->
+      <rect x="130" y="100" width="40" height="55" rx="4" fill="#22c55e"/>
+      <rect x="126" y="98" width="48" height="10" rx="3" fill="#16a34a"/>
+      <!-- Second set faded -->
+      <rect x="10" y="0" width="36" height="38" rx="4" fill="#22c55e" opacity=".4"/>
+      <rect x="6" y="30" width="44" height="10" rx="3" fill="#16a34a" opacity=".4"/>
+      <rect x="10" y="105" width="36" height="50" rx="4" fill="#22c55e" opacity=".4"/>
+      <rect x="6" y="103" width="44" height="10" rx="3" fill="#16a34a" opacity=".4"/>
+      <!-- Bird mid-flap -->
+      <text x="80" y="90" font-size="44" text-anchor="middle" font-family="serif">🐦</text>
+      <!-- vy variable -->
+      <rect x="10" y="58" width="52" height="24" rx="6" fill="#FF8C1A"/>
+      <text x="36" y="68" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle" font-family="Courier New,monospace">vy = -6</text>
+      <text x="36" y="78" font-size="6" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">↑ flap!</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Variables</span>
+  </div>
+</div>
+
+<!-- ══ 17 FLAP PHYSICS — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Flap Physics</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b va i1">change [vy▼] by (0.4)</span>
+      <span class="b mo i1">change y by (vy)</span>
+      <span class="b co cap">end</span>
+      <span class="nb" style="margin-top:4px">─ flap ─</span>
+      <span class="b ev hat">when [space▼] key pressed</span>
+      <span class="b va">set [vy▼] to (-6)</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">vy of <strong>-6</strong> on flap feels best. Gravity <strong>+0.4</strong> per frame. Tune these numbers!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 18 SCROLL LEFT — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">Scroll Left</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#bfdbfe"/>
+      <!-- Moving pipes with motion lines -->
+      <!-- Pipe set A -->
+      <rect x="110" y="0" width="36" height="48" rx="4" fill="#22c55e"/>
+      <rect x="106" y="40" width="44" height="10" rx="3" fill="#16a34a"/>
+      <rect x="110" y="100" width="36" height="55" rx="4" fill="#22c55e"/>
+      <rect x="106" y="98" width="44" height="10" rx="3" fill="#16a34a"/>
+      <!-- Motion lines left of pipes A -->
+      <line x1="88" y1="20" x2="106" y2="20" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+      <line x1="82" y1="30" x2="106" y2="30" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,3" opacity=".45"/>
+      <!-- Pipe set B (offscreen right, faded) -->
+      <rect x="165" y="0" width="36" height="64" rx="4" fill="#22c55e" opacity=".5"/>
+      <rect x="161" y="56" width="44" height="10" rx="3" fill="#16a34a" opacity=".5"/>
+      <rect x="165" y="110" width="36" height="45" rx="4" fill="#22c55e" opacity=".5"/>
+      <!-- Left arrows showing scroll direction -->
+      <polygon points="30,72 50,63 50,81" fill="#8b5cf6" opacity=".8"/>
+      <rect x="50" y="67" width="30" height="10" rx="5" fill="#8b5cf6" opacity=".8"/>
+      <!-- Bird stationary -->
+      <text x="42" y="88" font-size="36" text-anchor="middle" font-family="serif">🐦</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Motion</span>
+  </div>
+</div>
+
+<!-- ══ 18 SCROLL LEFT — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Scroll Left</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="nb">─ Pipe sprite ─</span>
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b mo i1">change x by (-4)</span>
+      <span class="b co i1">if &lt;(x pos) &lt; -260&gt;</span>
+      <span class="b mo i2">set x to (260)</span>
+      <span class="b co cap i1">end</span>
+      <span class="b co cap">end</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Move backdrop and obstacles <strong>left</strong>; keep the bird fixed in x. <strong>Infinite scrolling!</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 19 PROCEDURAL — FRONT ══ -->
+<div class="card card-front" style="--c:#8b5cf6">
+  <div class="top-strip">
+    <span class="action-title">Procedural</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="155" fill="#bfdbfe"/>
+      <!-- Pipe pair A -->
+      <rect x="15" y="0" width="30" height="40" rx="4" fill="#22c55e"/>
+      <rect x="11" y="32" width="38" height="9" rx="3" fill="#16a34a"/>
+      <rect x="15" y="100" width="30" height="55" rx="4" fill="#22c55e"/>
+      <rect x="11" y="98" width="38" height="9" rx="3" fill="#16a34a"/>
+      <!-- Pipe pair B -->
+      <rect x="80" y="0" width="30" height="58" rx="4" fill="#22c55e"/>
+      <rect x="76" y="50" width="38" height="9" rx="3" fill="#16a34a"/>
+      <rect x="80" y="112" width="30" height="43" rx="4" fill="#22c55e"/>
+      <rect x="76" y="110" width="38" height="9" rx="3" fill="#16a34a"/>
+      <!-- Pipe pair C -->
+      <rect x="148" y="0" width="30" height="30" rx="4" fill="#22c55e"/>
+      <rect x="144" y="22" width="38" height="9" rx="3" fill="#16a34a"/>
+      <rect x="148" y="118" width="30" height="37" rx="4" fill="#22c55e"/>
+      <rect x="144" y="116" width="38" height="9" rx="3" fill="#16a34a"/>
+      <!-- Timer labels -->
+      <rect x="44" y="70" width="34" height="12" rx="3" fill="#8b5cf6"/>
+      <text x="61" y="79" font-size="7" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">2 secs</text>
+      <rect x="110" y="70" width="34" height="12" rx="3" fill="#8b5cf6"/>
+      <text x="127" y="79" font-size="7" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">2 secs</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Control</span>
+  </div>
+</div>
+
+<!-- ══ 19 PROCEDURAL — BACK ══ -->
+<div class="card card-back" style="--c:#8b5cf6">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Procedural</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when ⚑ clicked</span>
+      <span class="b co">forever</span>
+      <span class="b co i1">create clone of [Pipe▼]</span>
+      <span class="b co i1">wait (2) secs</span>
+      <span class="b co cap">end</span>
+      <span class="nb" style="margin-top:4px">─ clone script ─</span>
+      <span class="b ev hat">when I start as a clone</span>
+      <span class="b mo">set y to (pick random -80 to 80)</span>
+      <span class="b co">repeat until &lt;(x) &lt; -260&gt;</span>
+      <span class="b mo i1">change x by (-4)</span>
+      <span class="b co cap">end</span>
+      <span class="b co">delete this clone</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text">Randomize the <strong>gap height</strong> each clone. Players can't memorize a fixed pattern.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 20 GAME OVER — FRONT ══ -->
+<div class="card card-front" style="--c:#6366f1">
+  <div class="top-strip">
+    <span class="action-title">Game Over</span>
+    <span class="difficulty-badge">Advanced</span>
+  </div>
+  <div class="illustration">
+    <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+      <!-- Dark flash overlay -->
+      <rect width="200" height="155" fill="#0f0f23"/>
+      <!-- Glow circle -->
+      <circle cx="100" cy="75" r="60" fill="#6366f1" opacity=".12"/>
+      <circle cx="100" cy="75" r="42" fill="#6366f1" opacity=".18"/>
+      <!-- GAME OVER text -->
+      <text x="100" y="62" font-size="20" font-weight="900" fill="#6366f1" text-anchor="middle" font-family="Nunito,sans-serif" letter-spacing="1">GAME</text>
+      <text x="100" y="86" font-size="20" font-weight="900" fill="#6366f1" text-anchor="middle" font-family="Nunito,sans-serif" letter-spacing="1">OVER</text>
+      <!-- Decorative lines -->
+      <line x1="20" y1="66" x2="68" y2="66" stroke="#6366f1" stroke-width="1.5" opacity=".5"/>
+      <line x1="132" y1="66" x2="180" y2="66" stroke="#6366f1" stroke-width="1.5" opacity=".5"/>
+      <!-- skull -->
+      <text x="100" y="120" font-size="28" text-anchor="middle" font-family="serif">💀</text>
+      <!-- Press R label -->
+      <rect x="68" y="130" width="64" height="14" rx="4" fill="#6366f1" opacity=".7"/>
+      <text x="100" y="140" font-size="8" font-weight="bold" fill="white" text-anchor="middle" font-family="Nunito,sans-serif">broadcast sent!</text>
+    </svg>
+  </div>
+  <div class="bottom-strip">
+    <span class="scratch-pill">Control</span>
+  </div>
+</div>
+
+<!-- ══ 20 GAME OVER — BACK ══ -->
+<div class="card card-back" style="--c:#6366f1">
+  <div class="back-top">
+    <span class="script-ref">Script Reference</span>
+    <span class="back-action-name">Game Over</span>
+  </div>
+  <div class="back-body">
+    <div class="block-col">
+      <span class="b ev hat">when I receive [game over▼]</span>
+      <span class="b co">stop [other scripts▼]</span>
+      <span class="b lo">switch backdrop to [Game Over▼]</span>
+      <span class="b co">wait (2) secs</span>
+      <span class="b co cap">stop [all▼]</span>
+    </div>
+    <div class="tip-col">
+      <div class="tip-label">💡 Pro Tip</div>
+      <div class="tip-text"><strong>broadcast</strong> 'game over' from ANY sprite. One central script handles the ending <strong>cleanly</strong>.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /advanced cards-grid -->
+
+<script>
+(() => {
+  const modeBtn  = document.getElementById('modeBtn')
+  const printBtn = document.getElementById('printBtn')
+  let interactive = false
+
+  function enter() {
+    document.querySelectorAll('.cards-grid').forEach(grid => {
+      const kids = Array.from(grid.children)
+      let i = 0
+      while (i < kids.length) {
+        const front = kids[i]
+        const back  = kids[i + 1]
+        if (front && back &&
+            front.classList?.contains('card-front') &&
+            back.classList?.contains('card-back')) {
+          const wrap  = document.createElement('div')
+          wrap.className = 'flip-card'
+          const inner = document.createElement('div')
+          inner.className = 'flip-card-inner'
+          grid.insertBefore(wrap, front)
+          wrap.appendChild(inner)
+          inner.appendChild(front)
+          inner.appendChild(back)
+          const hint = document.createElement('div')
+          hint.className = 'flip-hint'
+          hint.textContent = '👆 tap to flip'
+          wrap.appendChild(hint)
+          wrap.addEventListener('click', () => wrap.classList.toggle('flipped'))
+          i += 2
+        } else {
+          i += 1
+        }
+      }
+    })
+    document.body.classList.add('interactive-mode')
+    modeBtn.textContent = '📄 Print Layout'
+  }
+
+  function exit() {
+    document.querySelectorAll('.flip-card').forEach(wrap => {
+      const inner = wrap.querySelector('.flip-card-inner')
+      const front = inner.querySelector('.card-front')
+      const back  = inner.querySelector('.card-back')
+      wrap.parentNode.insertBefore(front, wrap)
+      wrap.parentNode.insertBefore(back, wrap)
+      wrap.remove()
+    })
+    document.body.classList.remove('interactive-mode')
+    modeBtn.textContent = '🎴 Interactive Mode'
+  }
+
+  modeBtn.addEventListener('click', () => {
+    interactive = !interactive
+    interactive ? enter() : exit()
+  })
+
+  printBtn.addEventListener('click', () => {
+    if (interactive) {
+      exit()
+      interactive = false
+      setTimeout(() => window.print(), 80)
+    } else {
+      window.print()
+    }
+  })
+})()
+</script>
+
+</body>
+</html>

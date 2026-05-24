@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Space Shooter — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print These Cards (File → Print → Actual Size)</button>
+
+<!-- ═══ STEP 1 ═══ -->
+<p class="section-title">Step 1 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">1 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🌌</div>
+    <div class="concept-pill">Backdrops · Sprites</div>
+    <div class="goal-text">Create the space environment and add a spaceship</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Set the Space Scene</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Set the Space Scene</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Open <strong>scratch.mit.edu</strong> and click "Create"</li>
+        <li>Right-click the cat sprite → Delete</li>
+        <li>Click "Choose a Backdrop" → search "Stars" black starfield</li>
+        <li>Click "Choose a Sprite" → search "Rocketship" → add it</li>
+        <li>Set size to 60 → drag the ship to the bottom-centre</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Set the rocket's direction to 0° (pointing up) in Sprite Info so the rocket faces upward.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">The Scratch stage is 480 × 360 pixels. x=0, y=0 is the centre.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<p class="section-title">Step 2 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">2 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🎮</div>
+    <div class="concept-pill">Events · Motion · Control</div>
+    <div class="goal-text">Move the spaceship left and right with arrow keys</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Fly the Ship</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Fly the Ship</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the ROCKETSHIP sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (0) y: (-150)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1 shape-c">if ‹key [left arrow] pressed?› then</div>
+      <div class="block motion indent-2">change x by (-8)</div>
+      <div class="block control indent-1 shape-c">if ‹key [right arrow] pressed?› then</div>
+      <div class="block motion indent-2">change x by (8)</div>
+      <div class="block motion indent-1">if on edge, bounce</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Test now — the ship should glide left and right without flying off screen.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"if on edge, bounce" saves you from writing edge-detection code yourself.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<p class="section-title">Step 3 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">3 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🟡</div>
+    <div class="concept-pill">Sprite Templates · Hiding</div>
+    <div class="goal-text">Add a Ball sprite and hide it on start — ready to become a laser clone</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add the Laser Bullet</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add the Laser Bullet</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the BALL sprite</div>
+      <div class="block events shape-hat note">On BALL: when 🏁 clicked</div>
+      <div class="block looks indent-0 shape-cap">hide</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Any sprite that spawns clones must hide its original first — otherwise the "master" copy sits frozen in the middle of the stage.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This template-and-clone pattern is identical to the "class and instance" concept in OOP. The Ball sprite is the class; each clone is an instance.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<p class="section-title">Step 4 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">4 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">💫</div>
+    <div class="concept-pill">Object Instantiation · Clone Pattern</div>
+    <div class="goal-text">Press SPACE to spawn a Ball clone that appears at the ship's position</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Create the Clone</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Create the Clone</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on BALL &amp; ROCKETSHIP</div>
+      <div class="block control shape-hat note">On BALL: when I start as a clone</div>
+      <div class="block motion indent-0">go to [Rocketship] ← snaps to ship first</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block events shape-hat note">On ROCKETSHIP: when [space] key pressed</div>
+      <div class="block control indent-0 shape-cap">create clone of [Ball]</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">"go to [Rocketship]" must be the FIRST block in the clone script — before show. Otherwise the clone appears at the wrong position!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"create clone of [Ball]" is identical to writing "new Bullet()" in Java or Python. You are doing Object-Oriented Programming right now.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<p class="section-title">Step 5 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">5 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🔥</div>
+    <div class="concept-pill">Repeat-Until · Destruction Pattern</div>
+    <div class="goal-text">The clone shoots upward and deletes itself when it leaves the screen</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Fire the Laser</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Fire the Laser</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the BALL sprite</div>
+      <div class="block control shape-hat note">On BALL: when I start as a clone</div>
+      <div class="block motion indent-0">go to [Rocketship]</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0 shape-c">repeat until ‹(y position) &gt; (175)›</div>
+      <div class="block motion indent-1">change y by (15)</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Increase "change y by (15)" to 20 or 25 for faster bullets. Faster bullets make the game easier!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"delete this clone" frees memory — just like garbage collection in Python and Java. Without it, hundreds of off-screen bullets would pile up.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 ═══ -->
+<p class="section-title">Step 6 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">6 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">👾</div>
+    <div class="concept-pill">Clones · Timers · Parallel Execution</div>
+    <div class="goal-text">Aliens appear randomly at the top and descend toward the ship</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Spawn Alien Enemies</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Spawn Alien Enemies</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col blocks-sm">
+      <div class="blocks-label">Scratch Blocks — on the ALIEN sprite</div>
+      <div class="block events shape-hat note">ALIEN: when 🏁 clicked</div>
+      <div class="block looks indent-0">hide</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1">wait (1.5) seconds</div>
+      <div class="block motion indent-1">go to x: (pick random (-200) to (200)) y: (180)</div>
+      <div class="block control indent-1">create clone of [myself]</div>
+      <div class="block control shape-hat note">ALIEN: when I start as a clone</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0 shape-c">repeat until ‹(y position) &lt; (-180)›</div>
+      <div class="block motion indent-1">change y by (-3)</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Lower the wait time (e.g. 0.8 secs) to spawn aliens faster. Higher "change y by" makes them fall quicker.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Two "when 🏁 clicked" scripts on one sprite run at the same time. In real code, this is called concurrency or async programming.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 7 ═══ -->
+<p class="section-title">Step 7 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">7 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">💥</div>
+    <div class="concept-pill">Sensing · Collision Detection</div>
+    <div class="goal-text">Make an alien react when a laser touches it — play a sound as feedback</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Detect the Hit</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Detect the Hit</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the ALIEN sprite</div>
+      <div class="block control shape-hat note">ALIEN: when I start as a clone</div>
+      <div class="block looks indent-0">show</div>
+      <div class="block control indent-0 shape-c">repeat until ‹(y position) &lt; (-180)›</div>
+      <div class="block motion indent-1">change y by (-3)</div>
+      <div class="block sensing indent-1 shape-c">if ‹touching [Ball]?› then</div>
+      <div class="block sound indent-2">play sound [pop] until done</div>
+      <div class="block control indent-2 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Click the Sounds tab on the Alien sprite to add new sounds. "Zap", "Laser1", and "Pop" all feel great for hits.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"touching [Ball]?" polls for overlap 30 times per second. Game engines like Unity call this an AABB check — behind every game's hit detection.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 ═══ -->
+<p class="section-title">Step 8 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">8 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🔢</div>
+    <div class="concept-pill">Variables · Reward State</div>
+    <div class="goal-text">Create a Score variable and add 10 points every time an alien is destroyed</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Score the Kill</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Score the Kill</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the ALIEN sprite</div>
+      <div class="block control shape-hat note">ALIEN (inside repeat-until loop)</div>
+      <div class="block sensing indent-0 shape-c">if ‹touching [Ball]?› then</div>
+      <div class="block variables indent-1">change [Score] by (10)</div>
+      <div class="block control indent-1 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Right-click the Score display on the stage and choose "Large readout" for a big, satisfying counter!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Every leaderboard, achievement, and in-game economy is built on this pattern: event detected → variable updated → UI refreshed.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 ═══ -->
+<p class="section-title">Step 9 / 9</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🚀 Space Shooter</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">9 / 9</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">💀</div>
+    <div class="concept-pill">State Machine · Program Termination</div>
+    <div class="goal-text">Lose a life when an alien escapes; the game ends when lives reach zero</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Lives &amp; Game Over</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Lives &amp; Game Over</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks — on the ALIEN sprite</div>
+      <div class="block control shape-hat note">(outside the repeat-until, after it ends)</div>
+      <div class="block variables indent-0">change [Lives] by (-1)</div>
+      <div class="block control indent-0 shape-c">if ‹(Lives) = (0)› then</div>
+      <div class="block looks indent-1">say [Mission Failed! 💥] for (2) seconds</div>
+      <div class="block control indent-1 shape-cap">stop [all]</div>
+      <div class="block control indent-0 shape-cap">delete this clone</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Share your game by clicking "Share" at the top of Scratch — anyone with the link can play it!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Traffic lights, login flows, vending machines, and game modes are all state machines. "PLAYING → GAME_OVER" is the simplest version.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
