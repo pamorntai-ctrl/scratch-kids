@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cube Jumper — Learning Cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print These Cards (File → Print → Actual Size)</button>
+
+<!-- ═══ STEP 1 ═══ -->
+<p class="section-title">Step 1 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">1 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🌃</div>
+    <div class="concept-pill">Backdrops · Setup</div>
+    <div class="goal-text">Open Scratch with a dark neon backdrop ready for the action</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Set the Stage</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Set the Stage</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Go to <strong>scratch.mit.edu</strong> → click "Create"</li>
+        <li>Right-click the cat sprite → Delete</li>
+        <li>Click "Choose a Backdrop" → search "Stars" or "Neon Tunnel"</li>
+        <li>(Optional) Backdrops tab → draw a bright neon horizon line</li>
+        <li>Sign in to save your project automatically</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">A dark backdrop makes neon-coloured sprites pop — same trick used by Geometry Dash and Tetris.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">The Scratch stage is 480×360 pixels. Y goes from -180 (bottom) to +180 (top). A horizon at y=-100 leaves perfect jump room.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<p class="section-title">Step 2 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">2 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🟦</div>
+    <div class="concept-pill">Sprites · Costumes</div>
+    <div class="goal-text">Paint a simple blue cube sprite with a tiny smiling face</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Design the Cube</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Design the Cube</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Hover "Choose a Sprite" → click <strong>Paint</strong> 🖌️</li>
+        <li>Costumes tab → pick Rectangle tool, bright blue fill, no outline</li>
+        <li>Drag a 50 × 50 square at the centre of the canvas</li>
+        <li>Brush tool → two black dots for eyes, tiny smile</li>
+        <li>Rename the sprite "<strong>Cube</strong>" in Sprite Info</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Keep the cube small (~50 px) so jumps look snappy and spikes feel close to the action.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Geometry Dash characters started as one-colour squares — drawn in 10 minutes. Simple shapes animate beautifully.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<p class="section-title">Step 3 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">3 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">⬇️</div>
+    <div class="concept-pill">Motion · Events</div>
+    <div class="goal-text">On green flag, the cube starts at the left of the screen sitting on the ground</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Stand on the Ground</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Stand on the Ground</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks (Cube sprite)</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (-150) y: (-100)</div>
+      <div class="block looks indent-0">set size to (80) %</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Always reset position in the green-flag script. Players love restarting — your game must reset cleanly.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">"go to x y" is teleportation — instant, no animation. It's faster than "glide" when you just need to reset.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<p class="section-title">Step 4 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">4 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🦘</div>
+    <div class="concept-pill">Events · Loops</div>
+    <div class="goal-text">Press SPACE → the cube rises then falls back to the ground</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Simple Jump</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Simple Jump</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col blocks-xs">
+      <div class="blocks-label">Add this NEW script to the Cube sprite</div>
+      <div class="block events shape-hat">when [space▼] key pressed</div>
+      <div class="block control indent-0 shape-c">if ‹(y position) &lt; (-95)› then</div>
+      <div class="block control indent-1 shape-c">repeat (10)</div>
+      <div class="block motion indent-2">change y by (12)</div>
+      <div class="block control indent-1 shape-cap">end</div>
+      <div class="block control indent-1 shape-c">repeat (10)</div>
+      <div class="block motion indent-2">change y by (-12)</div>
+      <div class="block control indent-1 shape-cap">end</div>
+      <div class="block control indent-0 shape-cap">end</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">The outer "if" stops mid-air double-jumping — "only jump if near the ground".</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This jump pauses the script. Step 5 upgrades it to a smarter version so spikes can still scroll while you jump.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<p class="section-title">Step 5 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">5 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🌍</div>
+    <div class="concept-pill">Variables · Physics</div>
+    <div class="goal-text">Replace the simple jump with "y power" + gravity so spikes can scroll while you jump</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Add Gravity</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Add Gravity</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col blocks-xs">
+      <div class="blocks-label">REPLACE the SPACE script — two scripts now</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (-150) y: (-100)</div>
+      <div class="block variables indent-0">set [y power▼] to (0)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block variables indent-1">change [y power▼] by (-1)</div>
+      <div class="block motion indent-1">change y by (y power)</div>
+      <div class="block control indent-1 shape-c">if ‹(y position) &lt; (-100)› then</div>
+      <div class="block motion indent-2">set y to (-100)</div>
+      <div class="block variables indent-2">set [y power▼] to (0)</div>
+      <div class="block control indent-1 shape-cap">end</div>
+      <div class="block control indent-0 shape-cap">end</div>
+      <div class="block events shape-hat">when [space▼] key pressed</div>
+      <div class="block control indent-0 shape-c">if ‹(y position) &lt; (-95)› then</div>
+      <div class="block variables indent-1">set [y power▼] to (12)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Positive y = up. y power = 12 launches up; gravity subtracts 1 each frame so the leap arcs back down naturally.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Two scripts running at once is "parallel programming". Real games use threads or async — same idea.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 ═══ -->
+<p class="section-title">Step 6 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">6 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🔺</div>
+    <div class="concept-pill">Sprites · Paint Editor</div>
+    <div class="goal-text">Paint a small red triangle obstacle sprite</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Make a Spike</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Make a Spike</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Steps to follow</div>
+      <ol class="actions-list">
+        <li>Hover "Choose a Sprite" → click <strong>Paint</strong></li>
+        <li>Costumes tab → Line tool, bright red, thickness 6</li>
+        <li>Draw 3 lines forming an upward triangle (~40 px wide)</li>
+        <li>Fill tool 🪣 → fill the inside red</li>
+        <li>Rename the sprite "<strong>Spike</strong>"</li>
+      </ol>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Anchor the spike's base at the bottom of the canvas — then "go to y: -110" plants it on the ground perfectly.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Geometry Dash uses only a handful of shapes — spike, block, jump-pad — arranged in patterns. Limited art + clever rhythm = endless levels.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 7 ═══ -->
+<p class="section-title">Step 7 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">7 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">➡️</div>
+    <div class="concept-pill">Motion · Loops</div>
+    <div class="goal-text">Spike slides from right to left, then loops back to the right edge endlessly</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Spikes Scroll Left</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Spikes Scroll Left</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Scratch Blocks (Spike sprite)</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block motion indent-0">go to x: (240) y: (-110)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block motion indent-1">change x by (-6)</div>
+      <div class="block control indent-1 shape-c">if ‹(x position) &lt; (-240)› then</div>
+      <div class="block motion indent-2">set x to (240)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">"change x by (-6)" is the scroll speed. Bigger negatives = faster. Step 10 makes this speed grow with the score!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">The character never moves forward — the world moves past it. Subway Surfers and Mario use the exact same trick.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 ═══ -->
+<p class="section-title">Step 8 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">8 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">💥</div>
+    <div class="concept-pill">Sensing · Control</div>
+    <div class="goal-text">If the cube touches a spike, the game stops everything instantly</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Game Over on Hit</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Game Over on Hit</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Add inside Cube's forever loop</div>
+      <div class="block control indent-0 shape-c">if ‹touching [Spike▼]?› then</div>
+      <div class="block looks indent-1">say [Game Over!] for (2) secs</div>
+      <div class="block control indent-1 shape-cap">stop [all▼]</div>
+      <div class="block control indent-0 shape-cap">end</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">"stop all" is the nuclear option — it freezes every script in every sprite. Perfect for game over.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">In pro games this is a "hitbox check" — CPU compares rectangles 60 times a second to decide if you live or die.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 ═══ -->
+<p class="section-title">Step 9 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">9 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">🏆</div>
+    <div class="concept-pill">Variables · Loops</div>
+    <div class="goal-text">Score climbs by 1 every second you stay alive — survival is rewarded</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Score Counter</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Score Counter</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">NEW script on Cube sprite</div>
+      <div class="block events shape-hat">when 🏁 clicked</div>
+      <div class="block variables indent-0">set [Score▼] to (0)</div>
+      <div class="block control indent-0 shape-c">forever</div>
+      <div class="block control indent-1">wait (1) secs</div>
+      <div class="block variables indent-1">change [Score▼] by (1)</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Multiple "when 🏁 clicked" scripts are fine — Scratch runs them all in parallel, each handling one job.</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">Time-based scoring is called "survival scoring". Subway Surfers, Temple Run, Fall Guys all use it.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 10 ═══ -->
+<p class="section-title">Step 10 / 10</p>
+<div class="card card-front" style="--diff-color:#3b82f6;--diff-bg:#dbeafe">
+  <div class="front-header">
+    <div class="game-name">🟦 Cube Jumper</div>
+    <div class="header-right"><span class="diff-badge">Intermediate</span><span class="step-num">10 / 10</span></div>
+  </div>
+  <div class="front-body">
+    <div class="step-emoji">📈</div>
+    <div class="concept-pill">Variables · Operators</div>
+    <div class="goal-text">Spike speeds up as Score climbs — automatic difficulty ramp</div>
+  </div>
+  <div class="front-footer">
+    <span class="step-title-small">Speed Climb</span>
+    <span class="brand">ScratchQuest • scratch.mit.edu</span>
+  </div>
+</div>
+
+<div class="card card-back" style="--diff-color:#3b82f6">
+  <div class="back-header">
+    <span class="back-title">📜 Script Reference</span>
+    <span class="back-step-name">Speed Climb</span>
+  </div>
+  <div class="back-body">
+    <div class="blocks-col">
+      <div class="blocks-label">Replace "change x by (-6)" on Spike with:</div>
+      <div class="block motion indent-0">change x by ( 0 - (6 + ((Score) / (5))) )</div>
+      <div class="block note">→ 0 minus (6 plus Score divided by 5)</div>
+      <div class="block note">→ as Score grows, the value gets more negative</div>
+      <div class="block note">→ more negative x = faster left scroll!</div>
+    </div>
+    <div class="info-col">
+      <div class="tip-box">
+        <span class="box-label">💡 Tip</span>
+        <span class="box-text">Start gentle (6 + Score/5). Too easy? Try Score/3. Too hard? Try Score/10. Tune to taste!</span>
+      </div>
+      <div class="dyk-box">
+        <span class="box-label">🤔 Did You Know?</span>
+        <span class="box-text">This is a "difficulty curve". Tetris speeds up every 10 lines, Pac-Man ghosts roam faster each maze. Same trick everywhere.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ const FILES = [
   { name: 'catch-stars',     width: 5,   height: 3.5 },
   { name: 'space-shooter',   width: 5,   height: 3.5 },
   { name: 'whack-a-mole',    width: 5,   height: 3.5 },
+  { name: 'cube-jumper',     width: 5,   height: 3.5 },
   { name: 'maze-runner',     width: 5,   height: 3.5 },
   { name: 'sky-drifter',     width: 5,   height: 3.5 },
 ]

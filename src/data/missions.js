@@ -2072,4 +2072,359 @@ export const MISSIONS = [
       },
     ],
   },
+
+  /* ════════════════════════════════════════════════════════════════
+     CUBE JUMPER — Intermediate, one-button rhythm runner
+  ════════════════════════════════════════════════════════════════ */
+  {
+    id: 'cube-jumper',
+    title: 'Cube Jumper',
+    emoji: '🟦',
+    tagline: 'Hop the cube over endless spikes — one button to win!',
+    description:
+      'A one-button rhythm runner inspired by Geometry Dash. Spikes slide toward your cube from the right; tap SPACE to leap over them. Survive longer to climb the score and watch the speed ramp up!',
+    difficulty: 'Intermediate',
+    difficultyColor: 'blue',
+    xpReward: 380,
+    timeEstimate: '30 min',
+    color: 'from-blue-500 to-cyan-500',
+    gradientBg: 'from-blue-900/30 to-cyan-900/20',
+    badge: {
+      id: 'cube-master',
+      name: 'Cube Master',
+      emoji: '🟦',
+      description: 'Built Cube Jumper — a one-button rhythm runner!',
+      color: 'from-blue-400 to-cyan-500',
+    },
+    concepts: ['Sprites', 'Events', 'Motion', 'Variables', 'Sensing', 'Operators'],
+    programmingSkills: [
+      {
+        emoji: '⚡',
+        skill: 'Single-Input Design',
+        color: '#FFAB19',
+        detail: 'One-button games are an entire genre — Flappy Bird, Geometry Dash, Crossy Road. Removing choices forces tight timing and is a real game-design technique pros use.',
+      },
+      {
+        emoji: '🌍',
+        skill: 'Jump Physics',
+        color: '#10b981',
+        detail: 'A "y power" variable + gravity loop creates an arcing jump that feels natural. It is the same recipe used in every 2D platformer ever made.',
+      },
+      {
+        emoji: '➡️',
+        skill: 'Auto-Scrolling',
+        color: '#4C97FF',
+        detail: 'The cube stays still; the world moves. This illusion of running is used in endless runners (Subway Surfers, Temple Run) and side-scrollers (Mario, Sonic).',
+      },
+      {
+        emoji: '🎯',
+        skill: 'Collision Detection',
+        color: '#5CB1D6',
+        detail: '"touching [Spike]?" instantly decides the game is over. The same hit-test pattern powers every action game and even VR.',
+      },
+      {
+        emoji: '📦',
+        skill: 'Game State',
+        color: '#a855f7',
+        detail: '"Score" and "Speed" are variables that change over time. Managing state cleanly is the core of every multiplayer game, simulation, and live app.',
+      },
+      {
+        emoji: '📈',
+        skill: 'Difficulty Curves',
+        color: '#FF6680',
+        detail: 'Increasing speed as score climbs is called a difficulty ramp. Tetris, Pac-Man, every casino slot — all use the same trick to keep players hooked.',
+      },
+    ],
+    steps: [
+
+      /* ── Step 1 ── */
+      {
+        id: 1,
+        title: 'Set the Stage',
+        emoji: '🌃',
+        xp: 20,
+        concept: { name: 'Backdrops · Setup', color: '#6366f1' },
+        goal: 'Open Scratch with a dark "night" backdrop and a glowing horizon line',
+        description:
+          'Cube Jumper has a clean, neon look — a dark sky with a single bright ground line. We will pick a dark backdrop and get rid of the cat to start fresh.',
+        scratchArea: 'overview',
+        previewStep: 0,
+        actions: [
+          { text: 'Go to scratch.mit.edu and click "Create".', highlight: 'scratch.mit.edu' },
+          { text: 'Right-click the cat sprite → Delete.', area: 'Sprite Panel' },
+          { text: 'Click "Choose a Backdrop" → search "Stars" or "Neon Tunnel" → click to add.', area: 'Backdrop Library' },
+          { text: '(Optional) Click the Backdrops tab → use the line tool to draw a bright neon horizon line across the middle.', area: 'Backdrop Editor' },
+        ],
+        blocks: [],
+        tip: 'A dark backdrop makes neon-coloured sprites pop — that\'s why Geometry Dash and Tetris use them.',
+        didYouKnow: 'In Scratch the stage is 480×360. The Y-axis goes from -180 (bottom) to +180 (top). A horizon line around y=-100 leaves room for jumps.',
+      },
+
+      /* ── Step 2 ── */
+      {
+        id: 2,
+        title: 'Design the Cube',
+        emoji: '🟦',
+        xp: 30,
+        concept: { name: 'Sprites · Costumes', color: '#d946ef' },
+        goal: 'Paint a simple blue cube sprite with a tiny face',
+        description:
+          'Cube Jumper\'s hero is a single coloured square. Use the Paint Editor to draw it from scratch so the kid owns the design.',
+        scratchArea: 'costumes',
+        previewStep: 1,
+        actions: [
+          { text: 'In the sprite panel, hover the blue "Choose a Sprite" button and pick "Paint" (the brush icon).', area: 'Sprite Panel' },
+          { text: 'Make sure you\'re in the Costumes tab. Pick the Rectangle tool with Fill = bright blue, no outline.', area: 'Paint Editor' },
+          { text: 'Drag a square about 50 × 50 pixels in the centre of the canvas.', area: 'Paint Canvas' },
+          { text: 'Pick the Brush tool → black → add two dots for eyes and a tiny smile.', area: 'Paint Canvas' },
+          { text: 'Rename the sprite "Cube" in the sprite info panel.', area: 'Sprite Info' },
+        ],
+        blocks: [],
+        tip: 'Keep the cube small (≈ 50 px) so jumps look snappy and spikes feel close to the action.',
+        didYouKnow: 'Geometry Dash characters started as one-colour squares because the designer drew them in 10 minutes. Simple shapes are easy to animate and recognise.',
+      },
+
+      /* ── Step 3 ── */
+      {
+        id: 3,
+        title: 'Stand on the Ground',
+        emoji: '⬇️',
+        xp: 25,
+        concept: { name: 'Motion · Events', color: '#4C97FF' },
+        goal: 'On green flag, the cube starts at the left of the screen sitting on the ground',
+        description:
+          'Before the cube moves at all, put it in its starting spot. We park it on the left side, sitting just above the horizon line.',
+        scratchArea: 'scripts',
+        previewStep: 2,
+        actions: [
+          { text: 'Click the Code tab. Drag in "when 🏁 clicked" from Events.', area: 'Events Palette' },
+          { text: 'Add "go to x: (-150) y: (-100)" from Motion — this is the cube\'s starting spot.', area: 'Motion Palette' },
+          { text: 'Add "set size to (80) %" from Looks so the cube isn\'t huge.', area: 'Looks Palette' },
+          { text: 'Click 🏁 — the cube snaps to the left side of the stage.', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',            cat: 'events', indent: 0, shape: 'hat'   },
+          { text: 'go to x: (-150) y: (-100)',  cat: 'motion', indent: 0, shape: 'stack' },
+          { text: 'set size to (80) %',         cat: 'looks',  indent: 0, shape: 'stack' },
+        ],
+        tip: 'Always reset position in the green-flag script. Players love restarting and your game must reset cleanly.',
+        didYouKnow: '"go to x y" is teleportation. There\'s no smooth animation — the sprite jumps instantly. This is faster than gliding when you just need to reset.',
+      },
+
+      /* ── Step 4 ── */
+      {
+        id: 4,
+        title: 'Simple Jump',
+        emoji: '🦘',
+        xp: 40,
+        concept: { name: 'Events · Loops', color: '#FFAB19' },
+        goal: 'Press SPACE → the cube rises then falls back to the ground',
+        description:
+          'Time for the first taste of jumping. We use a "repeat" loop to push the cube up, then another to bring it down. No variables yet — just movement that feels great.',
+        scratchArea: 'scripts',
+        previewStep: 3,
+        actions: [
+          { text: 'Add a new "when [space▼] key pressed" hat block from Events.', area: 'Events Palette' },
+          { text: 'Wrap it with an "if" so double-jumping is blocked. From Control: "if < > then".', area: 'Control Palette' },
+          { text: 'In Operators build "(y position) < (-95)". Snap it into the if diamond.', area: 'Operators Palette' },
+          { text: 'Inside the if: "repeat (10)" with "change y by (12)" inside — the upward leap.', area: 'Control Palette' },
+          { text: 'Below the first repeat (still inside the if): "repeat (10)" with "change y by (-12)" — the fall.', area: 'Control Palette' },
+          { text: 'Click 🏁 → tap SPACE → the cube hops! 🎉', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when [space▼] key pressed',           cat: 'events',  indent: 0, shape: 'hat'   },
+          { text: 'if ‹(y position) < (-95)› then',      cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'repeat (10)',                          cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'change y by (12)',                     cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'end',                                  cat: 'control', indent: 1, shape: 'cap'   },
+          { text: 'repeat (10)',                          cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'change y by (-12)',                    cat: 'motion',  indent: 2, shape: 'stack' },
+          { text: 'end',                                  cat: 'control', indent: 1, shape: 'cap'   },
+          { text: 'end',                                  cat: 'control', indent: 0, shape: 'cap'   },
+        ],
+        tip: 'The "if (y position) < (-95)" check stops mid-air double-jumping. It says "only jump if I\'m near the ground".',
+        didYouKnow: 'This is a "block-based" jump — the script pauses while it runs. Step 5 will upgrade to a smarter version that never pauses, so the spike can still scroll while you jump.',
+      },
+
+      /* ── Step 5 ── */
+      {
+        id: 5,
+        title: 'Add Gravity (Smoother Jump)',
+        emoji: '🌍',
+        xp: 50,
+        concept: { name: 'Variables · Physics', color: '#a855f7' },
+        goal: 'Replace the simple jump with a "y power" variable + gravity so the cube can jump while spikes still move',
+        description:
+          'The simple jump was great but it pauses the script. We need a jump that runs in parallel — so spikes can scroll smoothly. Enter the y power variable and a forever-gravity loop.',
+        scratchArea: 'scripts',
+        previewStep: 4,
+        actions: [
+          { text: 'Click "Variables" → "Make a Variable" → name it "y power" → OK.', area: 'Variables Palette' },
+          { text: 'DELETE the SPACE-key script you wrote in Step 4 — we are replacing it.', area: 'Scripts Area' },
+          { text: 'On the green-flag script, add "set [y power▼] to (0)" right after "go to".', area: 'Variables Palette' },
+          { text: 'Add a new "forever" loop below "set size".', area: 'Control Palette' },
+          { text: 'Inside forever: "change [y power▼] by (-1)" then "change y by (y power)".', area: 'Variables Palette' },
+          { text: 'Also inside forever: "if (y position) < (-100) then" → "set y to (-100)" + "set [y power▼] to (0)". This is the ground.', area: 'Control Palette' },
+          { text: 'Now add a NEW hat: "when [space▼] key pressed" → "if (y position) < (-95) then" → "set [y power▼] to (12)".', area: 'Events Palette' },
+          { text: 'Click 🏁 → tap SPACE → smooth arcing jump that doesn\'t pause anything! 🚀', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— inside the green-flag forever —',   cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'change [y power▼] by (-1)',           cat: 'variables', indent: 1, shape: 'stack' },
+          { text: 'change y by (y power)',                cat: 'motion',    indent: 1, shape: 'stack' },
+          { text: 'if ‹(y position) < (-100)› then',     cat: 'control',   indent: 1, shape: 'c'     },
+          { text: 'set y to (-100)',                      cat: 'motion',    indent: 2, shape: 'stack' },
+          { text: 'set [y power▼] to (0)',               cat: 'variables', indent: 2, shape: 'stack' },
+          { text: '— separate jump script —',             cat: 'control',   indent: 0, shape: 'stack', note: true },
+          { text: 'when [space▼] key pressed',            cat: 'events',    indent: 0, shape: 'hat'   },
+          { text: 'if ‹(y position) < (-95)› then',      cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'set [y power▼] to (12)',              cat: 'variables', indent: 1, shape: 'stack' },
+        ],
+        tip: 'In Scratch, positive y = up. Setting y power to 12 launches up; gravity subtracts 1 each frame so it arcs back down naturally.',
+        didYouKnow: 'Two separate scripts running at once is called "parallel programming". Real games use threads or async functions to do exactly this — input handling and physics in parallel.',
+      },
+
+      /* ── Step 6 ── */
+      {
+        id: 6,
+        title: 'Make a Spike',
+        emoji: '🔺',
+        xp: 25,
+        concept: { name: 'Sprites · Paint Editor', color: '#d946ef' },
+        goal: 'Paint a red triangle obstacle sprite',
+        description:
+          'Time to add danger. Spikes are simple triangles. We paint one in the Paint Editor — small, sharp, scary.',
+        scratchArea: 'costumes',
+        previewStep: 5,
+        actions: [
+          { text: 'In the sprite panel, hover "Choose a Sprite" → click "Paint".', area: 'Sprite Panel' },
+          { text: 'In Costumes, pick the Line tool with bright red and thickness 6.', area: 'Paint Editor' },
+          { text: 'Draw three lines that form an upward-pointing triangle, about 40 px wide.', area: 'Paint Canvas' },
+          { text: 'Use the Fill tool 🪣 to fill the inside red.', area: 'Paint Canvas' },
+          { text: 'Rename the sprite "Spike".', area: 'Sprite Info' },
+        ],
+        blocks: [],
+        tip: 'Make the spike\'s base sit on the bottom of the canvas — that way "go to y: -110" will place its base on the ground nicely.',
+        didYouKnow: 'Geometry Dash uses just a few obstacle shapes — spike, block, jump-pad — repeated in patterns. Limited art + clever rhythm = endless levels.',
+      },
+
+      /* ── Step 7 ── */
+      {
+        id: 7,
+        title: 'Spikes Scroll Left',
+        emoji: '➡️',
+        xp: 50,
+        concept: { name: 'Motion · Loops', color: '#4C97FF' },
+        goal: 'The Spike enters from the right, slides left across the screen, then reappears on the right',
+        description:
+          'Now we make the world move. The spike marches from right to left. When it goes off-screen it teleports back to the right edge so a new spike "appears" — endlessly.',
+        scratchArea: 'scripts',
+        previewStep: 6,
+        actions: [
+          { text: 'Click the Spike sprite, then the Code tab.', area: 'Scripts Area' },
+          { text: 'Drag "when 🏁 clicked" → "go to x: (240) y: (-110)" → starts at the right edge on the ground.', area: 'Motion Palette' },
+          { text: 'Add "forever" and inside it: "change x by (-6)".', area: 'Control Palette' },
+          { text: 'Inside the forever (after change-x): "if (x position) < (-240) then" → "set x to (240)".', area: 'Control Palette' },
+          { text: 'Click 🏁 → the spike sails left then loops back. Endless spikes!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',                     cat: 'events',  indent: 0, shape: 'hat'   },
+          { text: 'go to x: (240) y: (-110)',            cat: 'motion',  indent: 0, shape: 'stack' },
+          { text: 'forever',                              cat: 'control', indent: 0, shape: 'c'     },
+          { text: 'change x by (-6)',                     cat: 'motion',  indent: 1, shape: 'stack' },
+          { text: 'if ‹(x position) < (-240)› then',     cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'set x to (240)',                       cat: 'motion',  indent: 2, shape: 'stack' },
+        ],
+        tip: '"change x by (-6)" is the scroll speed. Bigger negatives = faster scroll = harder game. Step 10 will make this speed grow!',
+        didYouKnow: 'Auto-scrolling is the heart of every endless runner. The character never actually moves forward — the world moves past it. Same trick used in Subway Surfers and Mario.',
+      },
+
+      /* ── Step 8 ── */
+      {
+        id: 8,
+        title: 'Game Over on Hit',
+        emoji: '💥',
+        xp: 50,
+        concept: { name: 'Sensing · Control', color: '#5CB1D6' },
+        goal: 'If the cube touches a spike, the game stops everything',
+        description:
+          'Without consequences a game isn\'t a game. We add collision detection: when the cube hits a spike, we stop all scripts and the action freezes.',
+        scratchArea: 'scripts',
+        previewStep: 7,
+        actions: [
+          { text: 'Click the Cube sprite. Find the green-flag forever loop (the one with gravity).', area: 'Scripts Area' },
+          { text: 'Inside the forever, after the gravity blocks, add "if < > then" from Control.', area: 'Control Palette' },
+          { text: 'From Sensing drag "touching [Spike▼]?" into the diamond.', area: 'Sensing Palette' },
+          { text: 'Inside the if, add "say [Game Over!] for (2) secs" from Looks → then "stop [all▼]" from Control.', area: 'Control Palette' },
+          { text: 'Click 🏁 → don\'t jump → wait for the spike → 💥 GAME OVER!', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— inside cube\'s forever loop —',     cat: 'control', indent: 0, shape: 'stack', note: true },
+          { text: 'if ‹touching [Spike▼]?› then',         cat: 'control', indent: 1, shape: 'c'     },
+          { text: 'say [Game Over!] for (2) secs',        cat: 'looks',   indent: 2, shape: 'stack' },
+          { text: 'stop [all▼]',                          cat: 'control', indent: 2, shape: 'cap'   },
+        ],
+        tip: '"stop all" is the nuclear option — it stops every script in every sprite. Perfect for game over.',
+        didYouKnow: 'In professional games this is called a "hitbox check". The CPU compares two rectangles 60 times a second to decide if you live or die.',
+      },
+
+      /* ── Step 9 ── */
+      {
+        id: 9,
+        title: 'Score Counter',
+        emoji: '🏆',
+        xp: 45,
+        concept: { name: 'Variables · Loops', color: '#FF8C1A' },
+        goal: 'Score climbs by 1 every second you stay alive',
+        description:
+          'Reward the player for survival. We make a Score variable that ticks up automatically every second. Longer = higher score.',
+        scratchArea: 'scripts',
+        previewStep: 8,
+        actions: [
+          { text: 'Click Variables → "Make a Variable" → "Score" → OK. The Score readout appears top-left of the stage.', area: 'Variables Palette' },
+          { text: 'On the Cube sprite, drag a NEW "when 🏁 clicked" hat.', area: 'Events Palette' },
+          { text: 'Below it: "set [Score▼] to (0)".', area: 'Variables Palette' },
+          { text: 'Then add "forever" → inside it: "wait (1) secs" then "change [Score▼] by (1)".', area: 'Control Palette' },
+          { text: 'Click 🏁 → don\'t hit a spike → watch the score tick! 1… 2… 3…', area: 'Stage' },
+        ],
+        blocks: [
+          { text: 'when 🏁 clicked',           cat: 'events',    indent: 0, shape: 'hat'   },
+          { text: 'set [Score▼] to (0)',       cat: 'variables', indent: 0, shape: 'stack' },
+          { text: 'forever',                    cat: 'control',   indent: 0, shape: 'c'     },
+          { text: 'wait (1) secs',              cat: 'control',   indent: 1, shape: 'stack' },
+          { text: 'change [Score▼] by (1)',    cat: 'variables', indent: 1, shape: 'stack' },
+        ],
+        tip: 'Adding multiple "when 🏁 clicked" scripts is fine — Scratch runs them all in parallel. Each script handles one job.',
+        didYouKnow: 'A time-based score is called "survival scoring". Subway Surfers, Temple Run, and Fall Guys all use it.',
+      },
+
+      /* ── Step 10 ── */
+      {
+        id: 10,
+        title: 'Speed Climb',
+        emoji: '📈',
+        xp: 75,
+        concept: { name: 'Variables · Operators', color: '#FF6680' },
+        goal: 'The spike scrolls faster as your Score grows — difficulty ramps up automatically',
+        description:
+          'The boss touch. Replace the fixed scroll speed with a formula: speed = (6 + Score / 5). Every 5 points the spike gets faster — the game gets harder the longer you live!',
+        scratchArea: 'scripts',
+        previewStep: 9,
+        actions: [
+          { text: 'Click the Spike sprite → find the forever loop with "change x by (-6)".', area: 'Scripts Area' },
+          { text: 'Drag the "(-6)" number out of the block (trash it).', area: 'Scripts Area' },
+          { text: 'From Operators drag the "( ) - ( )" subtraction reporter into the slot.', area: 'Operators Palette' },
+          { text: 'In the first slot of subtract, drop "(0)". In the second slot drop another Operators block: "( ) + ( )".', area: 'Operators Palette' },
+          { text: 'In the addition slots: 6 in the left, and "(Score) / (5)" (using the divide reporter) in the right.', area: 'Operators Palette' },
+          { text: 'The final block reads: change x by ( 0 - ( 6 + (Score / 5) ) ). Click 🏁 → as Score grows, spikes get faster! 🏁', area: 'Stage' },
+        ],
+        blocks: [
+          { text: '— replace "change x by (-6)" with —',  cat: 'control', indent: 0, shape: 'stack', note: true },
+          { text: 'change x by ( 0 - (6 + ((Score) / (5))) )',  cat: 'motion', indent: 1, shape: 'stack' },
+        ],
+        tip: 'Start the speed formula gently (6 + Score/5). If it feels too easy, try (6 + Score/3). Too hard? (6 + Score/10).',
+        didYouKnow: 'This is called a "difficulty curve". Tetris speeds up every 10 lines, Pac-Man ghosts roam faster each maze, slots get tighter near jackpot. Same pattern, everywhere.',
+      },
+    ],
+  },
 ]
