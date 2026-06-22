@@ -1747,37 +1747,62 @@ function drawCube(ctx, x, y, size) {
   ctx.stroke()
 }
 
-function drawSpike(ctx, x, groundY) {
+function drawSpike(ctx, x, groundY, opts = {}) {
   if (x < -12 || x > 9999) return
-  const w = 14, h = 22
+  const w        = 14
+  const h        = 22
+  const flip     = opts.flip || false   // true = hang from ceiling (point down)
+  const palette  = opts.palette || 'red'
+
+  const COLORS = {
+    red:    { glow: '#ff2222', top: '#ff6666', bot: '#b71c1c', edge: '#7f0000' },
+    purple: { glow: '#c084fc', top: '#d8b4fe', bot: '#7e22ce', edge: '#4a1a87' },
+    gold:   { glow: '#fbbf24', top: '#fde68a', bot: '#d97706', edge: '#92400e' },
+  }
+  const c = COLORS[palette] || COLORS.red
 
   ctx.save()
-  ctx.shadowColor = '#ff2222'
-  ctx.shadowBlur = 5
+  ctx.shadowColor = c.glow
+  ctx.shadowBlur  = 5
 
-  const grad = ctx.createLinearGradient(x - w / 2, groundY - h, x + w / 2, groundY)
-  grad.addColorStop(0, '#ff6666')
-  grad.addColorStop(1, '#b71c1c')
+  const yBase = flip ? groundY      : groundY
+  const yTip  = flip ? groundY + h  : groundY - h
+
+  const grad = ctx.createLinearGradient(x - w / 2, Math.min(yBase, yTip), x + w / 2, Math.max(yBase, yTip))
+  grad.addColorStop(0, c.top)
+  grad.addColorStop(1, c.bot)
   ctx.fillStyle = grad
+
   ctx.beginPath()
-  ctx.moveTo(x - w / 2, groundY)
-  ctx.lineTo(x,         groundY - h)
-  ctx.lineTo(x + w / 2, groundY)
+  ctx.moveTo(x - w / 2, yBase)
+  ctx.lineTo(x,         yTip)
+  ctx.lineTo(x + w / 2, yBase)
   ctx.closePath()
   ctx.fill()
 
   ctx.shadowBlur = 0
-  ctx.strokeStyle = '#7f0000'
-  ctx.lineWidth = 1
+  ctx.strokeStyle = c.edge
+  ctx.lineWidth   = 1
   ctx.stroke()
   ctx.restore()
 }
 
+// Backdrop colour pairs used by Scene Cycle (step 13)
+const CUBE_SCENES = [
+  { top: '#0a0a2e', bot: '#1a0e3a', ground: '#00d4ff' },  // night
+  { top: '#1a3a1a', bot: '#0e1f0e', ground: '#7CFC00' },  // forest
+  { top: '#3a0a0a', bot: '#1f0505', ground: '#ff6b35' },  // lava
+]
+
 function drawCubeJumper(ctx, W, H, frame, previewStep) {
-  // Dark neon background
+  // Scene index — cycles for step 12 (id 13), fixed night for the rest
+  const sceneIdx = previewStep === 12 ? Math.floor(frame / 180) % CUBE_SCENES.length : 0
+  const scene    = CUBE_SCENES[sceneIdx]
+
+  // Background gradient (scene-aware)
   const bg = ctx.createLinearGradient(0, 0, 0, H)
-  bg.addColorStop(0, '#0a0a2e')
-  bg.addColorStop(1, '#1a0e3a')
+  bg.addColorStop(0, scene.top)
+  bg.addColorStop(1, scene.bot)
   ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
 
@@ -1790,18 +1815,33 @@ function drawCubeJumper(ctx, W, H, frame, previewStep) {
     ctx.fillRect(sx, sy, 1.3, 1.3)
   }
 
-  // Neon ground line (cyan glow)
+  // Neon ground line (cyan glow, recolours per scene)
   const groundY = H - 14
   ctx.save()
-  ctx.shadowColor = '#00ffff'
-  ctx.shadowBlur = 6
-  ctx.strokeStyle = '#00d4ff'
-  ctx.lineWidth = 2
+  ctx.shadowColor = scene.ground
+  ctx.shadowBlur  = 6
+  ctx.strokeStyle = scene.ground
+  ctx.lineWidth   = 2
   ctx.beginPath()
   ctx.moveTo(0, groundY)
   ctx.lineTo(W, groundY)
   ctx.stroke()
   ctx.restore()
+
+  // Ceiling line for steps 10+ (where TopSpikes live)
+  if (previewStep >= 10) {
+    ctx.save()
+    ctx.shadowColor = scene.ground
+    ctx.shadowBlur  = 4
+    ctx.strokeStyle = scene.ground
+    ctx.globalAlpha = 0.6
+    ctx.lineWidth   = 1.5
+    ctx.beginPath()
+    ctx.moveTo(0, 14)
+    ctx.lineTo(W, 14)
+    ctx.stroke()
+    ctx.restore()
+  }
 
   // ── Step 0 (id 1): just the stage + "Choose Backdrop" pill ──
   if (previewStep === 0) {
@@ -1929,20 +1969,49 @@ function drawCubeJumper(ctx, W, H, frame, previewStep) {
 
   // ── Step 6+ (id 7+): Scrolling spike(s) ──
   if (previewStep >= 6) {
-    // Speed climbs with score on step 9
-    const baseSpeed = 2.2
-    const speedBoost = previewStep === 9 ? Math.min(2.4, frame / 240) : 0
-    const speed = baseSpeed + speedBoost
-    const cyclePx = W + 50
+    // Speed climbs with score on step 9+; bump a bit more on later steps
+    const baseSpeed   = 2.2
+    const speedBoost  = previewStep >= 9 ? Math.min(2.4, frame / 240) : 0
+    const speed       = baseSpeed + speedBoost
+    const cyclePx     = W + 50
 
-    // Spike 1
-    const sx1 = W - (((frame * speed) % cyclePx + cyclePx) % cyclePx)
-    drawSpike(ctx, sx1, groundY)
+    // Costume palettes for step 11+ (id 12 — random costume swap)
+    const palettes = ['red', 'purple', 'gold']
+    const palFor = (cycleIndex) => {
+      if (previewStep < 11) return 'red'
+      // Cycle through palettes per pass
+      return palettes[Math.abs(cycleIndex) % palettes.length]
+    }
 
-    // Spike 2 (offset) for steps 8+
+    // Spike 1 (ground)
+    const t1     = (frame * speed)
+    const sx1    = W - ((t1 % cyclePx + cyclePx) % cyclePx)
+    const cyc1   = Math.floor(t1 / cyclePx)
+    drawSpike(ctx, sx1, groundY, { palette: palFor(cyc1) })
+
+    // Spike 2 (ground, offset) for steps 8+
     if (previewStep >= 7) {
-      const sx2 = W - ((((frame + 90) * speed) % cyclePx + cyclePx) % cyclePx)
-      drawSpike(ctx, sx2, groundY)
+      const t2   = (frame + 90) * speed
+      const sx2  = W - ((t2 % cyclePx + cyclePx) % cyclePx)
+      const cyc2 = Math.floor(t2 / cyclePx)
+      drawSpike(ctx, sx2, groundY, { palette: palFor(cyc2 + 1) })
+    }
+
+    // Ceiling spikes for steps 10+ (id 11 — Ceiling Spikes)
+    if (previewStep >= 10) {
+      const ceilY = 14
+      const t3    = (frame + 150) * speed
+      const sx3   = W - ((t3 % cyclePx + cyclePx) % cyclePx)
+      const cyc3  = Math.floor(t3 / cyclePx)
+      drawSpike(ctx, sx3, ceilY, { flip: true, palette: palFor(cyc3 + 2) })
+
+      // Second ceiling spike for steps 11+
+      if (previewStep >= 11) {
+        const t4   = (frame + 240) * speed
+        const sx4  = W - ((t4 % cyclePx + cyclePx) % cyclePx)
+        const cyc4 = Math.floor(t4 / cyclePx)
+        drawSpike(ctx, sx4, ceilY, { flip: true, palette: palFor(cyc4) })
+      }
     }
   }
 
@@ -1990,8 +2059,8 @@ function drawCubeJumper(ctx, W, H, frame, previewStep) {
     ctx.fillText(`Score: ${score}`, 8, 14)
   }
 
-  // ── Step 9 (id 10): Speed indicator climbs ──
-  if (previewStep === 9) {
+  // ── Step 9+ (id 10+): Speed indicator climbs ──
+  if (previewStep >= 9) {
     const spd = (2.2 + Math.min(2.4, frame / 240)).toFixed(1)
     ctx.fillStyle = 'rgba(244,67,54,0.7)'
     ctx.beginPath()
@@ -2003,6 +2072,21 @@ function drawCubeJumper(ctx, W, H, frame, previewStep) {
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
     ctx.fillText(`Speed: ${spd}`, W - 68, 14)
+  }
+
+  // ── Step 12 (id 13): Scene label — shows which biome is active ──
+  if (previewStep === 12) {
+    const labels = ['🌃 Night', '🌲 Forest', '🌋 Lava']
+    ctx.fillStyle = 'rgba(0,0,50,0.6)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W / 2 - 32, 4, 64, 18, 3)
+    else ctx.rect(W / 2 - 32, 4, 64, 18)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 9px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(labels[sceneIdx], W / 2, 13)
   }
 }
 
