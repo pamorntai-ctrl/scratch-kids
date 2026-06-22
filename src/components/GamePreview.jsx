@@ -1714,6 +1714,298 @@ function drawSkyDrifter(ctx, W, H, frame, previewStep) {
   }
 }
 
+/* ════════════════════════════════════════════════════════════════
+   CUBE JUMPER — neon one-button rhythm runner
+════════════════════════════════════════════════════════════════ */
+function drawCube(ctx, x, y, size) {
+  // Gradient cube body
+  const grad = ctx.createLinearGradient(x, y, x + size, y + size)
+  grad.addColorStop(0, '#4dd0e1')
+  grad.addColorStop(1, '#0288d1')
+  ctx.fillStyle = grad
+  ctx.fillRect(x, y, size, size)
+
+  // Inner highlight stripe
+  ctx.fillStyle = 'rgba(255,255,255,0.18)'
+  ctx.fillRect(x + 2, y + 2, size - 4, 2.5)
+
+  // Border
+  ctx.strokeStyle = '#01579b'
+  ctx.lineWidth = 1.4
+  ctx.strokeRect(x + 0.5, y + 0.5, size - 1, size - 1)
+
+  // Eyes
+  ctx.fillStyle = '#0b1d2c'
+  ctx.beginPath(); ctx.arc(x + size * 0.32, y + size * 0.4, 1.7, 0, Math.PI * 2); ctx.fill()
+  ctx.beginPath(); ctx.arc(x + size * 0.68, y + size * 0.4, 1.7, 0, Math.PI * 2); ctx.fill()
+
+  // Smile
+  ctx.strokeStyle = '#0b1d2c'
+  ctx.lineWidth = 1.2
+  ctx.beginPath()
+  ctx.arc(x + size / 2, y + size * 0.6, size * 0.2, 0.15 * Math.PI, 0.85 * Math.PI)
+  ctx.stroke()
+}
+
+function drawSpike(ctx, x, groundY) {
+  if (x < -12 || x > 9999) return
+  const w = 14, h = 22
+
+  ctx.save()
+  ctx.shadowColor = '#ff2222'
+  ctx.shadowBlur = 5
+
+  const grad = ctx.createLinearGradient(x - w / 2, groundY - h, x + w / 2, groundY)
+  grad.addColorStop(0, '#ff6666')
+  grad.addColorStop(1, '#b71c1c')
+  ctx.fillStyle = grad
+  ctx.beginPath()
+  ctx.moveTo(x - w / 2, groundY)
+  ctx.lineTo(x,         groundY - h)
+  ctx.lineTo(x + w / 2, groundY)
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.shadowBlur = 0
+  ctx.strokeStyle = '#7f0000'
+  ctx.lineWidth = 1
+  ctx.stroke()
+  ctx.restore()
+}
+
+function drawCubeJumper(ctx, W, H, frame, previewStep) {
+  // Dark neon background
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#0a0a2e')
+  bg.addColorStop(1, '#1a0e3a')
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+
+  // Star/particle field drifting left
+  for (let i = 0; i < 14; i++) {
+    const sx = ((i * 53 - frame * 0.4) % (W + 20) + W + 20) % (W + 20)
+    const sy = (i * 19) % (H - 30)
+    const a  = 0.25 + (i % 3) * 0.2
+    ctx.fillStyle = `rgba(180,200,255,${a})`
+    ctx.fillRect(sx, sy, 1.3, 1.3)
+  }
+
+  // Neon ground line (cyan glow)
+  const groundY = H - 14
+  ctx.save()
+  ctx.shadowColor = '#00ffff'
+  ctx.shadowBlur = 6
+  ctx.strokeStyle = '#00d4ff'
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.moveTo(0, groundY)
+  ctx.lineTo(W, groundY)
+  ctx.stroke()
+  ctx.restore()
+
+  // ── Step 0 (id 1): just the stage + "Choose Backdrop" pill ──
+  if (previewStep === 0) {
+    ctx.fillStyle = 'rgba(99,102,241,0.88)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W / 2 - 60, H / 2 - 7, 120, 14, 5)
+    else ctx.rect(W / 2 - 60, H / 2 - 7, 120, 14)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('🌃 Choose Backdrop', W / 2, H / 2)
+    return
+  }
+
+  // ── Cube position by step ──
+  const cubeSize = 22
+  let cubeX, cubeY
+
+  if (previewStep === 1) {
+    // Design the cube — centred for "Paint Editor" view
+    cubeX = W / 2 - cubeSize / 2 - 18
+    cubeY = H / 2 - cubeSize / 2
+  } else if (previewStep === 2) {
+    // Stand on the ground — left edge, idle gentle bob
+    cubeX = W * 0.2
+    cubeY = groundY - cubeSize - Math.abs(Math.sin(frame * 0.06)) * 1.5
+  } else if (previewStep === 3) {
+    // Simple linear jump (up then down, repeat-based)
+    cubeX = W * 0.2
+    const cycle = frame % 80
+    const t = cycle / 80
+    let jumpH
+    if (t < 0.5) jumpH = (t / 0.5) * 38           // up
+    else         jumpH = ((1 - t) / 0.5) * 38     // down
+    cubeY = groundY - cubeSize - jumpH
+  } else if (previewStep === 4) {
+    // Smooth gravity arc (sine)
+    cubeX = W * 0.2
+    const cycle = (frame % 70) / 70
+    const arcH = Math.sin(cycle * Math.PI) * 42
+    cubeY = groundY - cubeSize - arcH
+  } else if (previewStep >= 6) {
+    // Auto-jump as spike approaches (steps 7+)
+    cubeX = W * 0.2
+    const cycle = (frame % 70) / 70
+    const arcH = Math.sin(cycle * Math.PI) * 42
+    cubeY = groundY - cubeSize - arcH
+  } else {
+    // Step 5 (Make a Spike) — cube sits on ground
+    cubeX = W * 0.2
+    cubeY = groundY - cubeSize
+  }
+
+  // ── Step 1 (id 2): show cube + 🎨 Paint pill ──
+  if (previewStep === 1) {
+    drawCube(ctx, cubeX, cubeY, cubeSize)
+    // Paint Editor label
+    ctx.fillStyle = 'rgba(245,158,11,0.92)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(cubeX + cubeSize + 8, cubeY + 4, 56, 14, 4)
+    else ctx.rect(cubeX + cubeSize + 8, cubeY + 4, 56, 14)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('🎨 Paint', cubeX + cubeSize + 12, cubeY + 11)
+    return
+  }
+
+  // ── Steps 3, 4 (jump intro): pulse SPACE hint at bottom ──
+  if (previewStep === 3 || previewStep === 4) {
+    const pulse = 0.55 + 0.45 * Math.abs(Math.sin(frame * 0.08))
+    ctx.save()
+    ctx.globalAlpha = pulse * 0.9
+    ctx.fillStyle = 'rgba(255,255,0,0.18)'
+    ctx.strokeStyle = 'rgba(255,255,0,0.6)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(cubeX - 7, H - 32, 50, 12, 3)
+    else ctx.rect(cubeX - 7, H - 32, 50, 12)
+    ctx.fill()
+    ctx.stroke()
+    ctx.fillStyle = 'rgba(255,255,0,0.95)'
+    ctx.font = 'bold 8px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('SPACE', cubeX + 18, H - 26)
+    ctx.restore()
+  }
+
+  // ── Step 5 (id 6): ghost spike + "Spike sprite" pill ──
+  if (previewStep === 5) {
+    const sx = W * 0.6
+    ctx.save()
+    ctx.globalAlpha = 0.4
+    ctx.strokeStyle = '#ff4444'
+    ctx.lineWidth = 1.5
+    ctx.setLineDash([4, 4])
+    ctx.beginPath()
+    ctx.moveTo(sx - 7, groundY)
+    ctx.lineTo(sx,     groundY - 22)
+    ctx.lineTo(sx + 7, groundY)
+    ctx.closePath()
+    ctx.stroke()
+    ctx.setLineDash([])
+    ctx.restore()
+
+    ctx.save()
+    ctx.globalAlpha = 0.85
+    ctx.fillStyle = 'rgba(244,67,54,0.88)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(sx - 38, H / 2 - 6, 76, 12, 4)
+    else ctx.rect(sx - 38, H / 2 - 6, 76, 12)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 7px Nunito,sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('🔺 Spike sprite', sx, H / 2)
+    ctx.restore()
+  }
+
+  // ── Step 6+ (id 7+): Scrolling spike(s) ──
+  if (previewStep >= 6) {
+    // Speed climbs with score on step 9
+    const baseSpeed = 2.2
+    const speedBoost = previewStep === 9 ? Math.min(2.4, frame / 240) : 0
+    const speed = baseSpeed + speedBoost
+    const cyclePx = W + 50
+
+    // Spike 1
+    const sx1 = W - (((frame * speed) % cyclePx + cyclePx) % cyclePx)
+    drawSpike(ctx, sx1, groundY)
+
+    // Spike 2 (offset) for steps 8+
+    if (previewStep >= 7) {
+      const sx2 = W - ((((frame + 90) * speed) % cyclePx + cyclePx) % cyclePx)
+      drawSpike(ctx, sx2, groundY)
+    }
+  }
+
+  // ── Draw cube ──
+  drawCube(ctx, cubeX, cubeY, cubeSize)
+
+  // ── Step 7 (id 8): Game Over flash on collision ──
+  if (previewStep === 7) {
+    const cycleT = frame % 150
+    if (cycleT > 100) {
+      const prog = (cycleT - 100) / 50
+      ctx.save()
+      ctx.globalAlpha = Math.sin(prog * Math.PI) * 0.7
+      ctx.fillStyle = 'rgba(0,0,0,0.7)'
+      ctx.fillRect(0, 0, W, H)
+      ctx.fillStyle = '#ff4444'
+      ctx.font = 'bold 12px Nunito,sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('Game Over 💥', W / 2, H / 2)
+      ctx.restore()
+    }
+    if (cycleT > 90 && cycleT < 110) {
+      const flashA = Math.sin(((cycleT - 90) / 20) * Math.PI) * 0.6
+      ctx.save()
+      ctx.globalAlpha = flashA
+      ctx.fillStyle = '#ff4444'
+      ctx.fillRect(cubeX - 2, cubeY - 2, cubeSize + 4, cubeSize + 4)
+      ctx.restore()
+    }
+  }
+
+  // ── Step 8+ (id 9+): Score HUD ──
+  if (previewStep >= 8) {
+    const score = Math.floor(frame / 90)
+    ctx.fillStyle = 'rgba(0,0,50,0.6)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(4, 4, 72, 20, 3)
+    else ctx.rect(4, 4, 72, 20)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 10px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(`Score: ${score}`, 8, 14)
+  }
+
+  // ── Step 9 (id 10): Speed indicator climbs ──
+  if (previewStep === 9) {
+    const spd = (2.2 + Math.min(2.4, frame / 240)).toFixed(1)
+    ctx.fillStyle = 'rgba(244,67,54,0.7)'
+    ctx.beginPath()
+    if (ctx.roundRect) ctx.roundRect(W - 72, 4, 68, 20, 3)
+    else ctx.rect(W - 72, 4, 68, 20)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.font = 'bold 9px Nunito,sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(`Speed: ${spd}`, W - 68, 14)
+  }
+}
+
 const RENDERERS = {
   'apple-collector': drawAppleCollector,
   'space-shooter':  drawSpaceShooter,
@@ -1721,6 +2013,7 @@ const RENDERERS = {
   'catch-stars':    drawCatchStars,
   'whack-a-mole':   drawWhackAMole,
   'sky-drifter':    drawSkyDrifter,
+  'cube-jumper':    drawCubeJumper,
 }
 
 export default function GamePreview({ missionId, previewStep, compact = false }) {
